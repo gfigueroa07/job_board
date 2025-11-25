@@ -8,5 +8,15 @@ class ProfileForm(forms.ModelForm):
             'profile_picture',
             'description',
             'skills',
-            'resume_upload'
+            'resume',
+        ]
+
+class ProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'profile_picture',
+            'description',
+            'skills',
+            'resume',
         ]
