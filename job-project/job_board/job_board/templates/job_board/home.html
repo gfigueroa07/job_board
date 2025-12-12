@@ -1,2 +1,23 @@
-<h1>Home Page</h1>
-<p>Welcome to the Job Board</p>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Board</title>
+</head>
+<body>
+
+<h1>This app is still getting worked on. Please check again later</h1>
+
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">W Xarop Sensei frfr UwU</button>
+</form>
+<a href='job/details/'>job details</a>
+<a href='job/list/'>job list</a>
+<a href='profile/'>profile</a>
+<a href='/users/profile/create/'>create profile</a>
+<a href='/users/profile/<int:profile_id>/'>profile detail</a>
+<a href='/users/profile/edit/'>edit profile</a>
+<a href='/users/user/login/'>login</a>
+</body>
+</html>

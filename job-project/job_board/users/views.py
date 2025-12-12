@@ -26,7 +26,7 @@ def profile_create(request):
 
     return render(request, 'users/profile_create.html', {'form': form})
 
-
+@login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = profile.reviews_received.all()

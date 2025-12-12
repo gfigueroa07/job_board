@@ -9,3 +9,11 @@ from django.http import HttpResponse
 def home(request):
     return render(request, 'job_board/home.html')
 
+def job_details(request):
+    return render(request, 'job_board/job_details.html')
+
+def job_list(request):
+    return render(request, 'job_board/job_list.html')
+
+def profile(request):
+    return render(request, 'job_board/profile.html')
