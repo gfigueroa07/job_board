@@ -18,11 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 
+
+
 urlpatterns = [
     path('', views.home, name="Home"),
-    path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
-    # path('job/details/', views.job_details, name='job_details'),
-    # path('job/list/', views.job_list, name='job_list'),
-    # path('profile/', views.profile, name='profile'), 
+    path('profile/create/', views.profile_create, name='profile_create'),
+    path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
+    path('profile/edit/', views.profile_edit, name='profile_edit'),
+    path('user/login/', views.user_login, name='login')
 ]
