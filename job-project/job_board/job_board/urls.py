@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path, include
 from . import views
 
+
 urlpatterns = [
     path('', views.home, name="home"),
     path('users/', include('users.urls')),
@@ -25,4 +26,8 @@ urlpatterns = [
     path('job/details/', views.job_details, name='job_details'),
     path('job/list/', views.job_list, name='job_list'),
     path('profile/', views.profile, name='profile'), 
+    
+    # This is how you route to a class-based view. You call it by name and use .as_view()
+    path("xarop/items/", views.XaropItemsView.as_view(), name="xarop_items"),             # for list / create
+    path("xarop/items/<int:primary_key>/", views.XaropItemsView.as_view(), name="xarop_items_edit"),  # for edit
 ]
