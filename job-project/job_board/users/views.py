@@ -13,6 +13,7 @@ from django.contrib.auth.decorators import login_required
 def home(request):
     return render(request, 'users/home.html')
 
+@login_required
 def profile_create(request):
     if request.method == 'POST':
         form = ProfileForm(request.POST, request.FILES)

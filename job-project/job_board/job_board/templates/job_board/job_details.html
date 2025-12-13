@@ -1,1 +1,16 @@
-<h1>Job Details</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <h1>Job Details</h1>
+{% if message %}
+    <p>{{ message }}</p>
+{% else %}
+    {% for job in jobs %}
+        <p>{{ job.title }}</p>
+        <p>{{job.description}}</p>
+    {% endfor %}
+{% endif %}
+</head>
+<button>Return to <a href='/'>home</a> page</button>
+</body>
+</html>
