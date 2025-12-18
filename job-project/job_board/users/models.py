@@ -20,9 +20,9 @@ class Profile(models.Model):
 class JobListing(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     title = models.TextField(max_length=200)
-    description = models.CharField(blank=False)
+    description = models.CharField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
-    images = models.ImageField(upload_to='job_pics/', blank=True, null=True)
+    images = models.ImageField(upload_to='job_pics/', blank=False, null=True)
     due_date = models.TextField(max_length=20, blank=True, null=True)
     
     def __str__(self):

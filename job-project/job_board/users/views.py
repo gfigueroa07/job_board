@@ -1,8 +1,6 @@
-from django.shortcuts import render, redirect
-from job_board .forms import ProfileForm
-from users .models import Profile
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm
+from users .models import Profile
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -31,13 +29,13 @@ def profile_create(request):
             # Log the user in immediately
             login(request, user)
             
-            return redirect('job_board/home.html')  # replace 'home' with your URL name
+            return render(request, 'users/profile_detail.html')  # replace 'home' with your URL name
     else:
         user_form = UserCreationForm()
         profile_form = ProfileForm()
 
     context = {'user_form': user_form, 'profile_form': profile_form}
-    return render(request, 'users/user_login.html', context)
+    return render(request, 'users/profile_create.html', context)
 
 @login_required
 def profile_detail(request, profile_id):
@@ -45,7 +43,7 @@ def profile_detail(request, profile_id):
     reviews = profile.reviews_received.all()
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
-        'reviews': reviews
+        'reviews': reviews,
     })
 
 

@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing
+from users .models import Profile, JobListing, Review
 
 
 
@@ -31,11 +31,21 @@ class ProfileEditForm(forms.ModelForm):
             'resume',
         ]
 
-class JobList(forms.ModelForm):
+class JobDetailsForm(forms.ModelForm):
     class Meta:
         model = JobListing
         fields = [
             'title',
             'description',
             'images',
+        ]
+        
+class JobCreateForm(forms.ModelForm):
+    class Meta:
+        model = JobListing
+        fields = [
+            'images',
+            'title',
+            'description',
+            'due_date',
         ]
