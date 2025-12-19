@@ -14,7 +14,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'profile_name',
+            'location',
             'profile_picture',
             'description',
             'skills',
@@ -49,3 +49,4 @@ class JobCreateForm(forms.ModelForm):
             'description',
             'due_date',
         ]
+

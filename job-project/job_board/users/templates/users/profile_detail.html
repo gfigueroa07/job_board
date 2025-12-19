@@ -1,37 +1,14 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>{{ profile.user.username }}'s Profile</title>
-</head>
-<body>
-
-<h1>{{ profile.user.username }}'s Profile</h1>
-
-{% if profile.profile_picture %}
-    <img src="{{ profile.profile_picture.url }}" alt="Profile Picture" width="150">
-{% endif %}
-
+<h1>{{ profile.profile_name }}'s Profile</h1>
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
+<p><strong>Average Review Score:</strong> {{ profile.avg_review_score }}</p>
 
-{% if profile.resume_upload %}
-    <p><a href="{{ profile.resume_upload.url }}" download>Download Resume</a></p>
+{% if profile.profile_picture %}
+    <img src="{{ profile.profile_picture.url }}" width="150">
 {% endif %}
 
-<p><strong>Average Review Score:</strong> {{ profile.average_review_score }}</p>
-
-<h2>Reviews</h2>
-<ul>
-    {% for review in reviews %}
-        <li>
-            <strong>{{ review.reviewer_profile.user.username }}</strong>:
-            {{ review.rating }} stars<br>
-            {{ review.comment }}<br><br>
-        </li>
-    {% empty %}
-        <p>No reviews yet.</p>
-    {% endfor %}
-</ul>
-
-</body>
-</html>
+{% if profile.resume %}
+    <a href="{{ profile.resume.url }}" download>Download Resume</a>
+    
+{% endif %}
+<button>Return to <a href='/'>home</a> page</button>

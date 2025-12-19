@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm
-from users .models import Profile
+from users .models import Profile, Review
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login
 
 # Create your views here.
@@ -24,12 +24,13 @@ def profile_create(request):
             # Save the profile, link it to the new user
             profile = profile_form.save(commit=False)
             profile.user = user
+            profile.profile_name = user.username
             profile.save()
 
             # Log the user in immediately
             login(request, user)
             
-            return render(request, 'users/profile_detail.html')  # replace 'home' with your URL name
+            return redirect('profile_detail', profile_id=profile.id) # replace 'home' with your URL name
     else:
         user_form = UserCreationForm()
         profile_form = ProfileForm()
@@ -40,17 +41,16 @@ def profile_create(request):
 @login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = profile.reviews_received.all()
+    # reviews = profile.Review.all()
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
-        'reviews': reviews,
+        # 'reviews': reviews
     })
 
 
 @login_required
 def profile_edit(request):
     profile = request.user.profile
-
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
@@ -62,4 +62,11 @@ def profile_edit(request):
     return render(request, 'users/profile_edit.html', {'form': form})
 
 def user_login(request):
-    return render(request, 'users/user_login.html')
+    if request.method == 'POST':
+        form = AuthenticationForm(data=request.POST)
+        login(request, form.get_user())
+        profile = request.user.profile
+        return redirect('profile_detail', profile_id=profile.id)
+    else:
+        form = AuthenticationForm()
+    return render(request, 'users/user_login.html', {'form': form})
