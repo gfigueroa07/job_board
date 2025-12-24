@@ -42,15 +42,17 @@ def profile_create(request):
 @login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    # reviews = profile.Review.all()
+    reviews = profile.Review.all()
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
-        # 'reviews': reviews
+        'reviews': reviews
     })
 
 
-@login_required
 def profile_edit(request):
+    if not request.user.is_authenticated:
+        messages.error(request, 'No profile to edit. Please log in or create a profile.')
+        return redirect('login')
     profile = request.user.profile
     if request.method == 'POST':
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)

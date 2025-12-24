@@ -9,11 +9,9 @@
 
 <form method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-    {{  message }}
     {{ job_form.as_p }}
     <button type="submit">Save Job</button>
     <button>Return to <a href='/'>home</a> page</button>
 </form>
-
 </body>
 </html>
