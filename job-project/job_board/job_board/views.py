@@ -38,5 +38,5 @@ def job_list(request):
         job_form = JobCreateForm()
     return render(request, 'job_board/job_list.html', {'job_form' : job_form})
 
-def profile(request):
-    return render(request, 'job_board/profile.html')
+# def profile(request):
+#     return render(request, 'job_board/profile.html')
