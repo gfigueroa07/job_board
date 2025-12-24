@@ -50,3 +50,17 @@ class JobCreateForm(forms.ModelForm):
             'due_date',
         ]
 
+        
+# Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
+# These form objects need to be used for Django to run validations using your Models
+from django import forms
+from .models import XaropItem
+
+class XaropItemForm(forms.ModelForm):
+    class Meta:
+        model = XaropItem
+        fields = ["name", "description"]
+        widgets = {
+            "name": forms.TextInput(attrs={"required": True, "maxlength": 100}),
+            "description": forms.Textarea(attrs={"maxlength": 500})
+        }

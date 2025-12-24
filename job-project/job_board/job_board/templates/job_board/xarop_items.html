@@ -1,0 +1,115 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Xarop Items Dashboard</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 2rem;
+        }
+
+        .dashboard {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .item-list {
+            flex: 1;
+            border-right: 1px solid #ccc;
+            padding-right: 1rem;
+        }
+
+        .item-list ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .item-list li {
+            padding: 0.5rem;
+            cursor: pointer;
+        }
+
+        .item-list li:hover {
+            background-color: #f0f0f0;
+        }
+
+        .item-list li.selected {
+            background-color: #d0f0ff;
+            font-weight: bold;
+        }
+
+        .item-form {
+            flex: 1;
+            padding-left: 1rem;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Left: List of items -->
+        <div class="item-list">
+            <h3>Items</h3>
+            <ul>
+                {% for item in items %}
+                    <li 
+                        data-pk="{{ item.pk }}" 
+                        data-name="{{ item.name }}" 
+                        data-description="{{ item.description|escapejs }}"
+                        class="{% if selected_item and selected_item.pk == item.pk %}selected{% endif %}">
+                        {{ item.name }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Right: Form -->
+        <div class="item-form">
+            <h3>{% if selected_item %}Edit Item{% else %}New Item{% endif %}</h3>
+            <form method="post"
+            id="item-form"
+            action="{% url 'xarop_items' %}"
+            data-base-action="{% url 'xarop_items' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">{% if selected_item %}Update{% else %}Add{% endif %}</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const items = document.querySelectorAll(".item-list li");
+        const form = document.getElementById("item-form");
+        const baseAction = form.dataset.baseAction;
+
+        const nameInput = document.getElementById("id_name");
+        const descInput = document.getElementById("id_description");
+
+        items.forEach(li => {
+            li.addEventListener("click", () => {
+                // highlight
+                items.forEach(i => i.classList.remove("selected"));
+                li.classList.add("selected");
+
+                // fill form
+                nameInput.value = li.dataset.name;
+                descInput.value = li.dataset.description;
+
+                // IMPORTANT: replace action, don't append
+                form.action = `${baseAction}${li.dataset.pk}/`;
+            });
+        });
+    });
+    </script>
+
+</body>
+</html>
