@@ -1,0 +1,6 @@
+<a href='/users/login/'>login</a>
+<a href='/users/profile/create/'>Create Profile</a>
+<form method="post" action="{% url 'users:logout' %}">
+    {% csrf_token %}
+    <button type="submit">Logout</button>
+</form>

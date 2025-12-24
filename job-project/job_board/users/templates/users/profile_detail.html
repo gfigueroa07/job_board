@@ -8,7 +8,11 @@
 {% endif %}
 
 {% if profile.resume %}
-    <a href="{{ profile.resume.url }}" download>Download Resume</a>
-    
+    <a href="{{ profile.resume.url }}" download>Download Resume</a>  
 {% endif %}
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit">Log out</button>
+</form>
+
 <button>Return to <a href='/'>home</a> page</button>

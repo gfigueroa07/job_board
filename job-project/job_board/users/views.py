@@ -4,9 +4,10 @@ from users .models import Profile, Review
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 # Create your views here.
 # def home(request):
@@ -58,15 +59,22 @@ def profile_edit(request):
             return redirect('users/profile_detail', profile_id=profile.id)
     else:
         form = ProfileEditForm(instance=profile)
-
     return render(request, 'users/profile_edit.html', {'form': form})
 
 def user_login(request):
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
-        login(request, form.get_user())
-        profile = request.user.profile
-        return redirect('profile_detail', profile_id=profile.id)
+        if form.is_valid():
+            login(request, form.get_user())
+            profile = request.user.profile
+            return redirect('profile_detail', profile_id=profile.id)
     else:
         form = AuthenticationForm()
     return render(request, 'users/user_login.html', {'form': form})
+
+@require_POST
+def user_logout(request):
+    if request.method == 'POST':
+        logout(request)
+        return redirect('login')
+    return HttpResponse('ligma')

@@ -16,8 +16,10 @@
 <a href='job/list/'>job list</a>
 <a href='profile/'>profile</a>
 <a href='/users/profile/create/'>create profile</a>
-<a href='/users/profile/<int:profile_id>/'>profile detail</a>
+{% if user.is_authenticated and user.profile %}
+    <a href="{% url 'profile_detail' user.profile.id %}">View Profile</a>
+{% endif %}
 <a href='/users/profile/edit/'>edit profile</a>
-<a href='/users/login/'>login</a>
+<a href='/users/user/login/'>login</a>
 </body>
 </html>
