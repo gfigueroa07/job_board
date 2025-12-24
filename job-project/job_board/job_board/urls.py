@@ -22,6 +22,7 @@ from django.conf.urls.static import static
 
 
 
+
 urlpatterns = [
     path('', views.home, name="home"),
     path('users/', include('users.urls')),
@@ -33,3 +34,9 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('profile/', views.profile, name='profile'), 
+    
+    # This is how you route to a class-based view. You call it by name and use .as_view()
+    path("xarop/items/", views.XaropItemsView.as_view(), name="xarop_items"),             # for list / create
+    path("xarop/items/<int:primary_key>/", views.XaropItemsView.as_view(), name="xarop_items_edit"),  # for edit
+
