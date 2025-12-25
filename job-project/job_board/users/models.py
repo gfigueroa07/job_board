@@ -29,8 +29,9 @@ class JobListing(models.Model):
         return self.title
 
 class Review(models.Model):
-    review_by_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
-    review_to_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
+    review_to_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
+    review_by_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
+    images = models.ImageField(upload_to='review_pics/', blank=False, null=True)
     rating = models.FloatField()
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
