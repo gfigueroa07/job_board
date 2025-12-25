@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm
 from users .models import Profile, Review
 from django.urls import path
 from django.http import HttpResponse
@@ -79,4 +79,9 @@ def user_logout(request):
     if request.method == 'POST':
         logout(request)
         return redirect('login')
-    return HttpResponse('ligma')
+    # return HttpResponse('ligma')
+
+def reviews_page(request):
+    # if request.method == 'POST':
+    reviews = Review.objects.all()
+    return render(request, 'users/reviews_page.html', {'reviews': reviews})

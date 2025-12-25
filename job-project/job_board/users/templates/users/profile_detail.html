@@ -1,6 +1,7 @@
 <h1>{{ profile.profile_name }}'s Profile</h1>
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
+<a href='{% url 'reviews' %}'>Reviews</a>
 <p><strong>Average Review Score:</strong> {{ profile.avg_review_score }}</p>
 
 {% if profile.profile_picture %}
@@ -14,5 +15,4 @@
     {% csrf_token %}
     <button type="submit">Log out</button>
 </form>
-
 <button>Return to <a href='/'>home</a> page</button>

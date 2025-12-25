@@ -1,0 +1,13 @@
+    <!DOCTYPE html>
+<html>
+<head>
+    <title>Reviews</title>
+</head>
+<body>
+<h1>User Reviews</h1>
+{% for review in reviews %}
+    <p>{{ review }}</p>
+    {% empty %}
+    <p>This user has no reviews yet</p>
+{% endfor %}
+<button>Return to <a href='/'>home</a> page</button>
