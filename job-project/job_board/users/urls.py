@@ -31,7 +31,7 @@ urlpatterns = [
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
-    path('reviews/', views.reviews_page, name='reviews')
+    path('reviews/<int:profile_id>/', views.create_review, name='reviews')
 ]
 
 

@@ -55,7 +55,7 @@ class UserReviewsForm(forms.ModelForm):
         model = Review
         fields = [
             'rating',
-            'review_by_profile',
+            'images',
             'comment',
         ]
         

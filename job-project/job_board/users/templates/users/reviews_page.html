@@ -1,4 +1,4 @@
-    <!DOCTYPE html>
+    {% comment %} <!DOCTYPE html>
 <html>
 <head>
     <title>Reviews</title>
@@ -10,4 +10,20 @@
     {% empty %}
     <p>This user has no reviews yet</p>
 {% endfor %}
-<button>Return to <a href='/'>home</a> page</button>
+<button>Return to <a href='/'>home</a> page</button> {% endcomment %}
+
+<h2>Reviews</h2>
+
+{% if reviews %}
+    {% for review in reviews %}
+        <div class="review">
+            <p>Rating: {{ review.rating }}/5</p>
+            <p>{{ review.comment }}</p>
+            <small>
+                Reviewed by {{ review.review_by_profile.user.username }}
+            </small>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No reviews yet.</p>
+{% endif %}

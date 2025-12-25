@@ -42,7 +42,7 @@ def profile_create(request):
 @login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = Review.objects.all()
+    reviews = profile.reviews_received.all()
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews
@@ -86,3 +86,21 @@ def reviews_page(request):
     # if request.method == 'POST':
     reviews = Review.objects.all()
     return render(request, 'users/reviews_page.html', {'reviews': reviews})
+
+@login_required
+def create_review(request, profile_id):
+    reviewed_profile = get_object_or_404(Profile, id=profile_id)
+    if request.user.profile == reviewed_profile:
+        return redirect('profile_detail', profile_id=profile_id)
+    if request.method == 'POST':
+        form = UserReviewsForm(request.POST, request.FILES)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.review_by_profile = request.user.profile
+            review.review_to_profile = reviewed_profile
+            review.save()
+            return redirect('profile_detail', profile_id=profile_id)
+    else:
+        form = UserReviewsForm
+    return render(request, 'users/reviews_page.html', {'form': form, 'profile': reviewed_profile})
+    
