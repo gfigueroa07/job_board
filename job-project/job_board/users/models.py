@@ -35,6 +35,13 @@ class Review(models.Model):
     rating = models.FloatField()
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['review_by_profile', 'review_to_profile'],
+                name='one_review_per_user_per_profile'
+            )
+        ]
+        
     def __str__(self):
         return f"{self.review_by_profile.user.username} -> {self.review_to_profile.user.username}"

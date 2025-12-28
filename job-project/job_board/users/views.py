@@ -84,7 +84,6 @@ def user_logout(request):
     if request.method == 'POST':
         logout(request)
         return redirect('login')
-    # return HttpResponse('ligma')
 
 def reviews_page(request):
     # if request.method == 'POST':
@@ -95,6 +94,12 @@ def reviews_page(request):
 def create_review(request, profile_id):
     reviewed_profile = get_object_or_404(Profile, id=profile_id)
     if request.user.profile == reviewed_profile:
+        return redirect('profile_detail', profile_id=profile_id)
+    existing_review = Review.objects.filter(
+        review_by_profile=request.user.profile,
+        review_for_profile=reviewed_profile
+    ).exists()
+    if existing_review:
         return redirect('profile_detail', profile_id=profile_id)
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
@@ -112,7 +117,7 @@ def create_review(request, profile_id):
 def edit_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_by_profile != request.user.profile:
-        return redirect('profile_detail', profile_id=review_to_profile.id)
+        return redirect('profile_detail', profile_id=review.review_to_profile.id)
     if request.method =='POST':
         form = UserReviewsForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
@@ -126,8 +131,8 @@ def edit_review(request, review_id):
 def delete_review(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_by_profile != request.user.profile:
-        return redirect('profile_detail', profile_id=review_to_profile.id)
+        return redirect('profile_detail', profile_id=review.review_to_profile.id)
     if request.method == 'POST':
         review.delete()
-        return redirect('profile_detail', profile_id=review_to_profile.id)
+        return redirect('profile_detail', profile_id=review.review_to_profile.id)
     return render(request, 'users/delete_review.html', {'review': review})
