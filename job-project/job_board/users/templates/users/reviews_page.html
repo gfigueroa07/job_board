@@ -22,8 +22,14 @@
             <small>
                 Reviewed by {{ review.review_by_profile.user.username }}
             </small>
+            {% if review.review_by_profile == request.user.profile %}
+                <a href="{% url 'edit_review' review.id %}">Edit</a>
+                <a href="{% url 'delete_review' review.id %}">Delete</a>
+            {% endif %}
         </div>
     {% endfor %}
 {% else %}
     <p>No reviews yet.</p>
 {% endif %}
+
+<a href="{% url 'create_review' user.profile.id %}">Leave a review</a>

@@ -1,8 +1,13 @@
 <h1>{{ profile.profile_name }}'s Profile</h1>
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
-<a href='{% url 'reviews' user.profile.id %}'>Reviews</a>
-<p><strong>Average Review Score:</strong> {{ profile.avg_review_score }}</p>
+<h3>Average Rating</h3>
+<a href='{% url 'reviews' %}'>Reviews</a>
+{% if average_rating %}
+    <p>⭐ {{ average_rating|floatformat:1 }} / 5</p>
+{% else %}
+    <p>No ratings yet</p>
+{% endif %}
 
 {% if profile.profile_picture %}
     <img src="{{ profile.profile_picture.url }}" width="150">

@@ -8,6 +8,8 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
+from django.db.models import Avg
+
 
 # Create your views here.
 # def home(request):
@@ -43,9 +45,11 @@ def profile_create(request):
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = profile.reviews_received.all()
+    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
-        'reviews': reviews
+        'reviews': reviews,
+        'average rating': average_rating,   
     })
 
 
@@ -104,3 +108,26 @@ def create_review(request, profile_id):
         form = UserReviewsForm
     return render(request, 'users/reviews_page.html', {'form': form, 'profile': reviewed_profile})
     
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.review_by_profile != request.user.profile:
+        return redirect('profile_detail', profile_id=review_to_profile.id)
+    if request.method =='POST':
+        form = UserReviewsForm(request.POST, request.FILES, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('profile_detail', profile_id=review.review_to_profile.id)
+    else:
+        form = UserReviewsForm(instance=review)
+    return render(request, 'users/edit_review.html', {'form': form, 'review': review})
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if review.review_by_profile != request.user.profile:
+        return redirect('profile_detail', profile_id=review_to_profile.id)
+    if request.method == 'POST':
+        review.delete()
+        return redirect('profile_detail', profile_id=review_to_profile.id)
+    return render(request, 'users/delete_review.html', {'review': review})
