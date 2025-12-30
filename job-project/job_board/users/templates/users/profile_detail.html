@@ -1,6 +1,8 @@
 <h1>{{ profile.profile_name }}'s Profile</h1>
-{% if message %}
-    <p>{{ message }}</p>
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
 {% endif %}
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>

@@ -102,7 +102,7 @@ def create_review(request, profile_id):
         review_to_profile=reviewed_profile
     ).exists()
     if existing_review:
-        
+        messages.error(request, 'You have an  existing review')
         return redirect('profile_detail', profile_id=profile_id)
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
