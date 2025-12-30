@@ -7,6 +7,7 @@
             <p>{{ review.comment }}</p>
             <small>
                 Reviewed by {{ review.review_by_profile.user.username }}
+                <hr>
             </small>
             {% if review.review_by_profile == request.user.profile %}
                 <a href="{% url 'edit_review' review.id %}">Edit</a>

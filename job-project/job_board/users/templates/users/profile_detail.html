@@ -2,8 +2,7 @@
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
 <h3>Average Rating</h3>
-<a href='{% url 'reviews' profile.id %}'>Reviews</a>
-<a href="{% url 'create_review' profile.id %}">Leave a review</a>
+
 {% if average_rating %}
     <p>⭐ {{ average_rating|floatformat:1 }} / 5.0</p>
 {% else %}
@@ -19,6 +18,8 @@
 {% endif %}
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
+    <a href='{% url 'reviews' profile.id %}'>Reviews</a>
+    <a href="{% url 'create_review' profile.id %}">Leave a review</a>
     <button type="submit">Log out</button>
 </form>
 <button>Return to <a href='/'>home</a> page</button>

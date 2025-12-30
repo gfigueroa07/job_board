@@ -45,7 +45,7 @@ def profile_create(request):
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = profile.reviews_received.all()
-    average_rating = reviews.aggregate(Avg('rating'))['rating__avg']
+    average_rating = Review.objects.filter(review_to_profile=request.user.profile).aggregate(Avg('rating'))['rating__avg']
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
