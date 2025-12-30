@@ -90,14 +90,14 @@ def user_logout(request):
         logout(request)
         return redirect('login')
 
-def reviews_page(request, profile_id):
+def review_page(request, profile_id):
     # if request.method == 'POST':
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_written=profile)
-    return render(request, 'users/reviews_page.html', {'profile': profile, 'reviews': reviews})
+    return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
 
 @login_required
-def create_review(request, profile_id):
+def review_create(request, profile_id):
     reviewed_profile = get_object_or_404(Profile, id=profile_id)
     if request.user.profile == reviewed_profile:
         messages.error(request, 'Cant Review yourself')
@@ -122,10 +122,10 @@ def create_review(request, profile_id):
             return redirect('profile_detail', profile_id=profile_id)
     else:
         form = UserReviewsForm()
-    return render(request, 'users/create_review.html', {'form': form, 'profile': reviewed_profile})
+    return render(request, 'users/review_create.html', {'form': form, 'profile': reviewed_profile})
     
 @login_required
-def edit_review(request, review_id):
+def review_edit(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_received != request.user.profile:
         return redirect('profile_detail', profile_id=review.review_written.id)
@@ -136,14 +136,14 @@ def edit_review(request, review_id):
             return redirect('profile_detail', profile_id=review.review_written.id)
     else:
         form = UserReviewsForm(instance=review)
-    return render(request, 'users/edit_review.html', {'form': form, 'review': review})
+    return render(request, 'users/review_edit.html', {'form': form, 'review': review})
 
 @login_required
-def delete_review(request, review_id):
+def review_delete(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_by_profile != request.user.profile:
         return redirect('profile_detail', profile_id=review.review_written.id)
     if request.method == 'POST':
         review.delete()
         return redirect('profile_detail', profile_id=review.review_written.id)
-    return render(request, 'users/delete_review.html', {'review': review})
+    return render(request, 'users/review_delete.html', {'review': review})
