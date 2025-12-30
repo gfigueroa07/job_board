@@ -30,8 +30,8 @@ class JobListing(models.Model):
         return self.title
 
 class Review(models.Model):
-    review_to_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
-    review_by_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
+    review_written = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
+    review_received = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
     images = models.ImageField(upload_to='review_pics/', blank=True, null=True)
     rating = models.FloatField(validators=[
         MinValueValidator(1),
@@ -42,10 +42,10 @@ class Review(models.Model):
     class Meta:
         constraints = [
             models.UniqueConstraint(
-                fields=['review_by_profile', 'review_to_profile'],
+                fields=['review_received', 'review_written'],
                 name='one_review_per_user_per_profile'
             )
         ]
         
     def __str__(self):
-        return f"{self.review_by_profile.user.username} -> {self.review_to_profile.user.username}"
+        return f"{self.review_received.user.username} -> {self.review_written.user.username}"

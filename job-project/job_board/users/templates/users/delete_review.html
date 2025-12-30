@@ -5,7 +5,7 @@
 <form method="post">
     {% csrf_token %}
     <button type="submit">Yes, delete</button>
-    <a href="{% url 'profile_detail' review.review_to_profile.id %}">
+    <a href="{% url 'profile_detail' review.review_written.id %}">
         Cancel
     </a>
 </form>

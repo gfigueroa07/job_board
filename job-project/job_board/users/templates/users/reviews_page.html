@@ -6,10 +6,10 @@
             <p>Rating: {{ review.rating }}/5.0</p>
             <p>{{ review.comment }}</p>
             <small>
-                Reviewed by {{ review.review_by_profile.user.username }}
+                Reviewed by {{ review.review_received.user.username }}
                 <hr>
             </small>
-            {% if review.review_by_profile == request.user.profile %}
+            {% if review.review_received == request.user.profile %}
                 <a href="{% url 'edit_review' review.id %}">Edit</a>
                 <a href="{% url 'delete_review' review.id %}">Delete</a>
             {% endif %}
