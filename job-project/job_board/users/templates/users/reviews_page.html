@@ -3,7 +3,7 @@
 {% if reviews %}
     {% for review in reviews %}
         <div class="review">
-            <p>Rating: {{ review.rating }}/5.0</p>
+            <p>Rating: {{ review.rating }}/5</p>
             <p>{{ review.comment }}</p>
             <small>
                 Reviewed by {{ review.review_received.user.username }}
@@ -18,3 +18,4 @@
 {% else %}
     <p>No reviews yet.</p>
 {% endif %}
+<button>Return to <a href='/'>home</a> page</button>
