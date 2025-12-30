@@ -8,7 +8,7 @@
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
 <h3>Average Rating</h3>
 
-{% if average_rating %}
+{% if average_rating is not None %}
     <p>⭐ {{ average_rating|floatformat:1 }} / 5.0</p>
 {% else %}
     <p>No ratings yet</p>

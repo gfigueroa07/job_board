@@ -44,8 +44,8 @@ def profile_create(request):
 @login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = profile.reviews_received.all()
-    average_rating = Review.objects.filter(review_written=request.user.profile).aggregate(Avg('rating'))['rating__avg']
+    reviews = Review.objects.filter(review_written=profile)
+    average_rating = Review.objects.filter(review_written=profile).aggregate(Avg('rating'))['rating__avg']
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
@@ -58,6 +58,8 @@ def profile_edit(request):
         messages.error(request, 'No profile to edit. Please log in or create a profile.')
         return redirect('login')
     profile = request.user.profile
+    print("POST REQUEST RECEIVED edit")
+
     if request.method == 'POST':
         profile = request.user.profile
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
@@ -69,6 +71,8 @@ def profile_edit(request):
     return render(request, 'users/profile_edit.html', {'form': form})
 
 def user_login(request):
+    print("POST REQUEST RECEIVED login")
+
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -81,6 +85,7 @@ def user_login(request):
 
 @require_POST
 def user_logout(request):
+    print("POST REQUEST RECEIVED logout")
     if request.method == 'POST':
         logout(request)
         return redirect('login')
@@ -105,6 +110,7 @@ def create_review(request, profile_id):
     if existing_review:
         messages.error(request, 'You have an  existing review')
         return redirect('profile_detail', profile_id=profile_id)
+    print("POST REQUEST RECEIVED cr")
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
         if form.is_valid():
