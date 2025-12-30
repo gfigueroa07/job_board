@@ -95,12 +95,14 @@ def reviews_page(request, profile_id):
 def create_review(request, profile_id):
     reviewed_profile = get_object_or_404(Profile, id=profile_id)
     if request.user.profile == reviewed_profile:
+        messages.error(request, 'Cant Review yourself')
         return redirect('profile_detail', profile_id=profile_id)
     existing_review = Review.objects.filter(
         review_by_profile=request.user.profile,
         review_to_profile=reviewed_profile
     ).exists()
     if existing_review:
+        
         return redirect('profile_detail', profile_id=profile_id)
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)

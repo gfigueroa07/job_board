@@ -1,4 +1,7 @@
 <h1>{{ profile.profile_name }}'s Profile</h1>
+{% if message %}
+    <p>{{ message }}</p>
+{% endif %}
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
 <h3>Average Rating</h3>
