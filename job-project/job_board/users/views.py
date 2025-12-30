@@ -49,7 +49,7 @@ def profile_detail(request, profile_id):
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
-        'average rating': average_rating,   
+        'average_rating': average_rating,   
     })
 
 
@@ -85,10 +85,11 @@ def user_logout(request):
         logout(request)
         return redirect('login')
 
-def reviews_page(request):
+def reviews_page(request, profile_id):
     # if request.method == 'POST':
-    reviews = Review.objects.all()
-    return render(request, 'users/reviews_page.html', {'reviews': reviews})
+    profile = get_object_or_404(Profile, id=profile_id)
+    reviews = Review.objects.filter(review_to_profile=profile)
+    return render(request, 'users/reviews_page.html', {'profile': profile, 'reviews': reviews})
 
 @login_required
 def create_review(request, profile_id):
