@@ -113,7 +113,7 @@ def create_review(request, profile_id):
             review.save()
             return redirect('profile_detail', profile_id=profile_id)
     else:
-        form = UserReviewsForm
+        form = UserReviewsForm()
     return render(request, 'users/create_review.html', {'form': form, 'profile': reviewed_profile})
     
 @login_required
