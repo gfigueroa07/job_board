@@ -3,6 +3,7 @@
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
 <h3>Average Rating</h3>
 <a href='{% url 'reviews' %}'>Reviews</a>
+<a href="{% url 'create_review' profile.id %}">Leave a review</a>
 {% if average_rating %}
     <p>⭐ {{ average_rating|floatformat:1 }} / 5</p>
 {% else %}

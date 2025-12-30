@@ -51,6 +51,13 @@ class JobCreateForm(forms.ModelForm):
         ]
 
 class UserReviewsForm(forms.ModelForm):
+    def clean_rating(self):
+        rating = self.cleaned_data.get('rating')
+        if rating < 1 or rating > 5:
+            raise forms.ValidationError(
+                'Rating must be between 1-5.'
+            )
+        return rating
     class Meta:
         model = Review
         fields = [

@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -32,7 +33,10 @@ class Review(models.Model):
     review_to_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
     review_by_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
     images = models.ImageField(upload_to='review_pics/', blank=False, null=True)
-    rating = models.FloatField()
+    rating = models.FloatField(validators=[
+        MinValueValidator(1),
+        MaxValueValidator(5),
+    ])
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:

@@ -12,6 +12,6 @@ class Migration(migrations.Migration):
     operations = [
         migrations.AddConstraint(
             model_name='review',
-            constraint=models.UniqueConstraint(fields=('review_by_profile', 'review_for_profile'), name='one_review_per_user_per_profile'),
+            constraint=models.UniqueConstraint(fields=('review_by_profile', 'review_to_profile'), name='one_review_per_user_per_profile'),
         ),
     ]

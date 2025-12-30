@@ -97,7 +97,7 @@ def create_review(request, profile_id):
         return redirect('profile_detail', profile_id=profile_id)
     existing_review = Review.objects.filter(
         review_by_profile=request.user.profile,
-        review_for_profile=reviewed_profile
+        review_to_profile=reviewed_profile
     ).exists()
     if existing_review:
         return redirect('profile_detail', profile_id=profile_id)
@@ -111,7 +111,7 @@ def create_review(request, profile_id):
             return redirect('profile_detail', profile_id=profile_id)
     else:
         form = UserReviewsForm
-    return render(request, 'users/reviews_page.html', {'form': form, 'profile': reviewed_profile})
+    return render(request, 'users/create_review.html', {'form': form, 'profile': reviewed_profile})
     
 @login_required
 def edit_review(request, review_id):

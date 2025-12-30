@@ -1,5 +1,5 @@
 <h2>Leave a review for {{ profile.user.username }}</h2>
-
+{% comment %} <input type="number" name="rating" min="1" max="5" step="1"> {% endcomment %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
