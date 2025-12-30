@@ -141,7 +141,7 @@ def review_edit(request, review_id):
 @login_required
 def review_delete(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-    if review.review_by_profile != request.user.profile:
+    if review.review_received != request.user.profile:
         return redirect('profile_detail', profile_id=review.review_written.id)
     if request.method == 'POST':
         review.delete()

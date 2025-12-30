@@ -32,9 +32,9 @@ urlpatterns = [
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
     path('reviews/<int:profile_id>/', views.review_page, name='reviews'),
-    path('reviews/<int:profile_id>/create/', views.review_create, name='create_review'),
-    path('reviews/<int:review_id>/edit/', views.review_edit, name='edit_review'),
-    path('reviews/<int:review_id>/delete/', views.review_delete, name='delete_review'),
+    path('reviews/<int:profile_id>/create/', views.review_create, name='review_create'),
+    path('reviews/<int:review_id>/edit/', views.review_edit, name='review_edit'),
+    path('reviews/<int:review_id>/delete/', views.review_delete, name='review_delete'),
 ]
 
 
