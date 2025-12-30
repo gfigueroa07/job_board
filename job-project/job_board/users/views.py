@@ -96,6 +96,7 @@ def create_review(request, profile_id):
     reviewed_profile = get_object_or_404(Profile, id=profile_id)
     if request.user.profile == reviewed_profile:
         messages.error(request, 'Cant Review yourself')
+        print("SELF REVIEW BLOCK HIT") #debug test
         return redirect('profile_detail', profile_id=profile_id)
     existing_review = Review.objects.filter(
         review_by_profile=request.user.profile,
@@ -110,6 +111,7 @@ def create_review(request, profile_id):
             review = form.save(commit=False)
             review.review_by_profile = request.user.profile
             review.review_to_profile = reviewed_profile
+            print("SAVING REVIEW") #debug test
             review.save()
             return redirect('profile_detail', profile_id=profile_id)
     else:
