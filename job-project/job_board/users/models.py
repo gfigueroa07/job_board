@@ -33,7 +33,7 @@ class Review(models.Model):
     review_written = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
     review_received = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
     images = models.ImageField(upload_to='review_pics/', blank=True, null=True)
-    rating = models.FloatField(validators=[
+    rating = models.IntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5),
     ])
