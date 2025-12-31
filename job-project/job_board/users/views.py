@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm
-from users .models import Profile, Review
+from users .models import Profile, Review, User
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -147,3 +147,13 @@ def review_delete(request, review_id):
         review.delete()
         return redirect('profile_detail', profile_id=review.review_written.id)
     return render(request, 'users/review_delete.html', {'review': review})
+
+@login_required
+def profile_delete(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if user.id != request.user.id:
+        return redirect('profile_detail', user_id=user.id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('login')
+    return render(request, 'users/profile_delete.html', {'user': user})

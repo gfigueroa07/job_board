@@ -11,8 +11,9 @@
             {% if review.review_received == request.user.profile %}
                 <a href="{% url 'review_edit' review.id %}">Edit</a>
                 <a href="{% url 'review_delete' review.id %}">Delete</a>
-                <hr>
+                
             {% endif %}
+            <hr>
         </div>
     {% endfor %}
 {% else %}

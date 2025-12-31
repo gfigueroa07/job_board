@@ -9,7 +9,7 @@
 <h3>Average Rating</h3>
 
 {% if average_rating is not None %}
-    <p>⭐ {{ average_rating|floatformat:1 }} / 5.0</p>
+    <p>⭐ {{ average_rating|floatformat:1 }} / 5</p>
 {% else %}
     <p>No ratings yet</p>
 {% endif %}
@@ -26,5 +26,10 @@
     <a href='{% url 'reviews' profile.id %}'>Reviews</a>
     <a href="{% url 'review_create' profile.id %}">Leave a review</a>
     <button type="submit">Log out</button>
+</form>
+
+{% if profile.id == request.user.profile.id %}
+    <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
+{% endif %}
 </form>
 <button>Return to <a href='/'>home</a> page</button>
