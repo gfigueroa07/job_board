@@ -58,8 +58,6 @@ def profile_edit(request):
         messages.error(request, 'No profile to edit. Please log in or create a profile.')
         return redirect('login')
     profile = request.user.profile
-    print("POST REQUEST RECEIVED edit")
-
     if request.method == 'POST':
         profile = request.user.profile
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)

@@ -38,16 +38,28 @@ def job_list(request):
 def job_edit(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     if job.profile != request.user.profile:
-        return redirect('job_details', job_id=job.profile.id)
+        return redirect('job_details')
     if request.method == 'POST':
         form = JobDetailsForm(request.POST, request.FILES, instance=job)
         if form.is_valid():
             form.save()
-            return redirect('job_details', job_id=job.profile.id)
+            return redirect('job_details')
     else:
-        form = JobDetailsForm()
+        form = JobDetailsForm(instance=job)
     return render(request, 'job_board/job_edit.html', {'form': form, 'job': job})
 
+@login_required
+def job_delete(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    if job.profile != request.user.profile:
+        return redirect('job_details')
+    if request.method == 'POST':
+        job.delete()
+        return redirect('job_details')
+    return render(request, 'job_board/job_delete.html', {'job': job})
+    
+    
+    pass
 
 def profile(request):
     return render(request, 'job_board/profile.html')

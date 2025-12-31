@@ -11,7 +11,7 @@
         <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
         {% if job.profile == request.user.profile %}
             <a href="{% url 'job_edit' job.id %}">Edit</a>
-            {% comment %} <a href="{% url 'job_delete' job.id %}">Delete</a>    {% endcomment %}
+            <a href="{% url 'job_delete' job.id %}">Delete</a>   
         {% endif %}
         <hr>
     {% endfor %}
