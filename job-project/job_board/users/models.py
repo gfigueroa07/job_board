@@ -23,7 +23,7 @@ class JobListing(models.Model):
     title = models.TextField(max_length=200)
     description = models.CharField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
-    images = models.ImageField(upload_to='job_pics/', blank=False, null=True)
+    images = models.ImageField(upload_to='job_pics/', blank=True, null=True)
     due_date = models.TextField(max_length=20, blank=True, null=True)
     
     def __str__(self):
@@ -32,7 +32,7 @@ class JobListing(models.Model):
 class Review(models.Model):
     review_written = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_written')
     review_received = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reviews_received')
-    images = models.ImageField(upload_to='review_pics/', blank=False, null=True)
+    images = models.ImageField(upload_to='review_pics/', blank=True, null=True)
     rating = models.IntegerField(validators=[
         MinValueValidator(1),
         MaxValueValidator(5),
