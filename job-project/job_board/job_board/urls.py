@@ -29,6 +29,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('job/details/', views.job_details, name='job_details'),
     path('job/list/', views.job_list, name='job_list'),
+    path('job/<int:job_id>/edit/', views.job_edit, name='job_edit' )
 ]
 
 if settings.DEBUG:

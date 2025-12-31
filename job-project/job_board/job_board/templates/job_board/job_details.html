@@ -8,8 +8,11 @@
     {% for job in jobs %}
         <p>{{ job.title }}</p>
         <p>{{ job.description }}</p>
-        {% comment %} <p>Posted by: {{ job.profile }} {% endcomment %}
         <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
+        {% if job.profile == request.user.profile %}
+            <a href="{% url 'job_edit' job.id %}">Edit</a>
+            {% comment %} <a href="{% url 'job_delete' job.id %}">Delete</a>    {% endcomment %}
+        {% endif %}
         <hr>
     {% endfor %}
 {% endif %}

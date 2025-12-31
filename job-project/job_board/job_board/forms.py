@@ -38,6 +38,7 @@ class JobDetailsForm(forms.ModelForm):
             'title',
             'description',
             'images',
+            'due_date',
         ]
         
 class JobCreateForm(forms.ModelForm):

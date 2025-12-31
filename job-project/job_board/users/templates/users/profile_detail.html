@@ -9,7 +9,7 @@
 <h3>Average Rating</h3>
 
 {% if average_rating is not None %}
-    <p>⭐ {{ average_rating|floatformat:1 }} / 5</p>
+    <p>⭐ {{ average_rating|floatformat:-1 }} / 5</p>
 {% else %}
     <p>No ratings yet</p>
 {% endif %}

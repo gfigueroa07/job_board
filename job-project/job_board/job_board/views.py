@@ -34,8 +34,21 @@ def job_list(request):
         job_form = JobCreateForm()
     return render(request, 'job_board/job_list.html', {'job_form' : job_form})
 
-# def profile(request):
-#     return render(request, 'job_board/profile.html')
+@login_required
+def job_edit(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    if job.profile != request.user.profile:
+        return redirect('job_details', job_id=job.profile.id)
+    if request.method == 'POST':
+        form = JobDetailsForm(request.POST, request.FILES, instance=job)
+        if form.is_valid():
+            form.save()
+            return redirect('job_details', job_id=job.profile.id)
+    else:
+        form = JobDetailsForm()
+    return render(request, 'job_board/job_edit.html', {'form': form, 'job': job})
+
+
 def profile(request):
     return render(request, 'job_board/profile.html')
 
