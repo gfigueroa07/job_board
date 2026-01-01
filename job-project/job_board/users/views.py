@@ -146,7 +146,7 @@ def review_edit(request, review_id):
         if form.is_valid():
             review.edited = True
             form.save()
-            return redirect('profile_detail', profile_id=review.review_written.id)
+            return redirect('profile_detail', profile_id=review.review_received.id)
     else:
         form = UserReviewsForm(instance=review)
     return render(request, 'users/review_edit.html', {'form': form, 'review': review})
@@ -155,10 +155,10 @@ def review_edit(request, review_id):
 def review_delete(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_written != request.user.profile:
-        return redirect('profile_detail', profile_id=review.review_written.id)
+        return redirect('profile_detail', review_id=review.review_written.id)
     if request.method == 'POST':
         review.delete()
-        return redirect('profile_detail', profile_id=review.review_written.id)
+        return redirect('review_edit', profile_id=review.review_written.id)
     return render(request, 'users/review_delete.html', {'review': review})
 
 @login_required
