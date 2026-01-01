@@ -96,7 +96,7 @@ def user_jobs(request, profile_id):
 def review_page(request, profile_id):
     # if request.method == 'POST':
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = Review.objects.filter(review_written=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField().order_by('-written_by_user', '-id')))
+    reviews = Review.objects.filter(review_written=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField())).order_by('-written_by_user', '-id')
     return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
 
 @login_required
