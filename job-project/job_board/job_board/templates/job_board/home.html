@@ -12,16 +12,20 @@
     {{ form.as_p }}
     <button type="submit">W Xarop Sensei frfr UwU</button>
 </form>
-<a href='job/details/'>job details</a>
 {% if user.is_authenticated and user.profile %}
+    <a href='job/details/'>job details</a>
     <a href="{% url 'job_list' %}">job list</a>
 {% endif %}
-<a href='/users/profile/create/'>create profile</a>
-{% if user.is_authenticated and user.profile %}
-    <a href="{% url 'profile_detail' user.profile.id %}">View Profile</a>
+{% if not user.is_authenticated %}
+    <a href='/users/profile/create/'>create profile</a>
 {% endif %}
-<a href='/users/profile/edit/'>edit profile</a>
-<a href='/users/user/login/'>login</a>
+{% if user.is_authenticated and user.profile %}
+    <a href="{% url 'profile_detail' user.profile.id %}">view profile</a>
+    <a href='/users/profile/edit/'>edit profile</a>
+{% endif %}
+{% if not user.is_authenticated %}
+    <a href='/users/user/login/'>login</a>
+{% endif %}
 {% if user.is_authenticated and user.profile %}
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
