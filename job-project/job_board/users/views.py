@@ -45,8 +45,8 @@ def profile_create(request):
 @login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = Review.objects.filter(review_written=profile)
-    average_rating = Review.objects.filter(review_written=profile).aggregate(Avg('rating'))['rating__avg']
+    reviews = Review.objects.filter(review_received=profile)
+    average_rating = Review.objects.filter(review_received=profile).aggregate(Avg('rating'))['rating__avg']
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
@@ -105,7 +105,7 @@ def review_page(request, profile_id):
     #     sort_by=sort_option,
     #     user_profile=request.user.profile
     # )
-    reviews = Review.objects.filter(review_written=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField())).order_by('-written_by_user', '-id')
+    reviews = Review.objects.filter(review_received=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField())).order_by('-written_by_user', '-id')
     return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
 
 @login_required
