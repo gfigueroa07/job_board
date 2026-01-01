@@ -49,4 +49,4 @@ class Review(models.Model):
         ]
         
     def __str__(self):
-        return f"{self.review_received.user.username} -> {self.review_written.user.username}"
+        return f"{self.review_written.user.username} -> {self.review_received.user.username}"
