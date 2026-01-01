@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm
-from users .models import Profile, Review, User
+from users .models import Profile, Review, User, JobListing
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -87,6 +87,11 @@ def user_logout(request):
     if request.method == 'POST':
         logout(request)
         return redirect('login')
+    
+def user_jobs(request, profile_id):
+    profile = get_object_or_404(Profile, id=profile_id)
+    jobs = JobListing.objects.filter(profile=profile)
+    return render(request, 'users/user_jobs.html', {'profile': profile, 'jobs': jobs})
 
 def review_page(request, profile_id):
     # if request.method == 'POST':

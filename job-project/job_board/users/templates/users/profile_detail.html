@@ -24,7 +24,10 @@
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
     <a href='{% url 'reviews' profile.id %}'>Reviews</a>
-    <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+    {% if profile != request.user.profile %}
+        <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+    {% endif %}
+    <a href='{% url 'user_jobs' profile.id %}'>Jobs Listed</a>
     <button type="submit">Log out</button>
 </form>
 

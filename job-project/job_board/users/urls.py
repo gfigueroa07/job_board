@@ -29,13 +29,16 @@ urlpatterns = [
     path('profile/create/', views.profile_create, name='profile_create'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
+    path('profile/<int:user_id>/delete/', views.profile_delete, name='profile_delete'),
+    
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
+    path('user/<int:profile_id>/jobs/', views.user_jobs, name='user_jobs'),
+    
     path('reviews/<int:profile_id>/', views.review_page, name='reviews'),
     path('reviews/<int:profile_id>/create/', views.review_create, name='review_create'),
     path('reviews/<int:review_id>/edit/', views.review_edit, name='review_edit'),
-    path('reviews/<int:review_id>/delete/', views.review_delete, name='review_delete'),
-    path('profile/<int:user_id>/delete/', views.profile_delete, name='profile_delete'),
+    path('reviews/<int:review_id>/delete/', views.review_delete, name='review_delete'), 
 ]
 
 

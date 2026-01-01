@@ -1,0 +1,18 @@
+<h1>Jobs listed<h1>
+
+
+{% if jobs %}
+    {% for job in jobs %}
+        <div class="job">
+            {% if job.profile == request.user.profile %}
+                <p>{{ job.title }}</p>
+                <small><a href="{% url 'job_edit' job.id %}">Edit</a></small>
+                <small><a href="{% url 'job_delete' job.id %}">Delete</a></small>
+            {% endif %}
+            <hr>
+        </div>
+    {% endfor %}
+{% else %}
+    <p>No reviews yet.</p>
+{% endif %}
+<button>Return to <a href='/'>home</a> page</button>
