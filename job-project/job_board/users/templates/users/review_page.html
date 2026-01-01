@@ -4,11 +4,11 @@
     {% for review in reviews %}
         <div class="review">
             <p>Rating: {{ review.rating }}/5</p>
-            <p>{{ review.comment }}</p>
+            <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
             <small>
-                Reviewed by {{ review.review_received.user.username }}
+                Reviewed by {{ review.review_written.user.username }}
             </small>
-            {% if review.review_received == request.user.profile %}
+            {% if review.review_written == request.user.profile %}
                 <a href="{% url 'review_edit' review.id %}">Edit</a>
                 <a href="{% url 'review_delete' review.id %}">Delete</a> 
             {% endif %}

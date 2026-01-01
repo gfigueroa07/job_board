@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm
+from job_board .funcs import filter_and_sort
 from users .models import Profile, Review, User, JobListing
 from django.urls import path
 from django.http import HttpResponse
@@ -96,6 +97,14 @@ def user_jobs(request, profile_id):
 def review_page(request, profile_id):
     # if request.method == 'POST':
     profile = get_object_or_404(Profile, id=profile_id)
+    # sort_option = request.GET.get('sort', 'new')
+    # filters = {}
+    # reviews = filter_and_sort(
+    #     Review.objects.filter(review_received=profile),
+    #     filters=filters,
+    #     sort_by=sort_option,
+    #     user_profile=request.user.profile
+    # )
     reviews = Review.objects.filter(review_written=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField())).order_by('-written_by_user', '-id')
     return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
 
@@ -107,8 +116,8 @@ def review_create(request, profile_id):
         print("SELF REVIEW BLOCK HIT") #debug test
         return redirect('profile_detail', profile_id=profile_id)
     existing_review = Review.objects.filter(
-        review_received=request.user.profile,
-        review_written=reviewed_profile
+        review_written=request.user.profile,
+        review_received=reviewed_profile
     ).exists()
     if existing_review:
         messages.error(request, 'You have an  existing review')
@@ -118,8 +127,8 @@ def review_create(request, profile_id):
         form = UserReviewsForm(request.POST, request.FILES)
         if form.is_valid():
             review = form.save(commit=False)
-            review.review_received = request.user.profile
-            review.review_written = reviewed_profile
+            review.review_written = request.user.profile
+            review.review_received = reviewed_profile
             print("SAVING REVIEW") #debug test
             review.save()
             return redirect('profile_detail', profile_id=profile_id)
@@ -130,11 +139,12 @@ def review_create(request, profile_id):
 @login_required
 def review_edit(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-    if review.review_received != request.user.profile:
+    if review.review_written != request.user.profile:
         return redirect('profile_detail', profile_id=review.review_written.id)
     if request.method =='POST':
         form = UserReviewsForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
+            review.edited = True
             form.save()
             return redirect('profile_detail', profile_id=review.review_written.id)
     else:
@@ -144,7 +154,7 @@ def review_edit(request, review_id):
 @login_required
 def review_delete(request, review_id):
     review = get_object_or_404(Review, id=review_id)
-    if review.review_received != request.user.profile:
+    if review.review_written != request.user.profile:
         return redirect('profile_detail', profile_id=review.review_written.id)
     if request.method == 'POST':
         review.delete()
