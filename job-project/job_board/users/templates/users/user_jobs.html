@@ -1,16 +1,15 @@
 <h1>Jobs listed<h1>
 
-
 {% if jobs %}
     {% for job in jobs %}
         <div class="job">
-            {% if job.profile == request.user.profile %}
-                <p>{{ job.title }}</p>
+            <p>{{ job.title }}</p>
+            {% if profile.id == request.user.profile.id %}
                 <small><a href="{% url 'job_edit' job.id %}">Edit</a></small>
                 <small><a href="{% url 'job_delete' job.id %}">Delete</a></small>
-            {% endif %}
-            <hr>
+            {% endif  %}
         </div>
+        <hr>
     {% endfor %}
 {% else %}
     <p>No reviews yet.</p>
