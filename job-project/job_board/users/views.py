@@ -20,7 +20,6 @@ def profile_create(request):
     if request.method == 'POST':
         user_form = UserCreationForm(request.POST)
         profile_form = ProfileForm(request.POST, request.FILES)  # include files for avatar
-
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user first
             user = user_form.save()
@@ -33,12 +32,10 @@ def profile_create(request):
 
             # Log the user in immediately
             login(request, user)
-            
             return redirect('profile_detail', profile_id=profile.id) # replace 'home' with your URL name
     else:
         user_form = UserCreationForm()
         profile_form = ProfileForm()
-
     context = {'user_form': user_form, 'profile_form': profile_form}
     return render(request, 'users/profile_create.html', context)
 
@@ -70,8 +67,6 @@ def profile_edit(request):
     return render(request, 'users/profile_edit.html', {'form': form})
 
 def user_login(request):
-    print("POST REQUEST RECEIVED login")
-
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
@@ -113,7 +108,6 @@ def review_create(request, profile_id):
     reviewed_profile = get_object_or_404(Profile, id=profile_id)
     if request.user.profile == reviewed_profile:
         messages.error(request, 'Cant Review yourself')
-        print("SELF REVIEW BLOCK HIT") #debug test
         return redirect('profile_detail', profile_id=profile_id)
     existing_review = Review.objects.filter(
         review_written=request.user.profile,
@@ -122,7 +116,6 @@ def review_create(request, profile_id):
     if existing_review:
         messages.error(request, 'You have an  existing review')
         return redirect('profile_detail', profile_id=profile_id)
-    print("POST REQUEST RECEIVED cr")
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
         if form.is_valid():
