@@ -14,10 +14,7 @@
             {% csrf_token %}
             <button type="submit">Delete</button>
             </form>
-            <form method="post" action="{% url 'job_edit' job.id %}">
-            {% csrf_token %}
-            <button type="submit">Edit</button>
-            </form>  
+            <button><a href="{% url 'job_edit' job.id %}">Edit</a></button> 
         {% endif %}
         <hr>
     {% endfor %}

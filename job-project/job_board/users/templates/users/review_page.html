@@ -9,8 +9,11 @@
                 Reviewed by {{ review.review_written.user.username }}
             </small>
             {% if review.review_written == request.user.profile %}
-                <a href="{% url 'review_edit' review.id %}">Edit</a>
-                <a href="{% url 'review_delete' review.id %}">Delete</a> 
+                <button><a href="{% url 'review_edit' review.id %}">Edit</a></button>
+                <form method="post" action="{% url 'review_delete' review.id %}">
+                {% csrf_token %}
+                <button type="submit">Delete</button>
+                </form>
             {% endif %}
             <hr>
         </div>
