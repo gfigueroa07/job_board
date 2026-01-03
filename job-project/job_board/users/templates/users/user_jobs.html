@@ -4,7 +4,7 @@
     {% for job in jobs %}
         <div class="job">
             <p>{{ job.title }}</p>
-            {% if profile.id == request.user.profile.id %}
+            {% if job.profile == request.user.profile %}
                 <small><a href="{% url 'job_edit' job.id %}">Edit</a></small>
                 <small><a href="{% url 'job_delete' job.id %}">Delete</a></small>
             {% endif  %}

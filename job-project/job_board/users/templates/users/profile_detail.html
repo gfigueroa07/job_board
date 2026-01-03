@@ -21,12 +21,15 @@
 {% if profile.resume %}
     <a href="{{ profile.resume.url }}" download>Download Resume</a>  
 {% endif %}
+<a href='{% url 'reviews' profile.id %}'>Reviews</a>
+
+{% if profile != request.user.profile %}
+    <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+{% endif %}
+
+
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
-    <a href='{% url 'reviews' profile.id %}'>Reviews</a>
-    {% if profile != request.user.profile %}
-        <a href="{% url 'review_create' profile.id %}">Leave a review</a>
-    {% endif %}
     <a href='{% url 'user_jobs' profile.id %}'>Jobs Listed</a>
     <button type="submit">Log out</button>
 </form>
