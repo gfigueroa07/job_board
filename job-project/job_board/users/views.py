@@ -17,6 +17,10 @@ from django.db.models import Avg, Case, When, Value, BooleanField
 #     return render(request, 'users/home.html')
 
 def profile_create(request):
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        messages.error(request, "Please log out before creating a profile.")
+        return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
         user_form = UserCreationForm(request.POST)
         profile_form = ProfileForm(request.POST, request.FILES)  # include files for avatar
