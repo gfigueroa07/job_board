@@ -66,6 +66,13 @@ class UserReviewsForm(forms.ModelForm):
             'images',
             'comment',
         ]
+        widgets = {
+            'rating': forms.NumberInput(attrs={
+                'required': True, 
+                'min': 1, 
+                'max': 5
+            })
+        }
         
 # Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
 # These form objects need to be used for Django to run validations using your Models
