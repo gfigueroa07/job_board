@@ -10,8 +10,14 @@
         <p>{{ job.description }}</p>
         <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
         {% if job.profile == request.user.profile %}
-            <a href="{% url 'job_edit' job.id %}">Edit</a>
-            <a href="{% url 'job_delete' job.id %}">Delete</a>   
+            <form method="post" action="{% url 'job_delete' job.id %}">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+            </form>
+            <form method="post" action="{% url 'job_edit' job.id %}">
+            {% csrf_token %}
+            <button type="submit">Edit</button>
+            </form>  
         {% endif %}
         <hr>
     {% endfor %}
