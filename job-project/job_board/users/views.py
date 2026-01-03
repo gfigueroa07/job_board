@@ -71,6 +71,10 @@ def profile_edit(request):
     return render(request, 'users/profile_edit.html', {'form': form})
 
 def user_login(request):
+    if request.user.is_authenticated:
+        profile = request.user.profile
+        messages.error(request, "You are already logged in.")
+        return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
         form = AuthenticationForm(data=request.POST)
         if form.is_valid():
