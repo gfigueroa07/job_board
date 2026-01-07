@@ -1,13 +1,15 @@
 <h1>{{ profile.profile_name }}'s Profile</h1>
+
 {% if messages %}
     {% for message in messages %}
         <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
+
 <p><strong>Description:</strong> {{ profile.description }}</p>
 <p><strong>Skills:</strong> {{ profile.skills }}</p>
-<h3>Average Rating</h3>
 
+<h3>Average Rating</h3>
 {% if average_rating is not None %}
     <p>⭐ {{ average_rating|floatformat:-1 }} / 5</p>
 {% else %}
@@ -19,23 +21,28 @@
 {% endif %}
 
 {% if profile.resume %}
-    <a href="{{ profile.resume.url }}" download>Download Resume</a>  
+    <a href="{{ profile.resume.url }}" download>Download Resume</a>
 {% endif %}
-<a href='{% url 'reviews' profile.id %}'>Reviews</a>
 
-{% if profile != request.user.profile %}
+<!-- Link to all reviews -->
+<a href="{% url 'reviews' profile.id %}">Reviews</a>
+
+<!-- Leave a review: only for logged-in users who are not the profile owner -->
+{% if request.user.is_authenticated and profile != request.user.profile %}
     <a href="{% url 'review_create' profile.id %}">Leave a review</a>
 {% endif %}
 
+<!-- Link to jobs listed by this profile -->
+<a href="{% url 'user_jobs' profile.id %}">Jobs Listed</a>
 
-<form method="post" action="{% url 'logout' %}">
-    {% csrf_token %}
-    <a href='{% url 'user_jobs' profile.id %}'>Jobs Listed</a>
-    <button type="submit">Log out</button>
-</form>
-
-{% if profile.id == request.user.profile.id %}
+<!-- Owner-only controls -->
+{% if request.user.is_authenticated and profile.id == request.user.profile.id %}
+    <form method="post" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button type="submit">Log out</button>
+    </form>
     <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
 {% endif %}
-</form>
-<button>Return to <a href='/'>home</a> page</button>
+
+<!-- Return home button -->
+<p><a href="/">Return to home page</a></p>
