@@ -27,10 +27,11 @@ urlpatterns = [
     path('', views.home, name="home"),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
-    path('job/details/', views.job_details, name='job_details'),
+    path('job/page/', views.job_page, name='job_page'),
     path('job/list/', views.job_list, name='job_list'),
     path('job/<int:job_id>/edit/', views.job_edit, name='job_edit'),
     path('job/<int:job_id>/delete/', views.job_delete, name='job_delete'),
+    path('job/<int:job_id>/details/', views.job_details, name='job_details'),
     ]
 
 

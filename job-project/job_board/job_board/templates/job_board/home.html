@@ -6,14 +6,10 @@
 <body>
 
 <h1>This app is still getting worked on. Please check again later</h1>
-
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">W Xarop Sensei frfr UwU</button>
-</form>
+<button type="submit">W Xarop Sensei frfr UwU</button><hr>
+<a href='job/page/'>job details</a>
 {% if user.is_authenticated and user.profile %}
-    <a href='job/details/'>job details</a>
+    
     <a href="{% url 'job_list' %}">job list</a>
 {% endif %}
 {% if not user.is_authenticated %}

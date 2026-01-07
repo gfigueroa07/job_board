@@ -1,25 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <h1>Job Details</h1>
-{% if message %}
-    <p>{{ message }}</p>
-{% else %}
-    {% for job in jobs %}
-        <p>{{ job.title }}</p>
-        <p>{{ job.description }}</p>
-        <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
-        {% if job.profile == request.user.profile %}
-            <a href="{% url 'job_edit' job.id %}"> <button>Edit</button> </a>
-            <form method="post" action="{% url 'job_delete' job.id %}">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-           {% endif %}
-        <hr>
-    {% endfor %}
+<h1>Job Details</h1>
+
+
+<h1> {{ job.title }} </h1>
+{{ job.images }}
+{{ job.description}}
+{{ job.due_date}}
+<p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
+{% if job.profile == request.user.profile %}
+    <a href="{% url 'job_edit' job.id %}"> <button>Edit</button> </a>
+    <form method="post" action="{% url 'job_delete' job.id %}">
+        {% csrf_token %}
+        <button type="submit">Delete</button>
+    </form>
 {% endif %}
-</head>
-<button>Return to <a href='/'>home</a> page</button>
-</body>
-</html>
+<hr>

@@ -13,13 +13,16 @@ from .models import XaropItem
 def home(request):
     return render(request, 'job_board/home.html')
 
-def job_details(request):
+def job_page(request):
     jobs = JobListing.objects.all()
     if not jobs.exists():
-        return render(request, 'job_board/job_details.html', {'message' : 'no job listings. Check back later'})
-    return render(request, 'job_board/job_details.html', {'jobs': jobs})
+        return render(request, 'job_board/job_page.html', {'message' : 'no job listings. Check back later'})
+    return render(request, 'job_board/job_page.html', {'jobs': jobs})
 
-
+def job_details(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    return render(request, 'job_board/job_details.html', {'job': job})
+    
 def job_list(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Login before posting a job.')
@@ -29,7 +32,7 @@ def job_list(request):
         job = job_form.save(commit=False)
         job.profile = request.user.profile
         job.save()
-        return redirect('job_details')
+        return redirect('job_page')
     else:
         job_form = JobCreateForm()
     return render(request, 'job_board/job_list.html', {'job_form' : job_form})
