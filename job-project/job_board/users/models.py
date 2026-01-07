@@ -50,3 +50,54 @@ class Review(models.Model):
         
     def __str__(self):
         return f"{self.review_written.user.username} -> {self.review_received.user.username}"
+    
+class ProfileReport(models.Model):
+    reason_choice = [
+        ('spam','Spam'),
+        ('scam','Scam/Fraud'),
+        ('fake','Fake Profile'),
+        ('harassment','Harassment'),
+        ('inappropriate','Inappropriate Content'),
+        ('other','Other'),
+    ]
+    report_status = [
+        ('pending','Pending'),
+        ('reviewed','Reviewed'),
+        ('action_taken','Action Taken'),
+        ('ignored','Ignored'),
+    ]
+    reported_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reports_against')
+    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reported_made')
+    reason = models.CharField(max_length=20, choices=reason_choice)
+    message = models.TextField(max_length=250, blank=True)
+    status = models.CharField(max_length=20, choices=report_status, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.reported_profile} - {self.reason}"
+    
+    
+class JobReport(models.Model):
+    reason_choice = [
+        ('spam','Spam'),
+        ('scam','Scam/Fraud'),
+        ('fake','Fake Job'),
+        ('harassment','Harassment'),
+        ('inappropriate','Inappropriate Content'),
+        ('other','Other'),
+    ]
+    report_status = [
+        ('pending','Pending'),
+        ('reviewed','Reviewed'),
+        ('action_taken','Action Taken'),
+        ('ignored','Ignored'),
+    ]
+    
+    reported_job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='reports_against')
+    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reports_made')
+    reason = models.CharField(max_length=20, choices=reason_choice)
+    message = models.TextField(max_length=250, blank=True)
+    status = models.CharField(max_length=20, choices=report_status, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    def __str__(self):
+        return f"{self.reported_job} - {self.reason}"
