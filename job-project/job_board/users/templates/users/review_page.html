@@ -6,7 +6,7 @@
             <p>Rating: {{ review.rating }}/5</p>
             <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
             <small>
-                Reviewed by {{ review.review_written.user.username }}
+                Reviewed by <a href="{% url 'profile_detail' review.review_written.id %}">{{ review.review_written.user.username }}</a>
             </small>
             {% if review.review_written == request.user.profile %}
                 <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
