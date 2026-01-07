@@ -43,7 +43,6 @@ def profile_create(request):
     context = {'user_form': user_form, 'profile_form': profile_form}
     return render(request, 'users/profile_create.html', context)
 
-@login_required
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)
@@ -98,17 +97,8 @@ def user_jobs(request, profile_id):
     return render(request, 'users/user_jobs.html', {'profile': profile, 'jobs': jobs})
 
 def review_page(request, profile_id):
-    # if request.method == 'POST':
     profile = get_object_or_404(Profile, id=profile_id)
-    # sort_option = request.GET.get('sort', 'new')
-    # filters = {}
-    # reviews = filter_and_sort(
-    #     Review.objects.filter(review_received=profile),
-    #     filters=filters,
-    #     sort_by=sort_option,
-    #     user_profile=request.user.profile
-    # )
-    reviews = Review.objects.filter(review_received=profile).annotate(written_by_user=Case(When(review_written=request.user.profile, then=Value(True)), default=Value(False), output_field=BooleanField())).order_by('-written_by_user', '-id')
+    reviews = Review.objects.filter(review_received=profile)
     return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
 
 @login_required
