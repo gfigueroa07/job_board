@@ -1,0 +1,11 @@
+{% if profile_report %}
+    <h2>Report Profile</h2>
+{% else %}
+    <h2>Report Job</h2>
+{% endif %}
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Report</button>
+</form>
+<p><a href="/">Return to home page</a></p>

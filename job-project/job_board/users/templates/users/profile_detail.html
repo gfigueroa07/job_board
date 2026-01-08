@@ -43,6 +43,9 @@
     </form>
     <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
 {% endif %}
-
+<form method="post" action="{% url 'profile_report' profile.id %}">
+        {% csrf_token %}
+        <button type="submit">Report</button>
+</form>
 <!-- Return home button -->
 <p><a href="/">Return to home page</a></p>

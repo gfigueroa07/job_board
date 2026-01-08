@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review
+from users .models import Profile, JobListing, Review, ProfileReport, JobReport
 
 
 
@@ -31,6 +31,14 @@ class ProfileEditForm(forms.ModelForm):
             'resume',
         ]
 
+class ProfileReportForm(forms.ModelForm):
+    class Meta:
+        model = ProfileReport
+        fields = [
+            'reason',
+            'message'
+        ]
+              
 class JobDetailsForm(forms.ModelForm):
     class Meta:
         model = JobListing
@@ -50,7 +58,15 @@ class JobCreateForm(forms.ModelForm):
             'description',
             'due_date',
         ]
-
+        
+class JobReportForm(forms.ModelForm):
+    class Meta:
+        model = JobReport
+        fields = [
+            'reason',
+            'message'
+        ]
+        
 class UserReviewsForm(forms.ModelForm):
     def clean_rating(self):
         rating = self.cleaned_data.get('rating')

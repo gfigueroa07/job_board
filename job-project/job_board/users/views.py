@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm
 from job_board .funcs import filter_and_sort
 from users .models import Profile, Review, User, JobListing
 from django.urls import path
@@ -68,6 +68,53 @@ def profile_edit(request):
     else:
         form = ProfileEditForm(instance=profile)
     return render(request, 'users/profile_edit.html', {'form': form})
+
+@login_required
+def profile_delete(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    if user.id != request.user.id:
+        return redirect('profile_detail', user_id=user.id)
+    if request.method == 'POST':
+        user.delete()
+        return redirect('login')
+    return render(request, 'users/profile_delete.html', {'user': user})
+
+def profile_report(request, profile_id):
+    profile = get_object_or_404(Profile, id=profile_id)
+    if request.method == 'POST':
+        form = ProfileReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reported_profile = profile
+            if request.user.is_authenticated:
+                report.reporter_profile = request.user.profile
+            report.save()
+            messages.success(request, 'Thank you for your report.')
+            return redirect('profile_detail', profile_id=profile.id)
+    else:
+        form = ProfileReportForm()
+    return render(request, 'users/report.html', {'form': form, 'profile': profile})
+
+def  job_report(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    if request.method == 'POST':
+        form = JobReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            report.reported_job = job
+            if request.user.is_authenticated:
+                report.reporter_profile = request.user.profile
+            report.save()
+            messages.success(request, 'Thank you for your report.')
+            return redirect('job_details', job_id=job.id)
+    else:
+        form = JobReportForm()
+    return render(request, 'users/report.html', {'form': form, 'job': job})
+
+
+
+
+
 
 def user_login(request):
     if request.user.is_authenticated:
