@@ -20,6 +20,7 @@ class Profile(models.Model):
     
 class JobListing(models.Model):
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    price = models.FloatField(blank=False, default=0.0)
     title = models.TextField(max_length=200)
     description = models.CharField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)

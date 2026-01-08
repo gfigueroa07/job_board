@@ -2,7 +2,9 @@
 
 <h2>Job Title: {{ job.title }}</h2>
 <p>Description: {{ job.description }}</p>
-<p>Price: ${{ job.price }}</p>
+{% if job.price %}
+    <p>Price: ${{ job.price }}</p>
+{% endif %}
 
 {% if already_applied %}
     <p style="color: red;">You’ve already applied to this job.</p>

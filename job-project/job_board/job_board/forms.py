@@ -58,6 +58,10 @@ class JobCreateForm(forms.ModelForm):
             'description',
             'due_date',
         ]
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'price': forms.NumberInput(attrs={'step': 0.01}),
+        }
 
 class JobApplicationForm(forms.ModelForm):
     class Meta:

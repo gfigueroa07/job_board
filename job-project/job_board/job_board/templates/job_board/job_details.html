@@ -6,6 +6,7 @@
 {% endif %}
 
 <h1> {{ job.title }} </h1>
+<p>Price: ${{ job.price|floatformat:2 }}</p>
 {{ job.images }}
 {{ job.description}}
 {% if job.due_date %}
