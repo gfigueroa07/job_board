@@ -76,7 +76,7 @@ class ProfileReport(models.Model):
     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.reported_profile} - {self.reason}"
+        return f"{self.reported_profile} - {self.reason}: {self.status}"
     
     
 class JobReport(models.Model):
@@ -136,11 +136,11 @@ class ReviewReport(models.Model):
         ('action_taken','Action Taken'),
         ('ignored','Ignored'),
     ]
-    reported_review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='reports_against')
-    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reports_made')
+    reported_review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='report_against')
+    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='report_made')
     reason = models.CharField(max_length=20, choices=reason_choice)
     message = models.TextField(max_length=250, blank=True)
-    status = models.CharField(max_length=10, choices=report_status, default='pending')
+    status = models.CharField(max_length=20, choices=report_status, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
     
