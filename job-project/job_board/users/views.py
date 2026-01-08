@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -140,6 +140,32 @@ def job_report(request, job_id):
     else:
         form = JobReportForm()
     return render(request, 'users/report.html', {'form': form, 'job': job})
+
+@login_required
+def job_application(request, job_id):
+    job =  get_object_or_404(JobListing, id=job_id)
+    if request.user.profile == job.profile:
+        messages.error(request, "Can't apply to a job owned by you.")
+        return redirect('job_details', job_id=job.id)
+    already_applied = False
+    if request.method == 'POST':
+        form = JobApplicationForm(request.POST)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.job = job
+            application.applicant = request.user.profile
+            if JobApplication.objects.filter(job=job, applicant=request.user.profile).exists():
+                success = False  
+                already_applied = True
+            else: 
+                application.save()
+                success = True
+        else:
+            success = False
+    else:
+        form = JobApplicationForm()
+        success = False
+    return render(request, 'users/apply_job.html', {'form': form, 'job': job, 'success': success, 'already_applied': already_applied})
 
 def user_login(request):
     if request.user.is_authenticated:

@@ -1,0 +1,16 @@
+<h2>{{ job.title }}</h2>
+<p>{{ job.description }}</p>
+<p>Price: ${{ job.price }}</p>
+
+{% if already_applied %}
+    <p style="color: red;">You’ve already applied to this job.</p>
+{% endif %}
+{% if success %}
+    <p style="color: green;">Application submitted!</p>
+{% endif %}
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Apply</button>
+</form>

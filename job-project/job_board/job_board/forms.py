@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, ProfileReport, JobReport
+from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication
 
 
 
@@ -57,6 +57,13 @@ class JobCreateForm(forms.ModelForm):
             'title',
             'description',
             'due_date',
+        ]
+
+class JobApplicationForm(forms.ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = [
+            'message',
         ]
         
 class JobReportForm(forms.ModelForm):
