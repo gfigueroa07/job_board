@@ -157,6 +157,8 @@ def job_application(request, job_id):
             if JobApplication.objects.filter(job=job, applicant=request.user.profile).exists():
                 success = False  
                 already_applied = True
+                messages.warning(request, "You have already applied to this job.")
+                return redirect('job_details', job_id=job.id)
             else: 
                 application.save()
                 success = True
