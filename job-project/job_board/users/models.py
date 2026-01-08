@@ -99,5 +99,7 @@ class JobReport(models.Model):
     message = models.TextField(max_length=250, blank=True)
     status = models.CharField(max_length=20, choices=report_status, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
+    reporter_ip = models.GenericIPAddressField(null=True, blank=True)
+
     def __str__(self):
         return f"{self.reported_job} - {self.reason}"

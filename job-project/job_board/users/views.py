@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm
-from job_board .funcs import filter_and_sort
-from users .models import Profile, Review, User, JobListing
+from job_board .funcs import filter_and_sort, get_client_ip
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,8 @@ from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.db.models import Avg, Case, When, Value, BooleanField
-
+from django.utils import timezone
+from datetime import timedelta
 
 # Create your views here.
 # def home(request):
@@ -79,42 +80,66 @@ def profile_delete(request, user_id):
         return redirect('login')
     return render(request, 'users/profile_delete.html', {'user': user})
 
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+
 def profile_report(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     if request.method == 'POST':
         form = ProfileReportForm(request.POST)
         if form.is_valid():
+            reporter_profile = None
+            reporter_ip = None
+            if request.user.is_authenticated:
+                reporter_profile = request.user.profile
+                if ProfileReport.objects.filter(reported_profile=profile, reporter_profile=reporter_profile).exists():
+                    messages.warning(request, "You have already reported this profile.")
+                    return redirect('profile_detail', profile_id=profile.id)
+            else:
+                reporter_ip = get_client_ip(request)
+                time_limit = timezone.now() - timedelta(hours=24)
+                if ProfileReport.objects.filter(reported_profile=profile, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                    messages.warning(request, "You have already reported this profile in the last 24 hours.")
+                    return redirect('profile_detail', profile_id=profile.id)
             report = form.save(commit=False)
             report.reported_profile = profile
-            if request.user.is_authenticated:
-                report.reporter_profile = request.user.profile
+            report.reporter_profile = reporter_profile
+            report.reporter_ip = reporter_ip
             report.save()
-            messages.success(request, 'Thank you for your report.')
+            messages.success(request, "Thank you for your report.")
             return redirect('profile_detail', profile_id=profile.id)
     else:
         form = ProfileReportForm()
     return render(request, 'users/report.html', {'form': form, 'profile': profile})
 
-def  job_report(request, job_id):
+def job_report(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     if request.method == 'POST':
         form = JobReportForm(request.POST)
         if form.is_valid():
+            reporter_profile = None
+            reporter_ip = None
+            if request.user.is_authenticated:
+                reporter_profile = request.user.profile
+                if JobReport.objects.filter(reported_job=job, reporter_profile=reporter_profile).exists():
+                    messages.warning(request, "You have already reported this job.")
+                    return redirect('job_details', job_id=job.id)
+            else:
+                reporter_ip = get_client_ip(request)
+                time_limit = timezone.now() - timedelta(hours=24)
+                if JobReport.objects.filter(reported_job=job, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                    messages.warning(request, "You have already reported this job in the last 24 hours.")
+                    return redirect('job_details', job_id=job.id)
             report = form.save(commit=False)
             report.reported_job = job
-            if request.user.is_authenticated:
-                report.reporter_profile = request.user.profile
+            report.reporter_profile = reporter_profile
+            report.reporter_ip = reporter_ip
             report.save()
-            messages.success(request, 'Thank you for your report.')
+            messages.success(request, "Thank you for your report.")
             return redirect('job_details', job_id=job.id)
     else:
         form = JobReportForm()
     return render(request, 'users/report.html', {'form': form, 'job': job})
-
-
-
-
-
 
 def user_login(request):
     if request.user.is_authenticated:
