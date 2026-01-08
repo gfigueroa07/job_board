@@ -148,6 +148,11 @@ def job_application(request, job_id):
         messages.error(request, "Can't apply to a job owned by you.")
         return redirect('job_details', job_id=job.id)
     already_applied = False
+    if JobApplication.objects.filter(job=job, applicant=request.user.profile).exists():
+        success = False  
+        already_applied = True
+        messages.warning(request, "You have already applied to this job.")
+        return redirect('job_details', job_id=job.id)
     if request.method == 'POST':
         form = JobApplicationForm(request.POST)
         if form.is_valid():
@@ -159,15 +164,14 @@ def job_application(request, job_id):
                 already_applied = True
                 messages.warning(request, "You have already applied to this job.")
                 return redirect('job_details', job_id=job.id)
-            else: 
-                application.save()
-                success = True
+            application.save()
+            success = True
         else:
             success = False
     else:
         form = JobApplicationForm()
         success = False
-    return render(request, 'users/apply_job.html', {'form': form, 'job': job, 'success': success, 'already_applied': already_applied})
+    return render(request, 'users/user_apply.html', {'form': form, 'job': job, 'success': success, 'already_applied': already_applied})
 
 def user_login(request):
     if request.user.is_authenticated:
