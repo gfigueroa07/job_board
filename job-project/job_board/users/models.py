@@ -104,3 +104,18 @@ class JobReport(models.Model):
 
     def __str__(self):
         return f"{self.reported_job} - {self.reason}"
+    
+class JobApplication(models.Model):
+    application_status = [
+        ('pending', 'Pending'),
+        ('accepted', 'Accepted'),
+        ('rejected', 'Rejected'),
+    ]
+    job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
+    applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    message = models.TextField(blank=True)
+    applied_at = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=application_status, default='pending')
+    
+    def __str__(self):
+        return f"{self.job} - {self.applicant}"
