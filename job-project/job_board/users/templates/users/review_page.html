@@ -1,5 +1,9 @@
 <h2>Reviews</h2>
-
+{% if messages %}
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
+{% endif %}
 {% if reviews %}
     {% for review in reviews %}
         <div class="review">
@@ -8,6 +12,10 @@
             <small>
                 Reviewed by <a href="{% url 'profile_detail' review.review_written.id %}">{{ review.review_written.user.username }}</a>
             </small>
+            <form method="post" action="{% url 'review_report' review.id %}">
+                {% csrf_token %}
+                <button type="submit">Report</button>
+            </form>
             {% if review.review_written == request.user.profile %}
                 <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
                 <form method="post" action="{% url 'review_delete' review.id %}">

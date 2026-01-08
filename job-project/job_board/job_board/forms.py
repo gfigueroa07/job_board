@@ -1,6 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication
-
+from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport
 
 
 class ProfileForm(forms.ModelForm):
@@ -100,6 +99,18 @@ class UserReviewsForm(forms.ModelForm):
                 'max': 5
             })
         }
+       
+class ReviewReportForm(forms.ModelForm):
+    class Meta:
+        model = ReviewReport
+        fields = [
+            'reason',
+            'message'
+        ]
+       
+       
+       
+       
         
 # Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
 # These form objects need to be used for Django to run validations using your Models

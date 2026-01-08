@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport
 from django.urls import path
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -256,6 +256,31 @@ def review_delete(request, review_id):
         return redirect('review_edit', profile_id=review.review_written.id)
     return render(request, 'users/review_delete.html', {'review': review})
 
-def review_report(rewquest, review_id):
+def review_report(request, review_id):
     review  = get_object_or_404(Review, id=review_id)
-    
+    if request.method == 'POST':
+        form = ReviewReportForm(request.POST)
+        if form.is_valid():
+            reporter_profile = None
+            reporter_ip = None
+            if request.user.is_authenticated:
+                reporter_profile = request.user.profile
+                if ReviewReport.objects.filter(reporter_review=review, reporter_profile=reporter_profile).exists():
+                    messages.warning(request, "You have already reported this review.")
+                    return redirect('reviews', profile_id=review.review_received.id)
+            else:
+                reporter_ip = get_client_ip(request)
+                time_limit = timezone.now() - timedelta(hours=24)
+                if ReviewReport.objects.filter(reported_review=review, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                    messages.warning(request, "You have already reported this review in the last 24 hours.")
+                    return redirect('reviews', profile_id=review.review_received.id)
+            report = form.save(commit=False)
+            report.reported_review = review
+            report.reporter_profile = reporter_profile
+            report.reporter_ip = reporter_ip
+            report.save()
+            messages.success(request, "Thank you for your report.")
+            return redirect('reviews', profile_id=review.review_received.id)
+    else:
+        form = ReviewReportForm()
+    return render(request, 'users/report.html', {'form': form, 'review': review})

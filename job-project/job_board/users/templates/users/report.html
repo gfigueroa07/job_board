@@ -1,7 +1,9 @@
 {% if profile_report %}
     <h2>Report Profile</h2>
-{% else %}
+{% elif job_report %}
     <h2>Report Job</h2>
+{% elif review_report %}
+    <h2>Report Review</h2>
 {% endif %}
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}

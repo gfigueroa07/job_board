@@ -40,6 +40,7 @@ urlpatterns = [
     path('reviews/<int:profile_id>/create/', views.review_create, name='review_create'),
     path('reviews/<int:review_id>/edit/', views.review_edit, name='review_edit'),
     path('reviews/<int:review_id>/delete/', views.review_delete, name='review_delete'),    
+    path('review/<int:review_id>/report/', views.review_report, name='review_report'),
     
     path('job/<int:job_id>/report/', views.job_report, name='job_report'),
     path('job/<int:job_id>/apply/', views.job_application, name='job_apply'),
