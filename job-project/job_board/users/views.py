@@ -256,12 +256,6 @@ def review_delete(request, review_id):
         return redirect('review_edit', profile_id=review.review_written.id)
     return render(request, 'users/review_delete.html', {'review': review})
 
-@login_required
-def profile_delete(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if user.id != request.user.id:
-        return redirect('profile_detail', user_id=user.id)
-    if request.method == 'POST':
-        user.delete()
-        return redirect('login')
-    return render(request, 'users/profile_delete.html', {'user': user})
+def review_report(rewquest, review_id):
+    review  = get_object_or_404(Review, id=review_id)
+    

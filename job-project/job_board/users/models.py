@@ -39,7 +39,7 @@ class Review(models.Model):
         MinValueValidator(1),
         MaxValueValidator(5),
     ])
-    comment = models.TextField(blank=True)
+    comment = models.TextField(blank=True, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         constraints = [
@@ -69,7 +69,7 @@ class ProfileReport(models.Model):
     ]
     reported_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reports_against')
     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reported_made')
-    reason = models.CharField(max_length=20, choices=reason_choice)
+    reason = models.CharField(max_length=30, choices=reason_choice)
     message = models.TextField(max_length=250, blank=True)
     status = models.CharField(max_length=20, choices=report_status, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -97,14 +97,14 @@ class JobReport(models.Model):
     
     reported_job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='reports_against')
     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reports_made')
-    reason = models.CharField(max_length=20, choices=reason_choice)
+    reason = models.CharField(max_length=30, choices=reason_choice)
     message = models.TextField(max_length=250, blank=True)
     status = models.CharField(max_length=20, choices=report_status, default='pending')
     created_at = models.DateTimeField(auto_now_add=True)
     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.reported_job} - {self.reason}"
+        return f"{self.reported_job} - {self.reason}: {self.status}"
     
 class JobApplication(models.Model):
     application_status = [
@@ -119,4 +119,30 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=10, choices=application_status, default='pending')
     
     def __str__(self):
-        return f"{self.job} - {self.applicant}"
+        return f"{self.job} - {self.applicant}: {self.status}"
+    
+class ReviewReport(models.Model):
+    reason_choice = [
+        ('spam','Spam'),
+        ('scam','Scam/Fraud'),
+        ('fake','Fake Review'),
+        ('harassment','Harassment'),
+        ('inappropriate','Inappropriate Content'),
+        ('other','Other'),
+    ]
+    report_status = [
+        ('pending','Pending'),
+        ('reviewed','Reviewed'),
+        ('action_taken','Action Taken'),
+        ('ignored','Ignored'),
+    ]
+    reported_review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='reports_against')
+    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reports_made')
+    reason = models.CharField(max_length=20, choices=reason_choice)
+    message = models.TextField(max_length=250, blank=True)
+    status = models.CharField(max_length=10, choices=report_status, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    reporter_ip = models.GenericIPAddressField(null=True, blank=True)
+    
+    def __str__(self):
+        return f"{self.reporter_profile} - {self.reason}: {self.status}"
