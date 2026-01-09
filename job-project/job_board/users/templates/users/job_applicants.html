@@ -1,0 +1,24 @@
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
+
+{% if applications %}
+    {% for application in applications %}
+        <p>
+            Applicant: {{ application.applicant.user.username }}<br>
+            Message: {{ application.message }}<br>
+            Status: {{ application.status }}
+        </p>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="application_id" value="{{ application.id }}">
+            <button name="action" value="accepted">Accept</button>
+            <button name="action" value="rejected">Reject</button>
+        </form>
+        <hr>
+    {% endfor %}
+{% else %}
+    <p>No applicants yet.</p>
+{% endif %}
+
+<p><a href="/">Return to home page</a></p>

@@ -19,11 +19,12 @@
         <button type="submit">Report</button>
 </form>
 {% if job.profile == request.user.profile %}
-    <a href="{% url 'job_edit' job.id %}"> <button>Edit</button> </a>
+    <a href="{% url 'job_edit' job.id %}"><button>Edit</button></a>
     <form method="post" action="{% url 'job_delete' job.id %}">
         {% csrf_token %}
         <button type="submit">Delete</button>
     </form>
+    <a href="{% url 'job_applicants' job.id %}"><button>View Applicants</button></a>
 {% endif %}
 <hr>
 <p><a href="/">Return to home page</a></p>

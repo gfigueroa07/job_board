@@ -173,6 +173,29 @@ def job_application(request, job_id):
         success = False
     return render(request, 'users/user_apply.html', {'form': form, 'job': job, 'success': success, 'already_applied': already_applied})
 
+def job_applicants(request, job_id):
+    job = get_object_or_404(JobListing, id=job_id)
+    if request.user.profile.id != job.profile.id: 
+        messages.error(request, "You are not allowed to view this job's applicants.")
+        return redirect('job_page')
+    applications = JobApplication.objects.filter(job=job).order_by('-applied_at')
+    if request.method == 'POST':
+        application_id = request.POST.get('application_id')
+        action = request.POST.get('action')
+        application = get_object_or_404(JobApplication, id=application_id, job=job)
+        if action == 'accepted':
+            application.status = 'accepted'
+            application.save()
+            messages.success(request, f"{application.applicant.user.username} has been approved.")
+        elif action == 'rejected':
+            application.status = 'rejected'
+            application.save()
+            messages.success(request, f"{application.applicant.user.username} has been rejected")        
+    return render(request, 'users/job_applicants.html', {
+        'job': job,
+        'applications': applications,
+    })
+    
 def user_login(request):
     if request.user.is_authenticated:
         profile = request.user.profile

@@ -3,7 +3,9 @@
 <head>
     <h1>Job Page</h1>
 {% if message %}
-    <p>{{ message }}</p>
+    {% for message in messages %}
+        <p>{{ message }}</p>
+    {% endfor %}
 {% else %}
     {% for job in jobs %}
         <a href="{% url 'job_details' job.id %}"><p>{{ job.title }}</p></a>
