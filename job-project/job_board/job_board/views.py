@@ -21,9 +21,11 @@ def job_page(request):
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
-    application = JobApplication.objects.filter(
-    job=job,
-    applicant=request.user.profile).first()
+    application = None
+    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+        application = JobApplication.objects.filter(
+        job=job,
+        applicant=request.user.profile).first()
     return render(request, 'job_board/job_details.html', {'job': job, 'application': application})
     
 def job_list(request):

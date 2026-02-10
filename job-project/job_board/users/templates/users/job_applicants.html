@@ -9,13 +9,18 @@
             Message: {{ application.message }}<br>
             Status: {{ application.status }}
         </p>
-        <form method="post">
-            {% csrf_token %}
-            <input type="hidden" name="application_id" value="{{ application.id }}">
-            <button name="action" value="accepted">Accept</button>
-            <button name="action" value="rejected">Reject</button>
-        </form>
-        <hr>
+        {% if application.status == 'pending' %}
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="application_id" value="{{ application.id }}">
+                <button name="action" value="accepted">Accept</button>
+                <button name="action" value="rejected">Reject</button>
+            </form>
+            <hr>
+        {% else %}
+            <p>Application was {{ application.status }}</p>
+            <hr>
+        {% endif %}
     {% endfor %}
 {% else %}
     <p>No applicants yet.</p>

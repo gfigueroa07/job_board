@@ -175,7 +175,6 @@ def job_application(request, job_id):
 
 def job_applicants(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
-    status = get_object_or_404(JobApplication, id=status)
     if request.user.profile.id != job.profile.id: 
         messages.error(request, "You are not allowed to view this job's applicants.")
         return redirect('job_page')
@@ -183,8 +182,8 @@ def job_applicants(request, job_id):
     if request.method == 'POST':
         application_id = request.POST.get('application_id')
         action = request.POST.get('action')
-        if application.status != 'pending':
-            return HttpResponseBadRequest('Decision already made.')
+        # if action != 'pending':
+        #     return HttpResponseBadRequest('Decision already made.')
         application = get_object_or_404(JobApplication, id=application_id, job=job)
         if action == 'accepted':
             application.status = 'accepted'
