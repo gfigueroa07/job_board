@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -111,6 +112,7 @@ class JobApplication(models.Model):
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
+        ('withdrawn', 'Withdrawn'),
     ]
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -118,6 +120,13 @@ class JobApplication(models.Model):
     applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=application_status, default='pending')
     
+    def save(self, *args, **kwargs):
+        if self.pk:
+            old = JobApplication.objects.get(pk=self.pk)
+            if old.status != "pending" and old.status != self.status:
+                raise ValidationError("Application decision is locked")
+        super().save(*args, **kwargs)
+        
     def __str__(self):
         return f"{self.job} - {self.applicant}: {self.status}"
     

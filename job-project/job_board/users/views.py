@@ -3,7 +3,7 @@ from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, Prof
 from job_board .funcs import filter_and_sort, get_client_ip
 from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport
 from django.urls import path
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -183,15 +183,16 @@ def job_applicants(request, job_id):
     if request.method == 'POST':
         application_id = request.POST.get('application_id')
         action = request.POST.get('action')
+        if application.status != 'pending':
+            return HttpResponseBadRequest('Decision already made.')
         application = get_object_or_404(JobApplication, id=application_id, job=job)
         if action == 'accepted':
             application.status = 'accepted'
-            application.save()
             messages.success(request, f"{application.applicant.user.username} has been approved.")
         elif action == 'rejected':
             application.status = 'rejected'
-            application.save()
-            messages.success(request, f"{application.applicant.user.username} has been rejected")        
+            messages.success(request, f"{application.applicant.user.username} has been rejected")   
+        application.save()     
     return render(request, 'users/job_applicants.html', {
         'job': job,
         'applications': applications,
