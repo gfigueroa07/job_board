@@ -64,11 +64,20 @@ class JobCreateForm(forms.ModelForm):
 
 class JobApplicationForm(forms.ModelForm):
     class Meta:
-        model = JobApplication
         fields = [
             'message',
         ]
-        
+        model = JobApplication
+#     message = forms.CharField(
+#     widget=forms.Textarea(
+#         attrs={
+#             'style': 'resize:none;',  # Prevent resizing
+#             'rows': 5,
+#             'cols': 40,
+#             'placeholder': 'Enter your message...'
+#         }
+#     )
+# )
 class JobReportForm(forms.ModelForm):
     class Meta:
         model = JobReport

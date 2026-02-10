@@ -5,7 +5,7 @@ from job_board .forms import ProfileForm, ProfileEditForm
 from django.urls import path
 from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm
-from users.models import JobListing
+from users.models import JobListing, JobApplication
 from django.contrib.auth.decorators import login_required
 
 from .models import XaropItem
@@ -21,7 +21,10 @@ def job_page(request):
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
-    return render(request, 'job_board/job_details.html', {'job': job})
+    application = JobApplication.objects.filter(
+    job=job,
+    applicant=request.user.profile).first()
+    return render(request, 'job_board/job_details.html', {'job': job, 'application': application})
     
 def job_list(request):
     if not request.user.is_authenticated:

@@ -114,7 +114,7 @@ class JobApplication(models.Model):
     ]
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    message = models.TextField(blank=True)
+    message = models.TextField(blank=True, max_length=250)
     applied_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=application_status, default='pending')
     
