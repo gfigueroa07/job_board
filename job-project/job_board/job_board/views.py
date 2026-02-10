@@ -51,7 +51,7 @@ def job_edit(request, job_id):
         form = JobDetailsForm(request.POST, request.FILES, instance=job)
         if form.is_valid():
             form.save()
-            return redirect('job_details')
+            return redirect('job_details', job_id=job.id)
     else:
         form = JobDetailsForm(instance=job)
     return render(request, 'job_board/job_edit.html', {'form': form, 'job': job})
@@ -63,11 +63,8 @@ def job_delete(request, job_id):
         return redirect('job_details')
     if request.method == 'POST':
         job.delete()
-        return redirect('job_details')
+        return redirect('job_page')
     return render(request, 'job_board/job_delete.html', {'job': job})
-    
-    
-    pass
 
 def profile(request):
     return render(request, 'job_board/profile.html')

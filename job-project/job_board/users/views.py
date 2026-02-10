@@ -185,6 +185,10 @@ def job_applicants(request, job_id):
         # if action != 'pending':
         #     return HttpResponseBadRequest('Decision already made.')
         application = get_object_or_404(JobApplication, id=application_id, job=job)
+        if JobApplication.objects.filter(job=job, status="accepted").exists():
+            return messages.error(request, 'Job already has an accepted applicant.')
+            
+            # return HttpResponseBadRequest("Job already has an accepted applicant")
         if action == 'accepted':
             application.status = 'accepted'
             messages.success(request, f"{application.applicant.user.username} has been approved.")
