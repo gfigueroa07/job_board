@@ -182,15 +182,16 @@ def job_applicants(request, job_id):
     if request.method == 'POST':
         application_id = request.POST.get('application_id')
         action = request.POST.get('action')
-        # if action != 'pending':
-        #     return HttpResponseBadRequest('Decision already made.')
         application = get_object_or_404(JobApplication, id=application_id, job=job)
+        test = application.job
         if JobApplication.objects.filter(job=job, status="accepted").exists():
             messages.error(request, 'Job already has an accepted applicant.')
             return redirect('job_applicants', job_id=job.id)
             # return HttpResponseBadRequest("Job already has an accepted applicant")
         if action == 'accepted':
             application.status = 'accepted'
+            test.status = 'pending'
+            test.save()
             messages.success(request, f"{application.applicant.user.username} has been approved.")
         elif action == 'rejected':
             application.status = 'rejected'

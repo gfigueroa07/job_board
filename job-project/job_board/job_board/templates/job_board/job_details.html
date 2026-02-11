@@ -13,11 +13,13 @@
     <p> Job Due By: {{ job.due_date}}</p>
 {% endif %}
 <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
+
+<small>{{ application.status }}</small>
 {% if application and application.status in 'pending accepted' %}
     <p>Applied</p>
 {% else %}
     <a href=" {% url 'job_apply' job.id %}">Apply</a>
-    {% endif %}
+{% endif %}
 <form method="post" action="{% url 'job_report' job.id %}">
         {% csrf_token %}
         <button type="submit">Report</button>
