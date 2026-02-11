@@ -20,11 +20,18 @@ class Profile(models.Model):
         return self.user.username
     
 class JobListing(models.Model):
+    job_status = [
+        ('OPEN', 'open'),
+        ('PENDING', 'pending'),
+        ('COMPLETED', 'completed'),
+        ('CANCELLED', 'cancelled'),
+    ]
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     price = models.FloatField(blank=False, default=0.0)
     title = models.TextField(max_length=200)
     description = models.CharField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
+    status = models.CharField(max_length=10, choices=job_status, default='open')
     images = models.ImageField(upload_to='job_pics/', blank=True, null=True)
     due_date = models.TextField(max_length=20, blank=True, null=True)
     
