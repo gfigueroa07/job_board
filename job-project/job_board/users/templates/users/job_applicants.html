@@ -1,23 +1,23 @@
-
+{% for message in messages %}
+    <p>{{ message }}</p>
+{% endfor %}
 
 {% if applications %}
     {% for application in applications %}
         <p>
-            Applicant: {{ application.applicant.user.username }}<br>
+            Applicant: <a href="{% url 'profile_detail' application.applicant.id %}">{{ application.applicant.user.username }}</a><br>
             Message: {{ application.message }}<br>
             Status: {{ application.status }}
-        
         </p>
         
         {% if application.status == 'pending' %}
             <form method="post">
                 {% csrf_token %}
                 <input type="hidden" name="application_id" value="{{ application.id }}">
-                {% for message in messages %}
-                    <p>{{ message }}</p>
-                {% endfor %}
+                
                 <button name="action" value="accepted">Accept</button>
                 <button name="action" value="rejected">Reject</button>
+            
             </form>
             <hr>
         {% else %}
