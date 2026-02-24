@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
@@ -319,11 +319,7 @@ def send_message(request, job_id):
         content = request.POST.get('content')
         Message.objects.create(
             sender=request.user,
-            receiver=JobListing.profile
-            
+            receiver=JobListing.profile,
+            job=JobListing,
+            content=content            
         )
-        
-    
-    
-    
-        pass
