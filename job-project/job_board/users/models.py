@@ -164,8 +164,10 @@ class ReviewReport(models.Model):
         return f"{self.reporter_profile} - {self.reason}: {self.status}"
 class Conversation(models.Model):
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
-    participants = models.ManyToManyField(User)
+    applicant = models.ForeignKey(User, on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)  
+    class Meta:
+        unique_together = ('job',)
       
 class  Message(models.Model):
     conversation = models.ForeignKey(Conversation,  on_delete=models.CASCADE)

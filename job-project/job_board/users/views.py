@@ -325,21 +325,21 @@ def send_message(request, job_id):
         )
 
 def start_conversation(request, job_id):
-    job = JobListing.object.get(id=job_id)
-    owner = JobListing.profile
+    job = JobListing.objects.get(id=job_id)
+    owner = job.profile
     applicant = request.user
-    #check if conversation exists
     conversation = Conversation.objects.filter(
         job=job,
-        user1=owner,
-        user2=applicant
         ).first()
-    
     if not conversation:
-        conversation =  Conversation.objects.create(
-            job=job,
-            user1=owner,
-            user2=applicant
-        )
-        
+        conversation =  Conversation.objects.create(job=job) 
+        conversation.participants.add(owner, applicant)
     return redirect('conversation_detail', conversation.id)
+
+def conversation_detail(request, convo_id):
+    conversation = Conversation.objects.get(id=convo_id)
+    messages = conversation.message_set.all().order_by('timestamp')
+    return render(request, 'conversation.html', {
+        'conversation':conversation,
+        'messages': messages
+    })
