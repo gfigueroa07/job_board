@@ -164,8 +164,7 @@ class ReviewReport(models.Model):
         return f"{self.reporter_profile} - {self.reason}: {self.status}"
 class Conversation(models.Model):
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
-    user1 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='convo_user1')
-    user2 = models.ForeignKey(User, on_delete=models.CASCADE, related_name='convo_user2')
+    participants = models.ManyToManyField(User)
     timestamp = models.DateTimeField(auto_now_add=True)  
       
 class  Message(models.Model):

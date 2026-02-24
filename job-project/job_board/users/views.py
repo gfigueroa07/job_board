@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.contrib.auth.decorators import login_required
@@ -323,3 +323,23 @@ def send_message(request, job_id):
             job=JobListing,
             content=content            
         )
+
+def start_conversation(request, job_id):
+    job = JobListing.object.get(id=job_id)
+    owner = JobListing.profile
+    applicant = request.user
+    #check if conversation exists
+    conversation = Conversation.objects.filter(
+        job=job,
+        user1=owner,
+        user2=applicant
+        ).first()
+    
+    if not conversation:
+        conversation =  Conversation.objects.create(
+            job=job,
+            user1=owner,
+            user2=applicant
+        )
+        
+    return redirect('conversation_detail', conversation.id)
