@@ -314,27 +314,25 @@ def review_report(request, review_id):
         form = ReviewReportForm()
     return render(request, 'users/report.html', {'form': form, 'review': review})
 
-def send_message(request, job_id):
+def send_message(request, convo_id):
     if request.method == 'POST':
+        conversation = Conversation.objects.get(id=convo_id)
         content = request.POST.get('content')
         Message.objects.create(
+            conversation=conversation,
             sender=request.user,
-            receiver=JobListing.profile,
-            job=JobListing,
-            content=content            
+            content=content         
         )
-
+        return redirect("conversation_detail", convo_id)
+    
 def start_conversation(request, job_id):
     job = JobListing.objects.get(id=job_id)
-    owner = job.profile
-    applicant = request.user
-    conversation = Conversation.objects.filter(
+    applicant = request.user 
+    conversation, created = Conversation.objects.get_or_create(
         job=job,
-        ).first()
-    if not conversation:
-        conversation =  Conversation.objects.create(job=job) 
-        conversation.participants.add(owner, applicant)
-    return redirect('conversation_detail', conversation.id)
+        applicant=applicant
+    )
+    return redirect("conversation_detail", conversation.id)
 
 def conversation_detail(request, convo_id):
     conversation = Conversation.objects.get(id=convo_id)
