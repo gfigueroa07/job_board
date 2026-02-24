@@ -1,20 +1,22 @@
 <h1>Job Details</h1>
+
 {% if messages %}
     {% for message in messages %}
         <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
 
-<h1> {{ job.title }} </h1>
+<h1>{{ job.title }}</h1> <small>{{ application.status }}</small>
+
 <p>Price: ${{ job.price|floatformat:2 }}</p>
 {{ job.images }}
 {{ job.description}}
 {% if job.due_date %}
     <p> Job Due By: {{ job.due_date}}</p>
 {% endif %}
+
 <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
 
-<small>{{ application.status }}</small>
 {% if application and application.status in 'pending accepted' %}
     <p>Applied</p>
 {% else %}

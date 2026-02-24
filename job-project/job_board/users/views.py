@@ -313,3 +313,17 @@ def review_report(request, review_id):
     else:
         form = ReviewReportForm()
     return render(request, 'users/report.html', {'form': form, 'review': review})
+
+def send_message(request, job_id):
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        Message.objects.create(
+            sender=request.user,
+            receiver=JobListing.profile
+            
+        )
+        
+    
+    
+    
+        pass
