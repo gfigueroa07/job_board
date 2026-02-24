@@ -314,6 +314,7 @@ def review_report(request, review_id):
         form = ReviewReportForm()
     return render(request, 'users/report.html', {'form': form, 'review': review})
 
+@login_required
 def send_message(request, convo_id):
     if request.method == 'POST':
         conversation = Conversation.objects.get(id=convo_id)
@@ -324,7 +325,8 @@ def send_message(request, convo_id):
             content=content         
         )
         return redirect("conversation_detail", convo_id)
-    
+
+@login_required
 def start_conversation(request, job_id):
     job = JobListing.objects.get(id=job_id)
     applicant = request.user 
@@ -334,10 +336,11 @@ def start_conversation(request, job_id):
     )
     return redirect("conversation_detail", conversation.id)
 
+@login_required
 def conversation_detail(request, convo_id):
     conversation = Conversation.objects.get(id=convo_id)
     messages = conversation.message_set.all().order_by('timestamp')
     return render(request, 'conversation.html', {
-        'conversation':conversation,
+        'conversation': conversation,
         'messages': messages
     })
