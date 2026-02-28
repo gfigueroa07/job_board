@@ -194,7 +194,6 @@ def job_applicants(request, job_id):
             job.status = 'pending'
             job.save()
             Conversation.objects.get_or_create(job=job, applicant=application.applicant.user)
-            
             messages.success(request, f"{application.applicant.user.username} has been approved.")
         elif action == 'rejected':
             application.status = 'rejected'

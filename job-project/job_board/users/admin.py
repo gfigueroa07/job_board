@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport
+from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport, Conversation
 
 # Register your models here.
 
@@ -10,3 +10,4 @@ admin.site.register(JobReport)
 admin.site.register(JobApplication)
 admin.site.register(ProfileReport)
 admin.site.register(ReviewReport)
+admin.site.register(Conversation)
