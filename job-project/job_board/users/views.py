@@ -317,30 +317,19 @@ def review_report(request, review_id):
     return render(request, 'users/report.html', {'form': form, 'review': review})
 
 @login_required
-def send_message(request, convo_id):
-    if request.method == 'POST':
-        conversation = Conversation.objects.get(id=convo_id)
-        content = request.POST.get('content')
-        Message.objects.create(
-            conversation=conversation,
-            sender=request.user,
-            content=content         
-        )
-        return redirect("conversation_detail", convo_id)
-
-@login_required
-def start_conversation(request, job_id):
-    job = JobListing.objects.get(id=job_id)
-    applicant = request.user 
-    conversation, created = Conversation.objects.get_or_create(
-        job=job,
-        applicant=applicant
-    )
-    return redirect("conversation_detail", conversation.id)
-
-@login_required
 def conversation_detail(request, convo_id):
-    conversation = Conversation.objects.get(id=convo_id)
+    conversation = get_object_or_404(Conversation, id=convo_id)
+    if request.user != conversation.applicant and request.user != conversation.job.profile.user:
+        return redirect('job_details')
+    if request.method == 'POST':
+        content = request.POST.get('content')
+        if content:
+            Message.objects.create(
+                conversation=conversation,
+                sender=request.user,
+                content=content         
+            )
+            return redirect("conversation_detail", convo_id)
     messages = conversation.message_set.all().order_by('timestamp')
     return render(request, 'conversation.html', {
         'conversation': conversation,
