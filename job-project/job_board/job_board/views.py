@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm
 from users.models import JobListing, JobApplication, Conversation
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 
 from .models import XaropItem
 
@@ -20,17 +21,21 @@ def job_page(request):
     return render(request, 'job_board/job_page.html', {'jobs': jobs})
 
 def job_details(request, job_id):
-    job = get_object_or_404(JobListing, id=job_id)
+    job = get_object_or_404(JobListing, id=job_id) 
     application = None
-    conversation = None
-    if job.status == 'pending':
-        conversation = Conversation.objects.filter(
-            job=job,
-            applicant=request.user
-        ).first()
-        if request.user == conversation.job.profile or conversation.job.applicant:
-            return redirect('users/conversation.html')
-    if request.user.is_authenticated and hasattr(request.user, 'profile'):
+    conversation = None 
+    if request.user.is_authenticated:
+        if job.status == 'pending':
+            conversation = Conversation.objects.filter(job=job).filter(
+                Q(applicant=request.user)|
+                Q(job__profile__user=request.user)
+                ).first()  
+            if conversation and (
+                request.user == conversation.applicant or
+                request.user == conversation.job.profile.user
+            ):
+                return redirect('conversation_detail', convo_id=conversation.id)
+    if hasattr(request.user, 'profile'):  
         application = JobApplication.objects.filter(
         job=job,
         applicant=request.user.profile).first()

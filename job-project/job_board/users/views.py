@@ -12,6 +12,7 @@ from django.contrib.auth import login, logout
 from django.db.models import Avg, Case, When, Value, BooleanField
 from django.utils import timezone
 from datetime import timedelta
+from django.db.models import Q
 
 # Create your views here.
 # def home(request):
@@ -320,7 +321,7 @@ def review_report(request, review_id):
 def conversation_detail(request, convo_id):
     conversation = get_object_or_404(Conversation, id=convo_id)
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
-        return redirect('job_details')
+        return redirect('job_details', conversation.job.id)
     if request.method == 'POST':
         content = request.POST.get('content')
         if content:
@@ -329,9 +330,19 @@ def conversation_detail(request, convo_id):
                 sender=request.user,
                 content=content         
             )
-            return redirect("conversation_detail", convo_id)
+            return redirect("conversation_detail", convo_id=convo_id)
     messages = conversation.message_set.all().order_by('timestamp')
     return render(request, 'conversation.html', {
         'conversation': conversation,
         'messages': messages
+    })
+
+@login_required
+def inbox(request):
+    conversations = Conversation.objects.filter(
+        Q(applicant=request.user) |
+        Q(job__profile__user=request.user)
+    ).prefetch_related('message_set')
+    return render(request, 'inbox.html', {
+        'conversations': conversations
     })

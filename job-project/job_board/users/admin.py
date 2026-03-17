@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport, Conversation
+from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport, Conversation, Message
 
 # Register your models here.
 

@@ -1,0 +1,17 @@
+<h2>Inbox</h2>
+
+{% for convo in conversations %}
+    <div>
+        <a href="{% url 'conversation_detail' convo.id %}">
+            
+            {% if request.user == convo.applicant %}
+                Job Owner: {{ convo.job.profile.user.username }}
+            {% else %}
+                Applicant: {{ convo.applicant.username }}
+            {% endif %}
+
+        </a>
+    </div>
+{% empty %}
+    <p>No conversations yet.</p>
+{% endfor %}
