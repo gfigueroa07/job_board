@@ -13,6 +13,8 @@ from django.db.models import Avg, Case, When, Value, BooleanField
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
 
 # Create your views here.
 # def home(request):
@@ -80,9 +82,6 @@ def profile_delete(request, user_id):
         user.delete()
         return redirect('login')
     return render(request, 'users/profile_delete.html', {'user': user})
-
-from django.contrib import messages
-from django.shortcuts import get_object_or_404, redirect, render
 
 def profile_report(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
@@ -167,6 +166,7 @@ def job_application(request, job_id):
                 return redirect('job_details', job_id=job.id)
             application.save()
             success = True
+            return redirect('job_details', job_id=job.id)
         else:
             success = False
     else:

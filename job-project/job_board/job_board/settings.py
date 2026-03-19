@@ -133,7 +133,7 @@ STATICFILES_DIRS = (
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = '/users/user/login/'
+LOGIN_URL = 'login'
 
 #logout user after 900 seconds (15 minutes)
 SESSION_COOKIE_AGE = 900
