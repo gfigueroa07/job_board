@@ -1,10 +1,21 @@
 <h1>Conversation</h1>
 
+<div>
+    {% for message in messages %}
+        <div style="margin-bottom: 10px;">
+            <strong>{{ message.sender.username }}</strong><br>
+            {{ message.content }}<br>
+            <small>{{ message.timestamp }}</small>
+        </div>
+        <hr>
+    {% empty %}
+        <p>No messages yet.</p>
+    {% endfor %}
+</div>
 
+<p>Total messages: {{ messages|length }}</p>
 
-
-
-<form method="POST">
+<form method="POST" action="{% url 'conversation_details' conversation.id %}">
     {% csrf_token %}
     <textarea name="content" placeholder="Type your message..."></textarea>
     <button type="submit">Send</button>

@@ -34,7 +34,8 @@ urlpatterns = [
     path('profile/<int:profile_id>/report/', views.profile_report, name='profile_report'),
     
     path('conversations/', views.inbox, name='inbox'),
-    
+    path('conversation/<int:convo_id>/', views.conversation_detail, name='conversation_details'),
+
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
     path('user/<int:profile_id>/jobs/', views.user_jobs, name='user_jobs'),

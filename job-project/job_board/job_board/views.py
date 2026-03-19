@@ -34,7 +34,7 @@ def job_details(request, job_id):
                 request.user == conversation.applicant or
                 request.user == conversation.job.profile.user
             ):
-                return render(request, 'users/conversation.html')
+                return redirect('conversation_details', convo_id=conversation.id)
     if hasattr(request.user, 'profile'):  
         application = JobApplication.objects.filter(
         job=job,

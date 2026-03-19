@@ -330,9 +330,10 @@ def conversation_detail(request, convo_id):
                 sender=request.user,
                 content=content         
             )
-            return redirect("conversation_detail", convo_id=convo_id)
-    messages = conversation.message_set.all().order_by('timestamp')
-    return render(request, 'conversation.html', {
+            print("MESSAGE CREATED")
+            return redirect("conversation_details", convo_id=convo_id)
+    messages = conversation.messages.all().order_by('timestamp')
+    return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'messages': messages
     })
