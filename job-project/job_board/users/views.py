@@ -324,7 +324,7 @@ def conversation_detail(request, convo_id):
         return redirect('job_details', conversation.job.id)
     if request.method == 'POST':
         content = request.POST.get('content')
-        if content:
+        if content and content.strip():
             Message.objects.create(
                 conversation=conversation,
                 sender=request.user,
