@@ -2,16 +2,18 @@
 
 {% for convo in conversations %}
     <div>
-        <a href="{% url 'conversation_detail' convo.id %}">
-            
-            {% if request.user == convo.applicant %}
-                Job Owner: {{ convo.job.profile.user.username }}
-            {% else %}
-                Applicant: {{ convo.applicant.username }}
-            {% endif %}
+        <a href="{% url 'conversation_details' convo.id %}">
+            {{ convo.job.title }} -
 
+            {% if request.user == convo.applicant %}
+                {{ convo.job.profile.user.username }}
+            {% else %}
+                {{ convo.applicant.username }}
+            {% endif %}
         </a>
     </div>
 {% empty %}
     <p>No conversations yet.</p>
 {% endfor %}
+
+<p><a href="/">Return to home page</a></p>

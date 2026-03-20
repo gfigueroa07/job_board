@@ -14,7 +14,7 @@
     <a href="{% url 'job_list' %}">job list</a>
     <a href="{% url 'profile_detail' user.profile.id %}">view profile</a>
     <a href="{% url 'profile_edit' %}">edit profile</a>
-
+    <a href="{% url 'inbox' %}">Messages</a>
     <form method="post" action="{% url 'logout' %}">
         {% csrf_token %}
         <button type="submit">Log out</button>

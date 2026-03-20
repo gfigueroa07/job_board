@@ -343,7 +343,7 @@ def inbox(request):
     conversations = Conversation.objects.filter(
         Q(applicant=request.user) |
         Q(job__profile__user=request.user)
-    ).prefetch_related('message_set')
-    return render(request, 'inbox.html', {
+    ).prefetch_related('messages')
+    return render(request, 'users/inbox.html', {
         'conversations': conversations
     })
