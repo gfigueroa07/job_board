@@ -179,4 +179,29 @@ class  Message(models.Model):
     is_read = models.BooleanField(default=False)
     class Meta:
         ordering = ['timestamp']
+        
+class ConversationReport(models.Model):
+    reason_choice  =[
+        ('spam', 'Spam'),
+        ('scam', 'Scam'),
+        ('fake', 'Fake'),
+        ('harassment', 'Harassment'),
+        ('inappropiate', 'Inappropriate Content'),
+        ('other', 'Other'), 
+    ]  
+    report_status = [
+        ('pending','Pending'),
+        ('reviewed','Reviewed'),
+        ('action_taken','Action Taken'),
+        ('ignored','Ignored'),
+    ]
+    reported_convo = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='report_against')
+    reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reporter')
+    reason = models.CharField(max_length=20, choices=reason_choice)
+    message = models.TextField(max_length=250, blank=True)
+    status = models.CharField(max_length=20, choices=report_status, default='pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+    reporter_ip = models.GenericIPAddressField(null=True, blank=True)
     
+    def __str__(self):
+        return f"{self.reported_convo} - {self.reason}: {self.status}"

@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -337,6 +337,35 @@ def conversation_detail(request, convo_id):
         'conversation': conversation,
         'messages': messages
     })
+
+def conversation_report(request, convo_id):
+    conversation  = get_object_or_404(Conversation, id=convo_id)
+    if request.method == 'POST':
+        form = ConversationReportForm(request.POST)
+        if form.is_valid():
+            reporter_profile = None
+            reporter_ip = None
+            if request.user.is_authenticated:
+                reporter_profile = request.user.profile
+                if ConversationReport.objects.filter(reported_convo=conversation, reporter_profile=reporter_profile).exists():
+                    messages.warning(request, "You have already reported this conversation.")
+                    return redirect('conversation_details', profile_id=conversation.id)
+            else:
+                reporter_ip = get_client_ip(request)
+                time_limit = timezone.now() - timedelta(hours=24)
+                if ReviewReport.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                    messages.warning(request, "You have already reported this conversation in the last 24 hours.")
+                    return redirect('conversation_details', profile_id=conversation.id)
+            report = form.save(commit=False)
+            report.reported_convo = conversation
+            report.reporter_profile = reporter_profile
+            report.reporter_ip = reporter_ip
+            report.save()
+            messages.success(request, "Thank you for your report.")
+            return redirect('conversation_details', convo_id=conversation.id)
+    else:
+        form = ReviewReportForm()
+    return render(request, 'users/report.html', {'form': form, 'conversation': conversation})
 
 @login_required
 def inbox(request):

@@ -13,12 +13,14 @@
     {% endfor %}
 </div>
 
-<p>Total messages: {{ messages|length }}</p>
-
 <form method="POST" action="{% url 'conversation_details' conversation.id %}">
     {% csrf_token %}
     <textarea name="content" placeholder="Type your message..."></textarea>
     <button type="submit">Send</button>
+</form>
+<form method="post" action="{% url 'convo_report' conversation.id %}">
+    {% csrf_token %}
+    <button type="submit">Report</button>
 </form>
 
 <p><a href="/">Return to home page</a></p> 

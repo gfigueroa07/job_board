@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message
+from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport
 
 
 class ProfileForm(forms.ModelForm):
@@ -68,16 +68,7 @@ class JobApplicationForm(forms.ModelForm):
             'message',
         ]
         model = JobApplication
-#     message = forms.CharField(
-#     widget=forms.Textarea(
-#         attrs={
-#             'style': 'resize:none;',  # Prevent resizing
-#             'rows': 5,
-#             'cols': 40,
-#             'placeholder': 'Enter your message...'
-#         }
-#     )
-# )
+
 class JobReportForm(forms.ModelForm):
     class Meta:
         model = JobReport
@@ -116,7 +107,15 @@ class ReviewReportForm(forms.ModelForm):
             'reason',
             'message'
         ]
-        
+
+class ConversationReportForm(forms.ModelForm):
+    class Meta:
+        model = ConversationReport
+        fields = [
+            'reason',
+            'message'
+        ]
+    
 # Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
 # These form objects need to be used for Django to run validations using your Models
 from django import forms
