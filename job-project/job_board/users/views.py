@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-from django.db.models import Avg, Case, When, Value, BooleanField
+from django.db.models import Avg, Case, When, Value, BooleanField, Max
 from django.utils import timezone
 from datetime import timedelta
 from django.db.models import Q
@@ -340,7 +340,7 @@ def conversation_detail(request, convo_id):
 
 @login_required
 def inbox(request):
-    conversations = Conversation.objects.all().order_by('-messages__created_at')
+    conversations = Conversation.objects.annotate(last_message_time=Max('messages__created_at')).order_by('-last_message_time')
     convo_data = []
     for convo in conversations:
         last_message = convo.messages.order_by('-created_at').first()
@@ -349,7 +349,7 @@ def inbox(request):
         ).exclude(sender=request.user).exists()
         convo_data.append({
             'conversation': convo,
-            'last_messasge': last_message,
+            'last_message': last_message,
             'has_unread': has_unread
         })
     return render(request, 'users/inbox.html', {
