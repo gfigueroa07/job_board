@@ -21,10 +21,16 @@ class ConversationReportAdmin(admin.ModelAdmin):
     readonly_fields = ('view_messages',)
 
     def view_messages(self, obj):
-        messages = obj.reported_convo.message_set.all()
+        messages = obj.reported_convo.messages.all().order_by('timestamp')
+
+        if not messages:
+            return "No messages"
+
         return format_html(
-            "<br>".join(
-                f"<b>{m.sender}</b>: {m.content}" for m in messages
+            "<br><br>".join(
+                f"<strong>{m.sender.username}</strong>: {m.content} <br><small>{m.timestamp}</small>"
+                for m in messages
             )
         )
-    view_messages.short_description = "Messages"
+
+    view_messages.short_description = "Conversation Messages"
