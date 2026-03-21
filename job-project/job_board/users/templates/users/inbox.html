@@ -1,14 +1,30 @@
 <h2>Inbox</h2>
 
 {% for item in convo_data %}
-    <div>
+    <div style="margin-bottom: 15px;">
+        
+        <!-- Job Title -->
         <a href="{% url 'conversation_details' item.conversation.id %}">
-            {{ item.conversation.job }}
+            <strong>{{ item.conversation.job }}</strong>
         </a>
 
+        <br>
+
+        <!-- Last Message Preview -->
+        {% if item.last_message %}
+            <small>
+                {{ item.last_message.sender }}: 
+                {{ item.last_message.content|truncatechars:40 }}
+            </small>
+        {% endif %}
+
+        <br>
+
+        <!-- Unread Indicator -->
         {% if item.has_unread %}
             <strong>New Message</strong>
         {% endif %}
+
     </div>
 {% endfor %}
 

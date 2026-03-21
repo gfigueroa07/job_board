@@ -340,14 +340,16 @@ def conversation_detail(request, convo_id):
 
 @login_required
 def inbox(request):
-    conversations = Conversation.objects.all()
+    conversations = Conversation.objects.all().order_by('-messages__created_at')
     convo_data = []
     for convo in conversations:
+        last_message = convo.messages.order_by('-created_at').first()
         has_unread = convo.messages.filter(
             is_read=False
         ).exclude(sender=request.user).exists()
         convo_data.append({
             'conversation': convo,
+            'last_messasge': last_message,
             'has_unread': has_unread
         })
     return render(request, 'users/inbox.html', {
