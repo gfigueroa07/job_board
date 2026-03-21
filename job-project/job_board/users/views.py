@@ -331,11 +331,11 @@ def conversation_detail(request, convo_id):
                 content=content         
             )
             return redirect("conversation_details", convo_id=convo_id)
-    messages = conversation.messages.all().order_by('timestamp')
-    messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
+    convo_messages = conversation.messages.all().order_by('timestamp')
+    convo_messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
-        'messages': messages
+        'convo_messages': convo_messages,
     })
 
 def conversation_report(request, convo_id):
@@ -349,13 +349,13 @@ def conversation_report(request, convo_id):
                 reporter_profile = request.user.profile
                 if ConversationReport.objects.filter(reported_convo=conversation, reporter_profile=reporter_profile).exists():
                     messages.warning(request, "You have already reported this conversation.")
-                    return redirect('conversation_details', profile_id=conversation.id)
+                    return redirect('conversation_details', convo_id=conversation.id)
             else:
                 reporter_ip = get_client_ip(request)
                 time_limit = timezone.now() - timedelta(hours=24)
-                if ReviewReport.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                if ConversationReport.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
                     messages.warning(request, "You have already reported this conversation in the last 24 hours.")
-                    return redirect('conversation_details', profile_id=conversation.id)
+                    return redirect('conversation_details', convo_id=conversation.id)
             report = form.save(commit=False)
             report.reported_convo = conversation
             report.reporter_profile = reporter_profile
@@ -364,7 +364,7 @@ def conversation_report(request, convo_id):
             messages.success(request, "Thank you for your report.")
             return redirect('conversation_details', convo_id=conversation.id)
     else:
-        form = ReviewReportForm()
+        form = ConversationReportForm()
     return render(request, 'users/report.html', {'form': form, 'conversation': conversation})
 
 @login_required

@@ -1,16 +1,24 @@
 <h1>Conversation</h1>
-
+{% if messages %}
+    {% for msg in messages %}
+        <div style="color: red;">
+            {{ msg }}
+        </div>
+    {% endfor %}
+{% endif %}
 <div>
-    {% for message in messages %}
+    {% if convo_messages %}
+    {% for message in convo_messages %}
         <div style="margin-bottom: 10px;">
             <strong>{{ message.sender.username }}</strong><br>
             {{ message.content }}<br>
             <small>{{ message.timestamp }}</small>
         </div>
         <hr>
-    {% empty %}
-        <p>No messages yet.</p>
     {% endfor %}
+{% else %}
+    <p>No messages yet.</p>
+{% endif %}
 </div>
 
 <form method="POST" action="{% url 'conversation_details' conversation.id %}">
