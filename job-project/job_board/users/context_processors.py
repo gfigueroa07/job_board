@@ -1,13 +1,12 @@
-
-
-
+from .models import Conversation
 
 def unread_messages(request):
     if request.user.is_authenticated:
-        count = Message.objects.filter(
-            conversation__applicant=request.user,
-            is_read=False
-        ).exclude(sender=request.user).count()
+        conversations = Conversation.objects.filter(
+            messages__is_read=False
+        ).exclude(messages__sender=request.user).distinct()
+
+        count = conversations.count()
     else:
         count = 0
 

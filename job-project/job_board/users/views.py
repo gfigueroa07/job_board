@@ -3,7 +3,7 @@ from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, Prof
 from job_board .funcs import filter_and_sort, get_client_ip
 from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation
 from django.urls import path
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
@@ -330,9 +330,9 @@ def conversation_detail(request, convo_id):
                 sender=request.user,
                 content=content         
             )
-            print("MESSAGE CREATED")
             return redirect("conversation_details", convo_id=convo_id)
     messages = conversation.messages.all().order_by('timestamp')
+    messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'messages': messages
@@ -340,10 +340,23 @@ def conversation_detail(request, convo_id):
 
 @login_required
 def inbox(request):
-    conversations = Conversation.objects.filter(
-        Q(applicant=request.user) |
-        Q(job__profile__user=request.user)
-    ).prefetch_related('messages')
+    conversations = Conversation.objects.all()
+    convo_data = []
+    for convo in conversations:
+        has_unread = convo.messages.filter(
+            is_read=False
+        ).exclude(sender=request.user).exists()
+        convo_data.append({
+            'conversation': convo,
+            'has_unread': has_unread
+        })
     return render(request, 'users/inbox.html', {
-        'conversations': conversations
+        'convo_data': convo_data
     })
+
+def unread_count(request):
+    count = Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).count()
+
+    return JsonResponse({'count': count})
