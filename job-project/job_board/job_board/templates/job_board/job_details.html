@@ -35,7 +35,7 @@
     <a href="{% url 'job_applicants' job.id %}"><button>View Applicants</button></a>
 {% endif %}
 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-    <a href="{% url 'conversation_detail' conversation.id %}">Message</a>
+    <a href="{% url 'conversation_details' conversation.id %}">Message</a>
 {% endif %}
 <hr>
 <p><a href="/">Return to home page</a></p>

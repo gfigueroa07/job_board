@@ -27,19 +27,19 @@ def job_details(request, job_id):
     if request.user.is_authenticated:
         if job.status == 'pending':
             conversation = Conversation.objects.filter(job=job).filter(
-                Q(applicant=request.user)|
+                Q(applicant=request.user) |
                 Q(job__profile__user=request.user)
-                ).first()  
-            if conversation and (
-                request.user == conversation.applicant or
-                request.user == conversation.job.profile.user
-            ):
-                return redirect('conversation_details', convo_id=conversation.id)
+            ).first()
     if hasattr(request.user, 'profile'):  
         application = JobApplication.objects.filter(
-        job=job,
-        applicant=request.user.profile).first()
-    return render(request, 'job_board/job_details.html', {'job': job, 'application': application})
+            job=job,
+            applicant=request.user.profile
+        ).first()
+    return render(request, 'job_board/job_details.html', {
+        'job': job,
+        'application': application,
+        'conversation': conversation
+    })
     
 def job_list(request):
     if not request.user.is_authenticated:
