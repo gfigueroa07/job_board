@@ -1,0 +1,15 @@
+<h1>Jobs applied</h1>
+
+<h2>Jobs You Applied To</h2>
+
+{% for job_app in jobs %}
+    <div>
+        <p>Job: <a href="{% url 'job_details' job_app.job.id %}">{{ job_app.job.title }}</a></p>
+        <p>Status: {{ job_app.status }}</p>
+        <hr>
+    </div>
+{% empty %}
+    <p>No jobs applied yet.</p>
+{% endfor %}
+
+<p><a href="/">Return to home page</a></p>

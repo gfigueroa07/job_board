@@ -225,13 +225,19 @@ def user_logout(request):
     print("POST REQUEST RECEIVED logout")
     if request.method == 'POST':
         logout(request)
-        return redirect('login')
+        return redirect('login') 
     
 def user_jobs(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     jobs = JobListing.objects.filter(profile=profile)
     return render(request, 'users/user_jobs.html', {'profile': profile, 'jobs': jobs})
 
+@login_required
+def user_jobs_applied(request):
+    profile = request.user.profile
+    jobs = JobApplication.objects.filter(applicant=profile)
+    return render(request, 'users/jobs_applied.html', {'profile': profile, 'jobs': jobs})
+    
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)
