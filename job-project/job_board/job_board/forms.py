@@ -52,10 +52,11 @@ class JobCreateForm(forms.ModelForm):
     class Meta:
         model = JobListing
         fields = [
+            'price',
             'images',
             'title',
             'description',
-            'due_date',
+            'due_date',   
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),

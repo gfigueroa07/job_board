@@ -375,21 +375,33 @@ def conversation_report(request, convo_id):
 
 @login_required
 def inbox(request):
-    conversations = Conversation.objects.annotate(last_message_time=Max('messages__created_at')).order_by('-last_message_time')
-    convo_data = []
-    for convo in conversations:
-        last_message = convo.messages.order_by('-created_at').first()
-        has_unread = convo.messages.filter(
-            is_read=False
-        ).exclude(sender=request.user).exists()
-        convo_data.append({
-            'conversation': convo,
-            'last_message': last_message,
-            'has_unread': has_unread
+    profile = None
+    try: 
+        profile = request.user
+    except:
+        pass
+    if profile:
+        conversations = Conversation.objects.filter(
+            Q(applicant=profile) |
+            Q(job__profile__user=request.user)
+            ).annotate(last_message_time=Max('messages__created_at')
+            ).order_by('-last_message_time')
+        convo_data = []
+        for convo in conversations:
+            last_message = convo.messages.order_by('-created_at').first()
+            has_unread = convo.messages.filter(
+                is_read=False
+            ).exclude(sender=request.user).exists()
+            convo_data.append({
+                'conversation': convo,
+                'last_message': last_message,
+                'has_unread': has_unread
+            })
+        return render(request, 'users/inbox.html', {
+            'convo_data': convo_data
         })
-    return render(request, 'users/inbox.html', {
-        'convo_data': convo_data
-    })
+    else:
+        conversations = Conversation.objects.none()
 
 def unread_count(request):
     count = Message.objects.filter(
