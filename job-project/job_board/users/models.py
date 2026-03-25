@@ -220,7 +220,3 @@ class Notifications(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     related_job = models.ForeignKey(JobListing, null=True, blank=True, on_delete=models.CASCADE)
     related_application = models.ForeignKey(JobApplication, null=True, blank=True, on_delete=models.CASCADE)
-
-
-
-    pass
