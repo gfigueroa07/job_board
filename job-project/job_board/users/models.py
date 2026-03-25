@@ -26,6 +26,15 @@ class JobListing(models.Model):
         ('COMPLETED', 'completed'),
         ('CANCELLED', 'cancelled'),
     ]
+    job_category = [
+        ('landscaping','Landscaping'),
+        ('cleaning','Cleaning'),
+        ('garbage_removal','Garbage Removal'),
+        ('automotive','Automotive'),
+        ('handyman','Handyman'),
+        ('other','Other'),
+    ]
+    category = models.CharField(max_length=50, choices=job_category, default='other')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     price = models.FloatField(blank=False, default=0.0)
     title = models.TextField(max_length=200)

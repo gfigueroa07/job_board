@@ -56,7 +56,8 @@ class JobCreateForm(forms.ModelForm):
             'images',
             'title',
             'description',
-            'due_date',   
+            'due_date',
+            'category',
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),
