@@ -13,8 +13,10 @@ from .models import XaropItem
 def home(request):
     jobs = JobListing.objects.all()
     category = request.GET.get('category')
+    print("CATEGORY: ", category)
     if category:
         jobs = jobs.filter(category=category)
+    print("COUNT: ", jobs.count())
     return render(request, 'job_board/home.html', {'jobs': jobs})
 
 def job_page(request):
