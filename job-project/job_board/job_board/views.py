@@ -11,7 +11,11 @@ from django.db.models import Q
 from .models import XaropItem
 
 def home(request):
-    return render(request, 'job_board/home.html')
+    jobs = JobListing.objects.all()
+    category = request.GET.get('category')
+    if category:
+        jobs = jobs.filter(category=category)
+    return render(request, 'job_board/home.html', {'jobs': jobs})
 
 def job_page(request):
     jobs = JobListing.objects.all()

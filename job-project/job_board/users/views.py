@@ -9,11 +9,9 @@ from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
-from django.db.models import Avg, Case, When, Value, BooleanField, Max
+from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
 from datetime import timedelta
-from django.db.models import Q
-from django.contrib import messages
 from django.shortcuts import get_object_or_404, redirect, render
 
 # Create your views here.

@@ -10,6 +10,18 @@
 <a href="{% url 'my_jobs'  %}">My Jobs</a>
 <a href="{% url 'notifications' %}">Notifications</a>
 <h1>This app is still getting worked on. Please check again later</h1>
+<form method="GET">
+    <select name="category">
+        <option value="">All</option>
+        <option value="landscaping">Landscaping</option>
+        <option value="cleaning">Cleaning</option>
+        <option value="garbage_removal">Garbage Removal</option>
+        <option value="automotive">Automotive</option>
+        <option value="handyman">Handyman</option>
+        <!-- <option value="other">Other</option> -->
+    </select>
+    <button type="submit">Filter</button>
+</form>
 <button type="submit">W Xarop Sensei frfr UwU</button><hr>
 <a href='job/page/'>job details</a>
 <a href="{% url 'login' %}">login</a>
