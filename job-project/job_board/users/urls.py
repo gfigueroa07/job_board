@@ -32,6 +32,7 @@ urlpatterns = [
     path('profile/<int:user_id>/delete/', views.profile_delete, name='profile_delete'),
     path('profile/<int:profile_id>/report/', views.profile_report, name='profile_report'),
     
+    path('notifications/', views.notifications, name='notifications'),
     path('conversations/', views.inbox, name='inbox'),
     path('conversation/<int:convo_id>/', views.conversation_detail, name='conversation_details'),
     path('conversation/<int:convo_id>/report/', views.conversation_report, name='convo_report'),
@@ -51,6 +52,8 @@ urlpatterns = [
     path('job/<int:job_id>/report/', views.job_report, name='job_report'),
     path('job/<int:job_id>/apply/', views.job_application, name='job_apply'),
     path('job/<int:job_id>/applicants', views.job_applicants, name='job_applicants')
+
+
 ]
 
 if settings.DEBUG:

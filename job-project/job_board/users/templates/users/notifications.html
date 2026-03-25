@@ -1,0 +1,14 @@
+<h1>Notifications</h1>
+
+
+
+{% for notification in notifications %}
+    <div>
+        <p>{{ notification.message }}</p>
+        <small>{{ notification.created_at }}</small>
+        <hr>
+    </div>
+{% endfor %}
+
+
+<p><a href="/">Return to home page</a></p>

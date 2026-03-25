@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm
 from job_board .funcs import filter_and_sort, get_client_ip
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
 from django.contrib.auth.decorators import login_required
@@ -164,6 +164,12 @@ def job_application(request, job_id):
                 already_applied = True
                 messages.warning(request, "You have already applied to this job.")
                 return redirect('job_details', job_id=job.id)
+            Notifications.objects.create(
+                user=job.profile.user,
+                notification_type='application',
+                message=f"{request.user} applied to your job",
+                related_job=job
+            )
             application.save()
             success = True
             return redirect('job_details', job_id=job.id)
@@ -199,6 +205,12 @@ def job_applicants(request, job_id):
         elif action == 'rejected':
             application.status = 'rejected'
             messages.success(request, f"{application.applicant.user.username} has been rejected")   
+        Notifications.objects.create(
+            user=application.applicant.user,
+            notification_type='status_update',
+            message=f"Your application was {application.status}",
+            related_application=application
+            )
         application.save()     
     return render(request, 'users/job_applicants.html', {
         'job': job,
@@ -263,6 +275,11 @@ def review_create(request, profile_id):
             review.review_written = request.user.profile
             review.review_received = reviewed_profile
             print("SAVING REVIEW") #debug test
+            Notifications.objects.create(
+            user=review.review_received.user,
+            notification_type='review',
+            message=f"You received a new review.",
+            )
             review.save()
             return redirect('profile_detail', profile_id=profile_id)
     else:
@@ -408,4 +425,14 @@ def unread_count(request):
         is_read=False
     ).exclude(sender=request.user).count()
 
+    return JsonResponse({'count': count})
+
+@login_required
+def notifications(request):
+    notifications = request.user.notifications.order_by('-created_at')
+    return render(request, 'users/notifications.html', {'notifications': notifications})
+
+@login_required
+def notification_count(request):
+    count = request.user.notifcations.filter(is_read=False).count()
     return JsonResponse({'count': count})
