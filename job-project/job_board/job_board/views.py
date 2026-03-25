@@ -1,11 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from users .models import Profile
 from job_board .forms import ProfileForm, ProfileEditForm
 from django.urls import path
 from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm
-from users.models import JobListing, JobApplication, Conversation
+from users.models import JobListing, JobApplication, Conversation, Profile
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 
