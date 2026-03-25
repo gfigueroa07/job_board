@@ -181,7 +181,7 @@ class  Message(models.Model):
         ordering = ['timestamp']
         
 class ConversationReport(models.Model):
-    reason_choice  =[
+    reason_choice  = [
         ('spam', 'Spam'),
         ('scam', 'Scam'),
         ('fake', 'Fake'),
@@ -205,3 +205,22 @@ class ConversationReport(models.Model):
     
     def __str__(self):
         return f"{self.reported_convo} - {self.reason}: {self.status}"
+
+
+class Notifications(models.Model):
+    NOTIFICATION_TYPES = (
+        ('application', 'Application'),
+        ('review', 'Review'),
+        ('status_update', 'Status Update'),
+    )
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=50, choices=NOTIFICATION_TYPES)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    related_job = models.ForeignKey(JobListing, null=True, blank=True, on_delete=models.CASCADE)
+    related_application = models.ForeignKey(JobApplication, null=True, blank=True, on_delete=models.CASCADE)
+
+
+
+    pass
