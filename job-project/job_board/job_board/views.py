@@ -14,7 +14,7 @@ def home(request):
     jobs = JobListing.objects.all()
     category = request.GET.get('category')
     print("CATEGORY: ", category)
-    if category:
+    if category and category.strip():
         jobs = jobs.filter(category=category)
     print("COUNT: ", jobs.count())
     return render(request, 'job_board/home.html', {'jobs': jobs})
