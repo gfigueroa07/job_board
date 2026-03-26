@@ -23,8 +23,8 @@
     <a href=" {% url 'job_apply' job.id %}">Apply</a>
 {% endif %}
 <form method="post" action="{% url 'job_report' job.id %}">
-        {% csrf_token %}
-        <button type="submit">Report</button>
+    {% csrf_token %}
+    <button type="submit">Report</button>
 </form>
 {% if job.profile == request.user.profile %}
     <a href="{% url 'job_edit' job.id %}"><button>Edit</button></a>
