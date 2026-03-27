@@ -10,6 +10,7 @@
     <a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a>
     <a href="{% url 'notifications' %}">Notifications</a>
 </nav>
+<a href="{% url 'login' %}">login</a>
 <h1>Browse Jobs</h1>
 <form method="GET" action="{% url 'home' %}">
     <!-- Search -->
@@ -43,7 +44,6 @@
 {% empty %}
     <p>No jobs found</p>
 {% endfor %}
-<a href="{% url 'login' %}">login</a>
 
 {% if user.is_authenticated and user.profile %}
     <a href="{% url 'job_list' %}">job list</a>
