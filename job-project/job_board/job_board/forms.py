@@ -1,5 +1,6 @@
 from django import forms
 from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport
+from django.core.exceptions import ValidationError
 
 
 class ProfileForm(forms.ModelForm):
@@ -9,6 +10,8 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError(
                 'This profile already exists.'
             )
+        if len(profile_name) < 5:
+            raise ValidationError("Title too short")   
         return profile_name   
     class Meta:
         model = Profile
@@ -21,6 +24,15 @@ class ProfileForm(forms.ModelForm):
         ]
 
 class ProfileEditForm(forms.ModelForm):
+    def clean_profile_name(self):
+        profile_name = self.cleaned_data['profile_name']
+        if Profile.objects.filter(profile_name=profile_name).exists():
+            raise forms.ValidationError(
+                'This profile already exists.'
+            )
+        if len(profile_name) < 5:
+            raise ValidationError("Title too short")   
+        return profile_name  
     class Meta:
         model = Profile
         fields = [
@@ -47,7 +59,12 @@ class JobDetailsForm(forms.ModelForm):
             'images',
             'due_date',
         ]
-        
+    def clean_title(self):
+        title = self.cleaned_data['title']
+        if len(title) < 5:
+            raise ValidationError("Title too short")
+        return title
+    
 class JobCreateForm(forms.ModelForm):
     class Meta:
         model = JobListing

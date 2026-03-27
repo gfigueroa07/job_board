@@ -432,5 +432,5 @@ def notifications(request):
 
 @login_required
 def notification_count(request):
-    count = request.user.notifcations.filter(is_read=False).count()
+    count = request.user.notifications.filter(is_read=False).count()
     return JsonResponse({'count': count})
