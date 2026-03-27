@@ -445,14 +445,14 @@ def submit_report(request):
 
             # Make message required for bugs
             if report_type == 'bug' and not message:
-                return render(request, 'users/report.html', {
+                return render(request, 'users/feedback.html', {
                     'form': form,
                     'error': 'Please describe the bug in the message field.'
                 })
             # 24-hour limit check
             last_report = Feedback.objects.filter(user=request.user).order_by('-created_at').first()
             if last_report and timezone.now() - last_report.created_at < timedelta(hours=24):
-                return render(request, 'users/report.html', {
+                return render(request, 'users/feedback.html', {
                     'form': form,
                     'error': 'You can only submit one report every 24 hours.'
                 })
@@ -461,4 +461,4 @@ def submit_report(request):
             report.user = request.user
             report.save()
             return redirect('home')
-    return render(request, 'users/report.html', {'form': form})
+    return render(request, 'users/feedback.html', {'form': form})

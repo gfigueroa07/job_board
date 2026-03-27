@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport, Conversation, Message, ConversationReport, Message
+from .models import Profile, JobListing, Review, JobApplication, JobReport, ProfileReport, ReviewReport, Conversation, Message, ConversationReport, Message, Feedback
 from django.utils.html import format_html
 
 # Register your models here.
@@ -12,8 +12,6 @@ admin.site.register(JobApplication)
 admin.site.register(ProfileReport)
 admin.site.register(ReviewReport)
 admin.site.register(Conversation)
-
-
 
 @admin.register(ConversationReport)
 class ConversationReportAdmin(admin.ModelAdmin):
@@ -34,3 +32,5 @@ class ConversationReportAdmin(admin.ModelAdmin):
         )
 
     view_messages.short_description = "Conversation Messages"
+    
+admin.site.register(Feedback)

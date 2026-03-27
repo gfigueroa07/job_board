@@ -10,6 +10,7 @@
     <a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a>
     <a href="{% url 'notifications' %}">Notifications</a>
     <a href="{% url 'contact' %}">Contact Us</a>
+    <a href="{% url 'feedback' %}">Feedback/Report Bug</a>
 </nav>
 {% if user.is_authenticated and user.profile %}
     <a href="{% url 'job_list' %}">job list</a>
