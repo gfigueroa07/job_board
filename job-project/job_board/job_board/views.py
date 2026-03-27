@@ -87,8 +87,16 @@ def job_delete(request, job_id):
         return redirect('job_page')
     return render(request, 'job_board/job_delete.html', {'job': job})
 
+def privacy(request):
+    return render(request, 'job_board/privacy.html')
+
+def terms(request):
+    return render(request, 'job_board/terms.html')
+
 def profile(request):
     return render(request, 'job_board/profile.html')
+
+
 
 
 

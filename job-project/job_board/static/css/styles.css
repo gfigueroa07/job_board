@@ -1,2 +1,33 @@
 /* {% load static %}
 <link rel="stylesheet" href="{% static 'css/styles.css' %}"> */
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background: #ffffff;
+  color: #1f2937;
+}
+
+h1 {
+  color: #2563eb;
+  margin-bottom: 10px;
+}
+
+h2 {
+  margin-top: 25px;
+  color: #111827;
+}
+
+ul {
+  margin-left: 20px;
+}
+
+p {
+  margin: 10px 0;
+}
+
+.container {
+  max-width: 800px;
+  margin: auto;
+  padding: 20px;
+}
