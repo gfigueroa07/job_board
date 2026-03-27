@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm
-from job_board .funcs import filter_and_sort, get_client_ip
+from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications
 from django.urls import path
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages

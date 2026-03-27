@@ -2,6 +2,20 @@ from django.db.models import Case, When, Value, BooleanField
 
 # helper functions to avoid reusing code
 
+def is_job_owner(user, job):
+    return job.owner == user
+
+
+def is_application_owner(user, application):
+    return application.applicant.user == user
+
+
+def is_conversation_participant(user, conversation):
+    return (
+        user == conversation.applicant.user or
+        user == conversation.job.profile.user
+    )
+    
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
     if x_forwarded_for:
