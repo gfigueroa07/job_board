@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications
+from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications, Feedback
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
@@ -434,3 +434,31 @@ def notifications(request):
 def notification_count(request):
     count = request.user.notifications.filter(is_read=False).count()
     return JsonResponse({'count': count})
+
+@login_required
+def submit_report(request):
+    form = FeedbackForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            report_type = form.cleaned_data['report_type']
+            message = form.cleaned_data['message']
+
+            # Make message required for bugs
+            if report_type == 'bug' and not message:
+                return render(request, 'users/report.html', {
+                    'form': form,
+                    'error': 'Please describe the bug in the message field.'
+                })
+            # 24-hour limit check
+            last_report = Feedback.objects.filter(user=request.user).order_by('-created_at').first()
+            if last_report and timezone.now() - last_report.created_at < timedelta(hours=24):
+                return render(request, 'users/report.html', {
+                    'form': form,
+                    'error': 'You can only submit one report every 24 hours.'
+                })
+            # Save report
+            report = form.save(commit=False)
+            report.user = request.user
+            report.save()
+            return redirect('home')
+    return render(request, 'users/report.html', {'form': form})

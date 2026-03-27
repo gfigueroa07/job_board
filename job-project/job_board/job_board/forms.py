@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport
+from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport, Feedback
 from django.core.exceptions import ValidationError
 
 
@@ -134,6 +134,17 @@ class ConversationReportForm(forms.ModelForm):
             'reason',
             'message'
         ]
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['report_type', 'message', 'page_url']
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # default: message optional
+        self.fields['message'].required = False
+    
+    
     
 # Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
 # These form objects need to be used for Django to run validations using your Models

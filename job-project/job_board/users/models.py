@@ -231,11 +231,17 @@ class Notifications(models.Model):
     related_application = models.ForeignKey(JobApplication, null=True, blank=True, on_delete=models.CASCADE)
     
 class Feedback(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    message = models.TextField()
-    type = models.CharField(max_length=20, choices=[
+    REPORT_TYPES = (
         ('bug', 'Bug'),
         ('feedback', 'Feedback'),
-        ('report', 'Report'),
-    ])
+        ('suggestion', 'Suggestion'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
+    message = models.TextField(blank=True, null=True)  # allow blank for optional
+    page_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.report_type}"

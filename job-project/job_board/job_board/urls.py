@@ -37,7 +37,7 @@ urlpatterns = [
 
     path('privacy/', views.privacy, name='privacy'),
     path('terms/', views.terms, name='terms'),
-
+    path('contact/', views.contact, name='contact'),
     ]
 
 

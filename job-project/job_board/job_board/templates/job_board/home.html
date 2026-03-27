@@ -9,6 +9,7 @@
     <a href="{% url 'my_jobs' %}">My Jobs</a>
     <a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a>
     <a href="{% url 'notifications' %}">Notifications</a>
+    <a href="{% url 'contact' %}">Contact Us</a>
 </nav>
 {% if user.is_authenticated and user.profile %}
     <a href="{% url 'job_list' %}">job list</a>
@@ -57,6 +58,7 @@
 <footer>
   <a href="{% url 'privacy' %}">Privacy</a>
   <a href="{% url 'terms' %}">Terms</a>
+  <a href="{% url 'contact' %}">Contact Us</a>
 </footer>
 </body>
 </html>   

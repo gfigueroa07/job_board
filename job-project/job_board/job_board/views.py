@@ -14,12 +14,10 @@ def home(request):
     jobs = JobListing.objects.all()
     category = request.GET.get('category')
     query = request.GET.get('q')
-    print("CATEGORY: ", category)
     if category and category.strip():
         jobs = jobs.filter(category=category)
     if query:
         jobs = jobs.filter(title__icontains=query)
-    print("COUNT: ", jobs.count())
     return render(request, 'job_board/home.html', {'jobs': jobs})
 
 def job_page(request):
@@ -93,9 +91,11 @@ def privacy(request):
 def terms(request):
     return render(request, 'job_board/terms.html')
 
+def contact(request):
+    return render(request, 'job_board/contact.html')
+
 def profile(request):
     return render(request, 'job_board/profile.html')
-
 
 
 
