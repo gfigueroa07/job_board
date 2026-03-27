@@ -192,7 +192,6 @@ def job_applicants(request, job_id):
         if JobApplication.objects.filter(job=job, status="accepted").exists():
             messages.error(request, 'Job already has an accepted applicant.')
             return redirect('job_applicants', job_id=job.id)
-            # return HttpResponseBadRequest("Job already has an accepted applicant")
         if action == 'accepted':
             application.status = 'accepted'
             application.save()
@@ -209,7 +208,8 @@ def job_applicants(request, job_id):
             message=f"Your application was {application.status}",
             related_application=application
             )
-        application.save()     
+        application.save()
+        return redirect('job_applicants', job.id)     
     return render(request, 'users/job_applicants.html', {
         'job': job,
         'applications': applications,

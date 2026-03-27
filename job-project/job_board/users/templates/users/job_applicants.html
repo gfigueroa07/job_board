@@ -1,32 +1,38 @@
-{% for message in messages %}
-    <p>{{ message }}</p>
-{% endfor %}
-
-{% if applications %}
-    {% for application in applications %}
+{% if messages %}
+    {% for message in messages %}
+        <div>
+            <strong>{{ message.tags|title }}:</strong> {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+{% for application in applications %}
+    <div>
         <p>
-            Applicant: <a href="{% url 'profile_detail' application.applicant.id %}">{{ application.applicant.user.username }}</a><br>
-            Message: {{ application.message }}<br>
-            Status: {{ application.status }}
+            <strong>Applicant:</strong>
+            <a href="{% url 'profile_detail' application.applicant.id %}">
+                {{ application.applicant.user.username }}
+            </a>
         </p>
-        
+
+        <p><strong>Message:</strong> {{ application.message|default:"No message provided." }}</p>
+
+        <p><strong>Status:</strong> {{ application.status }}</p>
+
         {% if application.status == 'pending' %}
-            <form method="post">
+            <form method="post" action="{% url 'job_applicants' job.id %}">
                 {% csrf_token %}
                 <input type="hidden" name="application_id" value="{{ application.id }}">
-                
+
                 <button name="action" value="accepted">Accept</button>
                 <button name="action" value="rejected">Reject</button>
-            
             </form>
-            <hr>
         {% else %}
             <p>Application was {{ application.status }}</p>
-            <hr>
         {% endif %}
-    {% endfor %}
-{% else %}
+    </div>
+    <hr>
+{% empty %}
     <p>No applicants yet.</p>
-{% endif %}
+{% endfor %}
 
 <p><a href="/">Return to home page</a></p>
