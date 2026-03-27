@@ -229,3 +229,13 @@ class Notifications(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     related_job = models.ForeignKey(JobListing, null=True, blank=True, on_delete=models.CASCADE)
     related_application = models.ForeignKey(JobApplication, null=True, blank=True, on_delete=models.CASCADE)
+    
+class Feedback(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    message = models.TextField()
+    type = models.CharField(max_length=20, choices=[
+        ('bug', 'Bug'),
+        ('feedback', 'Feedback'),
+        ('report', 'Report'),
+    ])
+    created_at = models.DateTimeField(auto_now_add=True)
