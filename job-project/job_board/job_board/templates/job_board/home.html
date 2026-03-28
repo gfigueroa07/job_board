@@ -32,7 +32,7 @@
         <button type="submit">Log out</button>
     </form>
 {% else %}
-    <a href="{% url 'login' %}">Login</a>
+    <button><a href="{% url 'login' %}">Login</a></button>
 {% endif %}
 <h1>Browse Jobs</h1>
 <form method="GET" action="{% url 'home' %}">
