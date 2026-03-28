@@ -1,17 +1,23 @@
 <!DOCTYPE html>
 <html>
+    <html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jobs</title>
+    <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
-<nav>
-    <a href="{% url 'home' %}">Home</a>
-    <a href="{% url 'my_jobs' %}">My Jobs</a>
-    <a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a>
-    <a href="{% url 'notifications' %}">Notifications</a>
-    <a href="{% url 'contact' %}">Contact Us</a>
-    <a href="{% url 'feedback' %}">Feedback/Report Bug</a>
-</nav>
+    <header>
+        <nav id='info'>
+            <a href="{% url 'home' %}">Home</a>
+            <a href="{% url 'my_jobs' %}">My Jobs</a>
+            <a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a>
+            <a href="{% url 'notifications' %}">Notifications</a>
+            <a href="{% url 'contact' %}">Contact Us</a>
+            <a href="{% url 'feedback' %}">Feedback/Report Bug</a>
+        </nav>
+    </header>
 {% if user.is_authenticated and user.profile %}
     <a href="{% url 'job_list' %}">job list</a>
     <a href="{% url 'profile_detail' user.profile.id %}">view profile</a>
@@ -41,20 +47,17 @@
     <button type="submit">Search</button>
 </form>
 {% for job in jobs %}
-    <div>
-        <h3>
-            <a href="{% url 'job_details' job.id %}">
-                {{ job.title }}
-            </a>
-        </h3>
-        <p>Price: ${{ job.price|floatformat:2 }}</p>
-        <p>Category: {{ job.category }}</p>
-        <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
-        <a href="{% url 'job_details' job.id %}">View Job</a>
-    </div>
-    <hr>
+<div class="job-card">
+    <h3>
+        <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
+    </h3>
+    <p>Price: ${{ job.price|floatformat:2 }}</p>
+    <p>Category: {{ job.category }}</p>
+    <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
+    <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
+</div>
 {% empty %}
-    <p>No jobs found</p>
+<p>No jobs found</p>
 {% endfor %}
 <footer>
   <a href="{% url 'privacy' %}">Privacy</a>

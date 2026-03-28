@@ -1,33 +1,129 @@
-/* {% load static %}
-<link rel="stylesheet" href="{% static 'css/styles.css' %}"> */
+/* Reset and base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
 
 body {
-  font-family: Arial, sans-serif;
-  line-height: 1.6;
-  background: #ffffff;
-  color: #1f2937;
+    background-color: #ffffff; /* white background */
+    color: #333;
+    line-height: 1.6;
+    padding: 0 20px;
 }
 
+/* Header & navigation */
+header {
+    background-color: #0073b1; /* blue similar to Indeed */
+    padding: 10px 20px;
+}
+
+header nav#info {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+header nav#info a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 4px;
+    transition: background 0.2s;
+}
+
+header nav#info a:hover {
+    background-color: #005582; /* darker blue on hover */
+}
+
+/* Auth links and buttons */
+form button, body a.button {
+    background-color: #0073b1;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s;
+}
+
+form button:hover, body a.button:hover {
+    background-color: #005582;
+}
+
+/* Page heading */
 h1 {
-  color: #2563eb;
-  margin-bottom: 10px;
+    margin: 20px 0;
+    color: #0073b1;
 }
 
-h2 {
-  margin-top: 25px;
-  color: #111827;
+/* Search form */
+form input[type="text"], form select {
+    padding: 8px;
+    margin-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-ul {
-  margin-left: 20px;
+form button[type="submit"] {
+    padding: 8px 15px;
 }
 
-p {
-  margin: 10px 0;
+/* Job listing cards */
+div.job-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 6px;
+    background-color: #f9f9f9;
+    transition: box-shadow 0.2s;
 }
 
-.container {
-  max-width: 800px;
-  margin: auto;
-  padding: 20px;
+div.job-card:hover {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+div.job-card h3 a {
+    color: #0073b1;
+    text-decoration: none;
+}
+
+div.job-card h3 a:hover {
+    text-decoration: underline;
+}
+
+/* Job details */
+div.job-card p {
+    margin: 5px 0;
+}
+
+/* Footer */
+footer {
+    margin-top: 40px;
+    padding: 20px 0;
+    text-align: center;
+    border-top: 1px solid #ddd;
+}
+
+footer a {
+    margin: 0 10px;
+    color: #0073b1;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    header nav#info {
+        flex-direction: column;
+        gap: 10px;
+    }
 }
