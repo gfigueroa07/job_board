@@ -5,30 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jobs</title>
-    <link rel="stylesheet" href="static/css/styles.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <header>
         <nav id="info">
-            <li class="menuButton" onclick="showSidebar()"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" height="26px" viewBox="0 -960 960 960" width="26px" fill="#000000"><path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z"/></svg></a></li>
-            <script>
-            document.getElementById("menu-toggle").addEventListener("click", function() {
-                document.querySelector(".nav-links").classList.toggle("active");
-            });
-            </script>
-            <div class="nav-links">     
-                <ul class='sidebar'>
-                    <li><a href="{% url 'home' %}">Home</a></li>
-                    <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
-                    <li><a href="{% url 'inbox' %}">Inbox ({{ unread_count }})</a></li>
-                    <li><a href="{% url 'notifications' %}">Notifications</a></li>
-                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
-                    <li><a href="{% url 'feedback' %}">Feedback/Report Bug</a></li>
-                </ul>
-            </div>
+            <button id="menu-btn">☰</button>
+            <ul class="sidebar">
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
+                <li><a href="{% url 'inbox' %}">Inbox</a></li>
+                <li><a href="{% url 'notifications' %}">Notifications</a></li>
+            </ul>
         </nav>
-</header>
+    </header>
 
 
 {% if user.is_authenticated and user.profile %}
@@ -74,9 +66,20 @@
 {% endfor %}
 <footer>
     <p>&copy; <span id="year"></span> Hustlr. All Rights Reserved.</p>
-  <a href="{% url 'privacy' %}">Privacy</a>
-  <a href="{% url 'terms' %}">Terms</a>
-  <a href="{% url 'contact' %}">Contact Us</a>
+    <a href="{% url 'privacy' %}">Privacy</a>
+    <a href="{% url 'terms' %}">Terms</a>
+    <a href="{% url 'contact' %}">Contact Us</a>
 </footer>
+ <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const btn = document.getElementById("menu-btn");
+
+        btn.addEventListener("click", function () {
+        console.log("CLICK WORKS");
+        document.querySelector(".sidebar").classList.toggle("active");
+        });
+    });
+    </script>
 </body>
 </html>   
