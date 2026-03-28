@@ -25,7 +25,6 @@ from django.conf.urls.static import static
 
 
 urlpatterns = [
-    path('', job_board.views.home, name="home"),
     path('profile/create/', views.profile_create, name='profile_create'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
