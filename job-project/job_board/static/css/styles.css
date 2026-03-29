@@ -22,9 +22,22 @@ body {
 
 /* Header & navigation */
 header {
-    background-color: #0073b1; /* blue similar to Indeed */
-    padding: 10px 20px;
+    background-color: #ffffff; /* blue similar to Indeed */
+    padding: 0px 20px;
 }
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0073b1; /* your blue */
+}
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -33,9 +46,10 @@ ul {
 a {
     text-decoration: none;
 }
+
 button {
     background-color: #0073b1;
-    color: white;
+    color: rgb(172, 172, 172);
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
@@ -44,12 +58,18 @@ button {
     text-decoration: none;
     transition: background 0.2s;
 }
+
 #menu-btn {
     font-size: 24px;
     background: none;
     border: none;
-    color: white;
+    color: rgb(0, 0, 0);
     cursor: pointer;
+}
+
+#menu-btn:hover {
+    background-color: rgb(218, 218, 218);
+    text-wrap-style: balance;
 }
 
 /* Sidebar (dropdown) */
@@ -57,9 +77,10 @@ button {
     position: absolute;
     top: 5rem;        /* below navbar */
     right: 0;
-    width: 200px;
-
-    background: #0073b1;
+    width: 400px;
+    border: 2px solid, black;
+    border-radius: 20px;
+    background: #ffffff;
 
     display: none;    /* hidden by default */
     flex-direction: column;
@@ -74,14 +95,15 @@ button {
 }
 
 .sidebar a {
-    color: white;
+    color: rgb(0, 0, 0);
 }
+
 #menu-toggle {
     display: none;
     font-size: 24px;
     background: none;
     border: none;
-    color: white;
+    color: #0073b1;
     cursor: pointer;
 }
 
@@ -92,13 +114,12 @@ button {
     
 header nav#info {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
-    gap: 15px;
 }
 
-header nav#info a {
-    color: white;
+header .nav-right a {
+    color: rgb(0, 0, 0);
     text-decoration: none;
     font-weight: bold;
     padding: 6px 10px;
@@ -107,7 +128,7 @@ header nav#info a {
 } 
 
 header nav#info a:hover {
-    background-color: #005582;
+    background-color: #e2e2e2;
 }
 
 /* Auth links and buttons */
@@ -124,13 +145,13 @@ form button, body a.button {
 }
 
 form button:hover, body a.button:hover {
-    background-color: #005582;
+    background-color: #0073b19f;
 }
 
 /* Page heading */
 h1 {
     margin: 20px 0;
-    color: #0073b1;
+    color: #000000;
 }
 
 /* Search form */
@@ -151,7 +172,7 @@ div.job-card {
     padding: 15px;
     margin: 15px 0;
     border-radius: 6px;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     transition: box-shadow 0.2s;
 }
 
@@ -193,7 +214,7 @@ footer a:hover {
 }
 
 /* Responsive */
-@media (max-width: 600px) {
+/* @media (max-width: 600px) {
     #menu-toggle {
         display: block;
     }
@@ -219,4 +240,4 @@ footer a:hover {
     nav .sidebar{
         width: 100%;
     }
-}
+} */

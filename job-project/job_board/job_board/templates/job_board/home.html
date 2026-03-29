@@ -12,28 +12,40 @@
 <body>
     <header>
         <nav id="info">
+            <a href='{% url 'home' %}' class='logo'>Hustlr</a>
+            <div class='nav-right'>
+            {% if user.is_authenticated and user.profile %}
+                <a href="{% url 'inbox' %}">Inbox</a>
+                <a href="{% url 'notifications' %}">Notifications ({{ unread_count }})</a>
+                <a href="{% url 'profile_detail' user.profile.id %}">Profile</a>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a>
+            {% endif %}
             <button id="menu-btn">☰</button>
             <ul class="sidebar">
+                {% if user.is_authenticated and user.profile %}
                 <li><a href="{% url 'home' %}">Home</a></li>
+
                 <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
-                <li><a href="{% url 'inbox' %}">Inbox</a></li>
-                <li><a href="{% url 'notifications' %}">Notifications</a></li>
+                <li><a href="{% url 'job_list' %}">Post a  Job</a></li>
+
+                <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                <li><a href="{% url 'terms' %}">Terms of Service</a></li>
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <li><button type="submit">Log Out</button></li>
+                </form>
+                {% else %}
+                    <li><a href="{% url 'home' %}">Home</a></li>
+                    <li><a href="{% url 'login' %}">Login</a></li>
+                    <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    <li><a href="{% url 'privacy' %}">Privacy Policy</a></li>
+                    <li><a href="{% url 'terms' %}">Terms of Service</a></li>  
+                {% endif %}
             </ul>
         </nav>
     </header>
-
-
-{% if user.is_authenticated and user.profile %}
-    <a href="{% url 'job_list' %}">job list</a>
-    <a href="{% url 'profile_detail' user.profile.id %}">view profile</a>
-    <a href="{% url 'profile_edit' %}">edit profile</a>
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Log out</button>
-    </form>
-{% else %}
-    <button><a href="{% url 'login' %}">Login</a></button>
-{% endif %}
 <h1>Browse Jobs</h1>
 <form method="GET" action="{% url 'home' %}">
     <!-- Search -->
@@ -66,8 +78,8 @@
 {% endfor %}
 <footer>
     <p>&copy; <span id="year"></span> Hustlr. All Rights Reserved.</p>
-    <a href="{% url 'privacy' %}">Privacy</a>
-    <a href="{% url 'terms' %}">Terms</a>
+    <a href="{% url 'privacy' %}">Privacy Policy</a>
+    <a href="{% url 'terms' %}">Terms of Service</a>
     <a href="{% url 'contact' %}">Contact Us</a>
 </footer>
  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
