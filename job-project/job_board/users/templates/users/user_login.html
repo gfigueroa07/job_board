@@ -1,5 +1,8 @@
 {% extends 'job_board/base.html' %}
-
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock %}
 {% block content %}
 <h1>Login</h1>
 {% if messages %}
@@ -12,6 +15,6 @@
     {{ form.as_p }}
     <button type="submit">Login</button>
 </form>
-<a href=" {% url 'profile_create' %} ">create profile</a>
+<a href="{% url 'profile_create' %} ">create profile</a>
 <p><a href="/">Return to home page</a></p>
 {% endblock %}

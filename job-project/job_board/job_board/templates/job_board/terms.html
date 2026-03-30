@@ -1,3 +1,6 @@
+{% extends 'job_board/base.html' %}
+{% load static %}
+{% block content %}
 <h1>Terms of Service</h1>
 
 <h2>Effective Date: 03/27/2026</h2>
@@ -60,3 +63,6 @@
 <h3>11. Contact</h3>
 
 <h4>For questions, contact: support@hustlr.com</h4>
+<hr>
+<a href="{% url 'home' %}">Back to Jobs</a>
+{% endblock %}

@@ -1,3 +1,9 @@
+{% extends 'job_board/base.html' %}
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/inbox.css' %}">
+{% endblock %}
+{% block content %}
 <h2>Inbox</h2>
 
 {% for item in convo_data %}
@@ -30,3 +36,4 @@
 {% endfor %}
 
 <p><a href="/">Return to home page</a></p>
+{% endblock %}
