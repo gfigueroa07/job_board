@@ -1,9 +1,7 @@
 
-
-<form method="GET" action="{% url 'job_page' %}">
+<form method="GET" action="{% url 'job_page' %}" class='search-bar-box'>
     <!-- Search -->
     <input type="text" name="q" placeholder="Search jobs..." value="{{ request.GET.q }}">
-
     <!-- Category -->
     <select name="category">
         <option value="">All</option>

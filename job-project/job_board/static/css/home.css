@@ -1,3 +1,25 @@
-.logo {
-    text-align: center;
+.home-container {
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* spacing between elements */
+}
+
+/* Logo image */
+.logo img {
+    width: 400px;
+}
+
+/* Tagline */
+.tagline {
+    font-size: 22px;
+    color: #444;
+}
+
+/* Search */
+.search-wrapper {
+    width: 1000px;
+    max-width: 600px;
 }

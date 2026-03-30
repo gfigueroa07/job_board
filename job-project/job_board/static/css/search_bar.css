@@ -1,0 +1,42 @@
+/* Container for the whole form */
+.search-bar-box {
+    display: flex;
+    border: 1px solid #ccc;       /* Outer border of the box */
+    border-radius: 8px;
+    overflow: hidden;              /* Clip the children borders */
+    max-width: 600px;
+    width: 100%;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+/* Input field */
+.search-bar-box input[type="text"] {
+    flex: 2;                       /* wider than select/button */
+    padding: 12px 15px;
+    border: none;                  /* remove individual border */
+    outline: none;
+}
+
+/* Category dropdown */
+.search-bar-box select {
+    flex: 1;
+    padding: 12px 10px;
+    border: none;                  /* remove individual border */
+    outline: none;
+    border-left: 1px solid #ccc;   /* optional separation line */
+}
+
+/* Search button */
+.search-bar-box button {
+    flex: 1;
+    padding: 12px 15px;
+    border: none;
+    background-color: #2557a7;
+    color: white;
+    cursor: pointer;
+    border-left: 1px solid #ccc;   /* optional separation line */
+}
+
+.search-bar-box button:hover {
+    background-color: #1d4ed8;
+}
