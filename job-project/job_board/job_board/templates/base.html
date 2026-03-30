@@ -1,10 +1,10 @@
+{% load static %}
 <!DOCTYPE html>
-<html>
-    <html lang="en">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jobs</title>
+    <title>Hustlr</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -46,52 +46,23 @@
             </ul>
         </nav>
     </header>
-<h1>Browse Jobs</h1>
-<form method="GET" action="{% url 'home' %}">
-    <!-- Search -->
-    <input type="text" name="q" placeholder="Search jobs..." value="{{ request.GET.q }}">
-
-    <!-- Category -->
-    <select name="category">
-        <option value="">All</option>
-        <option value="landscaping" {% if request.GET.category == "landscaping" %}selected{% endif %}>Landscaping</option>
-        <option value="cleaning" {% if request.GET.category == "cleaning" %}selected{% endif %}>Cleaning</option>
-        <option value="garbage_removal" {% if request.GET.category == "garbage_removal" %}selected{% endif %}>Garbage Removal</option>
-        <option value="automotive" {% if request.GET.category == "automotive" %}selected{% endif %}>Automotive</option>
-        <option value="handyman" {% if request.GET.category == "handyman" %}selected{% endif %}>Handyman</option>
-    </select>
-
-    <button type="submit">Search</button>
-</form>
-{% for job in jobs %}
-<div class="job-card">
-    <h3>
-        <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
-    </h3>
-    <p>Price: ${{ job.price|floatformat:2 }}</p>
-    <p>Category: {{ job.category }}</p>
-    <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
-    <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
-</div>
-{% empty %}
-<p>No jobs found</p>
-{% endfor %}
-<footer>
-    <p>&copy; <span id="year"></span> Hustlr. All Rights Reserved.</p>
-    <a href="{% url 'privacy' %}">Privacy Policy</a>
-    <a href="{% url 'terms' %}">Terms of Service</a>
-    <a href="{% url 'contact' %}">Contact Us</a>
-</footer>
- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    {% block content %}{% endblock %}
+    <footer>
+        <p>&copy; <span id="year"></span> Hustlr. All Rights Reserved.</p>
+        <a href="{% url 'privacy' %}">Privacy Policy</a>
+        <a href="{% url 'terms' %}">Terms of Service</a>
+        <a href="{% url 'contact' %}">Contact Us</a>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const btn = document.getElementById("menu-btn");
+        document.addEventListener("DOMContentLoaded", function () {
+            const btn = document.getElementById("menu-btn");
 
-        btn.addEventListener("click", function () {
-        console.log("CLICK WORKS");
-        document.querySelector(".sidebar").classList.toggle("active");
+            btn.addEventListener("click", function () {
+            console.log("CLICK WORKS");
+            document.querySelector(".sidebar").classList.toggle("active");
+            });
         });
-    });
     </script>
 </body>
-</html>   
+</html>

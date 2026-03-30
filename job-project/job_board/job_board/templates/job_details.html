@@ -1,3 +1,5 @@
+{% extends 'base.html' %}
+{% block content %}
 <h1>Job Details</h1>
 
 {% if messages %}
@@ -67,3 +69,4 @@
 
 <hr>
 <a href="{% url 'home' %}">Back to Jobs</a>
+{% endblock %}

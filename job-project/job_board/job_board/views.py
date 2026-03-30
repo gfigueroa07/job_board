@@ -18,13 +18,13 @@ def home(request):
         jobs = jobs.filter(category=category)
     if query:
         jobs = jobs.filter(title__icontains=query)
-    return render(request, 'job_board/home.html', {'jobs': jobs})
+    return render(request, 'home.html', {'jobs': jobs})
 
 def job_page(request):
     jobs = JobListing.objects.all()
     if not jobs.exists():
-        return render(request, 'job_board/job_page.html', {'message' : 'no job listings. Check back later'})
-    return render(request, 'job_board/job_page.html', {'jobs': jobs})
+        return render(request, 'job_page.html', {'message' : 'no job listings. Check back later'})
+    return render(request, 'job_page.html', {'jobs': jobs})
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id) 
@@ -41,7 +41,7 @@ def job_details(request, job_id):
             job=job,
             applicant=request.user.profile
         ).first()
-    return render(request, 'job_board/job_details.html', {
+    return render(request, 'job_details.html', {
         'job': job,
         'application': application,
         'conversation': conversation
@@ -59,7 +59,7 @@ def job_list(request):
         return redirect('job_page')
     else:
         job_form = JobCreateForm()
-    return render(request, 'job_board/job_list.html', {'job_form' : job_form})
+    return render(request, 'job_list.html', {'job_form' : job_form})
 
 @login_required
 def job_edit(request, job_id):
@@ -73,7 +73,7 @@ def job_edit(request, job_id):
             return redirect('job_details', job_id=job.id)
     else:
         form = JobDetailsForm(instance=job)
-    return render(request, 'job_board/job_edit.html', {'form': form, 'job': job})
+    return render(request, 'job_edit.html', {'form': form, 'job': job})
 
 @login_required
 def job_delete(request, job_id):
@@ -83,19 +83,19 @@ def job_delete(request, job_id):
     if request.method == 'POST':
         job.delete()
         return redirect('job_page')
-    return render(request, 'job_board/job_delete.html', {'job': job})
+    return render(request, 'job_delete.html', {'job': job})
 
 def privacy(request):
-    return render(request, 'job_board/privacy.html')
+    return render(request, 'privacy.html')
 
 def terms(request):
-    return render(request, 'job_board/terms.html')
+    return render(request, 'terms.html')
 
 def contact(request):
-    return render(request, 'job_board/contact.html')
+    return render(request, 'contact.html')
 
 def profile(request):
-    return render(request, 'job_board/profile.html')
+    return render(request, 'profile.html')
 
 
 
