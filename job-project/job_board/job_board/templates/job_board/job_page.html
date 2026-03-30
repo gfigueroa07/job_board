@@ -1,23 +1,36 @@
 {% extends 'job_board/base.html' %}
-{% block content %}
-<h1>Job Page</h1>
-{% if message %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/jobs.css' %}">
+{% endblock %}
+
+{% block content%}
+    <h1>Browse Jobs</h1>
+    {% include 'job_board/partials/search_bar.html' %}
+    <p>{{ job_count }} jobs found</p>
+    {% for job in page_obj %}
+        <div class="job-card">
+            <h3>
+                <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
+            </h3>
+            <p>Price: ${{ job.price|floatformat:2 }}</p>
+            <p>Category: {{ job.category }}</p>
+            <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
+            <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
+        </div>
+    {% empty %}
+        <p>No jobs found</p>
     {% endfor %}
-{% else %}
-    {% for job in jobs %}
-        <a href="{% url 'job_details' job.id %}"><p>{{ job.title }}</p></a>
-        <p>Posted by: <a  href=" {% url 'profile_detail' job.profile.id %}">{{ job.profile }}</a></p>
-        {% if job.profile == request.user.profile %}
-            <a href="{% url 'job_edit' job.id %}"> <button>Edit</button></a>
-            <form method="post" action="{% url 'job_delete' job.id %}">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-            </form>
-           {% endif %}
-        <hr>
-    {% endfor %}
-{% endif %}
-<p><a href="/">Return to home page</a></p>
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1&q={{ request.GET.q }}&category={{ request.GET.category }}">First</a>
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Next</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Last</a>
+        {% endif %}
+    </div>
 {% endblock %}

@@ -7,24 +7,31 @@ from .forms import JobDetailsForm, JobCreateForm
 from users.models import JobListing, JobApplication, Conversation, Profile
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
+from django.core.paginator import Paginator
 
 from .models import XaropItem
 
 def home(request):
-    jobs = JobListing.objects.all()
-    category = request.GET.get('category')
-    query = request.GET.get('q')
-    if category and category.strip():
-        jobs = jobs.filter(category=category)
-    if query:
-        jobs = jobs.filter(title__icontains=query)
-    return render(request, 'job_board/home.html', {'jobs': jobs})
+
+    return render(request, 'job_board/home.html')
 
 def job_page(request):
     jobs = JobListing.objects.all()
-    if not jobs.exists():
-        return render(request, 'job_board/job_page.html', {'message' : 'no job listings. Check back later'})
-    return render(request, 'job_board/job_page.html', {'jobs': jobs})
+    query = request.GET.get('q')
+    category = request.GET.get('category')
+    if query:
+        jobs = jobs.filter(title__icontains=query)
+    if category and category.strip():
+        
+        jobs = jobs.filter(category=category)
+    paginator = Paginator(jobs, 5)  # 5 jobs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'job_board/job_page.html', {
+        'page_obj': page_obj,
+        'job_count': jobs.count(),
+    })
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id) 
