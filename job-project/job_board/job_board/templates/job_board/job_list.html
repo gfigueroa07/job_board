@@ -1,11 +1,5 @@
-{% extends 'base.html' %}
-<!DOCTYPE html>
-<html>
-<head>
-    <title>List Job</title>
-</head>
-<body>
-
+{% extends 'job_board/base.html' %}
+{% block content %}
 <h1>List Your Job</h1>
 
 <form method="POST" enctype="multipart/form-data">
@@ -14,5 +8,4 @@
     <button type="submit">Save Job</button>
 </form>
 <p><a href="/">Return to home page</a></p>
-</body>
-</html>
+{% endblock %}

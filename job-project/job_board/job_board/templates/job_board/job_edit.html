@@ -1,4 +1,5 @@
-{% extends 'base.html' %}
+{% extends 'job_board/base.html' %}
+{% block content %}
 <h2>Edit Job</h2>
 
 <form method="post" enctype="multipart/form-data">
@@ -7,3 +8,4 @@
     <button type="submit">Save changes</button>
 </form>
 <p><a href="/">Return to home page</a></p>
+{% endblock %}
