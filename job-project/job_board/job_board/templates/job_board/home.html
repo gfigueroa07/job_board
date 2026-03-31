@@ -10,11 +10,11 @@
         {% include 'job_board/partials/search_bar.html' %}
     </div>
     <div class="logo">
-        <img src="{% static 'app/logo.png' %}" alt="Hustlr Logo">
+        <img src="{% static 'css/images/logo.png' %}" alt="Hustlr Logo">
     </div>
-    <div class='get-started'>
         <p>Create an account or log in to see quick jobs near you.
-        <a class='button' href="{% url 'login' %}">Get Started →</a>
+    <div class='get-started'>        
+        <a href="{% url 'login' %}" >Get Started →</a>
     </div>
 </div>
 {% endblock %} 

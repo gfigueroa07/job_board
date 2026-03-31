@@ -31,12 +31,12 @@
     flex: 1;
     padding: 12px 15px;
     border: none;
-    background-color: #2557a7;
+    background-color: #0073b1;
     color: white;
     cursor: pointer;
     border-left: 1px solid #ccc;   /* optional separation line */
 }
 
 .search-bar-box button:hover {
-    background-color: #1d4ed8;
+    background-color: #0073b19f;
 }

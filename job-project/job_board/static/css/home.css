@@ -1,5 +1,5 @@
 .home-container {
-    height: 40vh;
+    height: 50vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -12,12 +12,6 @@
     width: 400px;
 }
 
-/* Tagline */
-.tagline {
-    font-size: 22px;
-    color: #444;
-}
-
 /* Search */
 .search-wrapper {
     width: 1000px;
@@ -25,26 +19,21 @@
 }
 
 /* Home page button */
-.get-started-btn {
+.get-started {
     display: inline-block;        /* makes it behave like a button */
     margin-top: 20px;             /* space below the <p> */
     padding: 12px 30px;
-    background-color: #2557a7;
-    color: white;
+    background-color: #0073b1;
     text-decoration: none;        /* remove underline */
     border-radius: 8px;
     font-weight: bold;
     transition: background-color 0.3s;
 }
 
-.get-started-btn:hover {
-    background-color: #1d4ed8;
+.get-started:hover {
+    background-color: #0073b19f;
 }
 
-/* Optional: center it */
-.home-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 20px;   /* space between logo, tagline, button, search bar */
+.get-started a {
+    color: white;
 }

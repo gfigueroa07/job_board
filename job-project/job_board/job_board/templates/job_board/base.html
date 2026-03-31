@@ -19,10 +19,13 @@
                 <a href="{% url 'notifications' %}">🕭 ({{ unread_count }})</a>
                 <a href="{% url 'profile_detail' user.profile.id %}">👤</a>
             {% else %}
+            <div class='login'>
                 <a href="{% url 'login' %}">Login</a>
+            </div>
             {% endif %}
             <button id="menu-btn">☰</button>
             <ul class="sidebar">
+                <button id="exit-btn">✖</button>
                 {% if user.is_authenticated and user.profile %}
                 <li><a href="{% url 'home' %}">Home</a></li>
 
@@ -56,17 +59,23 @@
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const btn = document.getElementById("menu-btn");
+            const sidebar = document.querySelector(".sidebar");
+            const menuBtn = document.getElementById("menu-btn");
+            const exitBtn = document.getElementById("exit-btn");
+            menuBtn.addEventListener("click", function () {
+                console.log("Menu click");
+                sidebar.classList.toggle("active");
+            });
 
-            btn.addEventListener("click", function () {
-            console.log("CLICK WORKS");
-            document.querySelector(".sidebar").classList.toggle("active");
+            exitBtn.addEventListener("click", function () {
+                console.log("Exit click");
+                sidebar.classList.remove("active");
             });
         });
         document.addEventListener("DOMContentLoaded", function () {
             // Automatically update the copyright year
             document.getElementById('year').textContent = new Date().getFullYear();
-    
+
             // Initialize Swiper
             const swiper = new Swiper(".card-swiper", {
                 centeredSlides: false,

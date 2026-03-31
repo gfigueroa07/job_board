@@ -22,14 +22,13 @@ body {
 
 /* Header & navigation */
 header {
-    background-color: #ffffff; /* blue similar to Indeed */
     padding: 0px 20px;
 }
 
 .nav-right {
     display: flex;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
 }
 
 .logo {
@@ -73,16 +72,32 @@ button {
     text-wrap-style: balance;
 }
 
+#exit-btn {
+    font-size: 24px;
+    background: none;
+    border: none;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+}
+
+#exit-btn:hover {
+    background-color: rgb(218, 218, 218);
+    text-wrap-style: balance;
+}
+
 /* Sidebar (dropdown) */
 .sidebar {
     position: absolute;
-    top: 5rem;        /* below navbar */
+    top: 0rem;       /* below navbar */
     right: 0;
-    width: 400px;
-    border: 2px solid, black;
+    width: 50%;
+    height: 100vh;
+    border: 1px solid, black;
     border-radius: 20px;
     background: #ffffff;
-
+    transition: transform 0.3s ease;
     display: none;    /* hidden by default */
     flex-direction: column;
 }
@@ -91,8 +106,14 @@ button {
     display: flex;    /* show when clicked */
 }
 
+.sidebar.inactive {
+    display: none;
+    transform: translateX(-100%);
+}
+
 .sidebar li {
     padding: 10px;
+    border-bottom: 1px solid #5e5e5e4b;
 }
 
 .sidebar a {
@@ -119,11 +140,22 @@ header nav#info {
     align-items: center;
 }
 
+nav#info .login a {
+    background-color: #0073b1;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-weight: normal;
+    transition: background 0.2s;
+} 
+
 header .nav-right a {
+    background-color: #ffffff;
     color: rgb(0, 0, 0);
     text-decoration: none;
     font-weight: bold;
-    padding: 6px 10px;
+    padding: 10px 10px;
     border-radius: 4px;
     transition: background 0.2s;
 } 
@@ -147,12 +179,6 @@ form button, body a.button {
 
 form button:hover, body a.button:hover {
     background-color: #0073b19f;
-}
-
-/* Page heading */
-h1 {
-    margin: 20px 0;
-    color: #000000;
 }
 
 /* Footer */
