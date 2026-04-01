@@ -37,6 +37,7 @@ header {
     color: #0073b1; /* your blue */
 }
 
+
 ul {
     list-style-type: none;
     margin: 0;
@@ -161,7 +162,7 @@ header .nav-right a {
 } 
 
 header nav#info a:hover {
-    background-color: #e2e2e2;
+    background-color: #b1b1b19f;
 }
 
 /* Auth links and buttons */

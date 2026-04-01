@@ -221,7 +221,7 @@ def user_login(request):
         messages.error(request, "You are already logged in.")
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
             profile = request.user.profile

@@ -8,7 +8,6 @@
         <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
-
 <div class="page-center">
     <div id="logo">
         <a href="{% url 'home' %}" class="logo">Hustlr</a>
@@ -25,13 +24,32 @@
                     <a href="{% url 'privacy' %}">Privacy</a> 
                     policies.
                 </small>
+                
             </div>
-        <form method="POST" enctype="multipart/form-data">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Login</button>
-        </form>
-        <a href="{% url 'profile_create' %} ">create profile</a>
+    <form method="POST">
+        {% csrf_token %}
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors.0 }}</div>
+        {% endif %}
+        <div class="form-group">
+            {{ form.username.label_tag }}
+            {{ form.username }}
+            {% if form.username.errors %}
+                <div class="error">{{ form.username.errors.0 }}</div>
+            {% endif %}
+        </div>
+        <div class="form-group">
+            {{ form.password.label_tag }}
+            {{ form.password }}
+            {% if form.password.errors %}
+                <div class="error">{{ form.password.errors.0 }}</div>
+            {% endif %}
+        </div>
+        <button type="submit">Login</button>
+    </form>
+        <div id='create-profile'>
+            <a href="{% url 'profile_create' %}" class="create-profile" >create profile</a>
+        </div>
     </div>
 </div>
-    {% endblock %}
+{% endblock %}
