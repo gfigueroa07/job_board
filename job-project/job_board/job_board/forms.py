@@ -22,6 +22,9 @@ class ProfileForm(forms.ModelForm):
             'skills',
             'resume',
         ]
+    profile_name = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
 
 class ProfileEditForm(forms.ModelForm):
     def clean_profile_name(self):
