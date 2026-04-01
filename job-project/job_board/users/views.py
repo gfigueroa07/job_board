@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm, CustomUserCreationForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications, Feedback
 from django.urls import path
@@ -24,7 +24,7 @@ def profile_create(request):
         messages.error(request, "Please log out before creating a profile.")
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        user_form = UserCreationForm(request.POST)
+        user_form = CustomUserCreationForm(request.POST)
         profile_form = ProfileForm(request.POST, request.FILES)  # include files for avatar
         if user_form.is_valid() and profile_form.is_valid():
             # Save the user first
@@ -40,7 +40,7 @@ def profile_create(request):
             login(request, user)
             return redirect('profile_detail', profile_id=profile.id) # replace 'home' with your URL name
     else:
-        user_form = UserCreationForm()
+        user_form = CustomUserCreationForm()
         profile_form = ProfileForm()
     context = {'user_form': user_form, 'profile_form': profile_form}
     return render(request, 'users/profile_create.html', context)

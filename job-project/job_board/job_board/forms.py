@@ -1,29 +1,19 @@
 from django import forms
 from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport, Feedback
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-
+from django.contrib.auth.forms import UserCreationForm
 
 class ProfileForm(forms.ModelForm):
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    location = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Location'})
     )
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    description = forms.CharField(
+        widget=forms.Textarea(attrs={'placeholder': 'Write a short bio...'})
     )
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
-    
     class Meta:
         model = Profile
         fields = [
-            'profile_name',      # Include if it's a model field
             'location',
             'profile_picture',
             'description',
@@ -38,6 +28,20 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Title too short")   
         return profile_name
 
+class CustomUserCreationForm(UserCreationForm):
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
+    )
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
+        
 class ProfileEditForm(forms.ModelForm):
     def clean_profile_name(self):
         profile_name = self.cleaned_data['profile_name']
