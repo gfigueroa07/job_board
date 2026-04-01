@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm, CustomUserCreationForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm, CustomUserCreationForm, UserProfileCreationForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications, Feedback
 from django.urls import path
@@ -24,26 +24,23 @@ def profile_create(request):
         messages.error(request, "Please log out before creating a profile.")
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        user_form = CustomUserCreationForm(request.POST)
-        profile_form = ProfileForm(request.POST, request.FILES)  # include files for avatar
-        if user_form.is_valid() and profile_form.is_valid():
-            # Save the user first
-            user = user_form.save()
-            
-            # Save the profile, link it to the new user
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.profile_name = user.username
-            profile.save()
-
-            # Log the user in immediately
-            login(request, user)
-            return redirect('profile_detail', profile_id=profile.id) # replace 'home' with your URL name
+        form = UserProfileCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # or wherever you want
     else:
-        user_form = CustomUserCreationForm()
-        profile_form = ProfileForm()
-    context = {'user_form': user_form, 'profile_form': profile_form}
-    return render(request, 'users/profile_create.html', context)
+        form = UserProfileCreationForm()
+    return render(request, 'users/profile_create.html', {'form': form})
+
+def register(request):
+    if request.method == 'POST':
+        form = UserProfileCreationForm(request.POST, request.FILES)
+        if form.is_valid():
+            form.save()
+            return redirect('home')  # or wherever you want
+    else:
+        form = UserProfileCreationForm()
+    return render(request, 'users/profile_create.html', {'form': form})
 
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)

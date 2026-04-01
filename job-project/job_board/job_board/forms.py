@@ -28,6 +28,60 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Title too short")   
         return profile_name
 
+class UserProfileCreationForm(UserCreationForm):
+    # User fields with placeholders
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    password1 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
+    )
+    password2 = forms.CharField(
+        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
+    )
+    # email = forms.EmailField(
+    #     required=True,
+    #     widget=forms.EmailInput(attrs={'placeholder': 'Email'})
+    # )
+
+    # Profile fields with placeholders
+    location = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Location'})
+    )
+    description = forms.CharField(
+        required=False,
+        widget=forms.Textarea(attrs={'placeholder': 'Short bio...'})
+    )
+    skills = forms.CharField(
+        required=False,
+        widget=forms.TextInput(attrs={'placeholder': 'Skills, comma-separated'})
+    )
+    profile_picture = forms.ImageField(required=False)
+    resume = forms.FileField(required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            'profile_picture', 'username', 'password1', 'password2',
+            'location', 'description', 'skills', 'resume'
+        ]
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        # Save profile info
+        profile, created = Profile.objects.get_or_create(user=user)
+        profile.location = self.cleaned_data.get('location')
+        profile.description = self.cleaned_data.get('description')
+        profile.skills = self.cleaned_data.get('skills')
+        if self.cleaned_data.get('profile_picture'):
+            profile.profile_picture = self.cleaned_data.get('profile_picture')
+        if self.cleaned_data.get('resume'):
+            profile.resume = self.cleaned_data.get('resume')
+        if commit:
+            profile.save()
+        return user
+    
 class CustomUserCreationForm(UserCreationForm):
     username = forms.CharField(
         widget=forms.TextInput(attrs={'placeholder': 'Username'})

@@ -1,59 +1,76 @@
+
 .page-center {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
-    background: #f3f2f1;
+    min-height: 90vh;
+    background-color: #f8f9fa;
 }
 
 .form-box {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 12px rgba(0,0,0,0.1);
     width: 100%;
     max-width: 500px;
-    background: white;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 15px;
+.form-box h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #0073b1; 
 }
 
-.form-group input,
-.form-group textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
+.form-field {
+    margin-bottom: 1rem;
 }
 
-button {
+.form-field input,
+.form-field textarea {
     width: 100%;
-    padding: 10px;
-    background: #0073b1;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+}
+
+.form-field input::placeholder,
+.form-field textarea::placeholder {
+    color: #999;
+}
+
+.error p {
+    color: red;
+    font-size: 0.85rem;
+    margin: 0.25rem 0 0;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #0073b1;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
+    font-size: 1rem;
     cursor: pointer;
 }
 
-button:hover {
-    background: #005f8d;
+button[type="submit"]:hover {
+    background-color: #0073b19f;
 }
 
-.error {
-    color: red;
-    font-size: 12px;
-    margin-top: 5px;
+.profile-picture-field {
+    text-align: center;
+    margin-bottom: 1rem;
 }
 
-.help {
-    font-size: 12px;
-    color: #666;
-}
-
-.section-title {
-    margin-top: 20px;
-    margin-bottom: 10px;
+.profile-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%; /* circle like Facebook */
+    margin-bottom: 0.5rem;
+    border: 2px solid #ccc;
 }
