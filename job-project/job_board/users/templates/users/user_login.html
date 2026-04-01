@@ -1,20 +1,23 @@
-{% extends 'job_board/base.html' %}
 {% load static %}
 {% block extra_css %}
-<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+<link rel="stylesheet" href="{% static 'auth/login.css' %}">
 {% endblock %}
 {% block content %}
-<h1>Login</h1>
 {% if messages %}
     {% for message in messages %}
         <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
-<form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Login</button>
-</form>
-<a href="{% url 'profile_create' %} ">create profile</a>
-<p><a href="/">Return to home page</a></p>
-{% endblock %}
+<div id='login-container'>
+    <div id='logo'>
+        <a href='{% url 'home' %}' class='logo'>Hustlr</a>
+    </div>
+    <div id='info'>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Login</button>
+    </form>
+    <a href="{% url 'profile_create' %} ">create profile</a>
+</div>
+    {% endblock %}
