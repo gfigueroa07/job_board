@@ -8,7 +8,7 @@
 
 html {
     scroll-behavior: smooth;
-    scroll-padding-top: 5rem; /* Adjust this value based on the height of your nav bar */
+    scroll-padding-top: 7rem; /* Adjust this value based on the height of your nav bar */
 }
 
 body {
@@ -22,7 +22,7 @@ body {
 
 /* Header & navigation */
 header {
-    padding: 0px 20px;
+    padding: 10px 20px;
 }
 
 .nav-right {
@@ -183,8 +183,8 @@ form button:hover, body a.button:hover {
 
 /* Footer */
 footer {
-    margin-top: 40px;
-    padding: 20px 0;
+    margin-top: 200px;
+    padding: 10px 0;
     text-align: center;
     border-top: 1px solid #ddd;
 }

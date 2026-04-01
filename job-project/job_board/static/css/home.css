@@ -5,24 +5,27 @@
     justify-content: center;
     align-items: center;
     gap: 20px; /* spacing between elements */
+    padding-top: 50px;
 }
 
 /* Logo image */
 .logo img {
     width: 400px;
+    padding-top: 50px;
 }
 
 /* Search */
 .search-wrapper {
     width: 1000px;
     max-width: 600px;
+    padding-top: 10px;
 }
 
 /* Home page button */
 .get-started {
     display: inline-block;        /* makes it behave like a button */
     margin-top: 20px;             /* space below the <p> */
-    padding: 12px 30px;
+    padding: 10px 30px;
     background-color: #0073b1;
     text-decoration: none;        /* remove underline */
     border-radius: 8px;
