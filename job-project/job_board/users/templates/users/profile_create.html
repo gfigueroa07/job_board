@@ -4,26 +4,19 @@
 <link rel="stylesheet" href="{% static 'auth/create-profile.css' %}">
 {% block content %}
 <div class="page-center">
-
     <div class="form-box">
-
         <h2>Create Your Profile</h2>
-
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
-
             <!-- NON FIELD ERRORS -->
             {% if user_form.non_field_errors %}
                 <div class="error">{{ user_form.non_field_errors.0 }}</div>
             {% endif %}
-
             {% if profile_form.non_field_errors %}
                 <div class="error">{{ profile_form.non_field_errors.0 }}</div>
             {% endif %}
-
             <!-- ACCOUNT SECTION -->
             <h3 class="section-title">Account</h3>
-
             <div class="form-group">
                 {{ user_form.username }}
                 <small class="help">{{ user_form.username.help_text }}</small>
@@ -31,7 +24,6 @@
                     <div class="error">{{ user_form.username.errors.0 }}</div>
                 {% endif %}
             </div>
-
             <div class="form-group">
                 {{ user_form.password1 }}
                 <small class="help">{{ user_form.password1.help_text }}</small>
@@ -39,42 +31,31 @@
                     <div class="error">{{ user_form.password1.errors.0 }}</div>
                 {% endif %}
             </div>
-
             <div class="form-group">
                 {{ user_form.password2 }}
                 {% if user_form.password2.errors %}
                     <div class="error">{{ user_form.password2.errors.0 }}</div>
                 {% endif %}
             </div>
-
             <!-- PROFILE SECTION -->
             <h3 class="section-title">Profile Info</h3>
-
             <div class="form-group">
                 {{ profile_form.location }}
             </div>
-
             <div class="form-group">
                 {{ profile_form.profile_picture }}
             </div>
-
             <div class="form-group">
                 {{ profile_form.description }}
             </div>
-
             <div class="form-group">
                 {{ profile_form.skills }}
             </div>
-
             <div class="form-group">
                 {{ profile_form.resume }}
             </div>
-
             <button type="submit">Create Profile</button>
-
         </form>
-
     </div>
-
 </div>
 {% endblock %}

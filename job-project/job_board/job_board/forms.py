@@ -4,27 +4,39 @@ from django.core.exceptions import ValidationError
 
 
 class ProfileForm(forms.ModelForm):
-    def clean_profile_name(self):
-        profile_name = self.cleaned_data['profile_name']
-        if Profile.objects.filter(profile_name=profile_name).exists():
-            raise forms.ValidationError(
-                'This profile already exists.'
-            )
-        if len(profile_name) < 5:
-            raise ValidationError("Title too short")   
-        return profile_name   
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    username = forms.CharField(
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+    )
+    
     class Meta:
         model = Profile
         fields = [
+            'profile_name',      # Include if it's a model field
             'location',
             'profile_picture',
             'description',
             'skills',
             'resume',
         ]
-    profile_name = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
+    def clean_profile_name(self):
+        profile_name = self.cleaned_data.get('profile_name')
+        if Profile.objects.filter(profile_name=profile_name).exists():
+            raise forms.ValidationError('This profile already exists.')
+        if len(profile_name) < 5:
+            raise forms.ValidationError("Title too short")   
+        return profile_name
 
 class ProfileEditForm(forms.ModelForm):
     def clean_profile_name(self):
