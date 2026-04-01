@@ -8,16 +8,30 @@
         <p>{{ message }}</p>
     {% endfor %}
 {% endif %}
-<div id='login-container'>
-    <div id='logo'>
-        <a href='{% url 'home' %}' class='logo'>Hustlr</a>
+
+<div class="page-center">
+    <div id="logo">
+        <a href="{% url 'home' %}" class="logo">Hustlr</a>
     </div>
-    <div id='info'>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    <a href="{% url 'profile_create' %} ">create profile</a>
+    <div id='login-container'>
+        <div class='info'>
+            <h2>Ready to take the next step?</h2>
+            <p>Create an account or sign in.</p>
+            <div class='terms'>
+                <small>
+                    By clicking any of the ‘Continue’ options below, 
+                    you understand and agree to Hustlr's
+                    <a href="{% url 'terms' %}">Terms</a> and 
+                    <a href="{% url 'privacy' %}">Privacy</a> 
+                    policies.
+                </small>
+            </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Login</button>
+        </form>
+        <a href="{% url 'profile_create' %} ">create profile</a>
+    </div>
 </div>
     {% endblock %}
