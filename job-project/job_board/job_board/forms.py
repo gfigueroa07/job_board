@@ -81,20 +81,6 @@ class UserProfileCreationForm(UserCreationForm):
         if commit:
             profile.save()
         return user
-    
-class CustomUserCreationForm(UserCreationForm):
-    username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
-    )
-    password1 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
-    )
-    password2 = forms.CharField(
-        widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
-    )
-    class Meta:
-        model = User
-        fields = ['username', 'password1', 'password2']
         
 class ProfileEditForm(forms.ModelForm):
     def clean_profile_name(self):

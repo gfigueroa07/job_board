@@ -1,10 +1,11 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
+{% load custom_filters %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 {% block content %}
-<h1>{{ profile.profile_name }}'s Profile</h1>
+<h1>{{ profile.user }}'s Profile</h1>
 {% if messages %}
     {% for message in messages %}
         <p>{{ message }}</p>
@@ -15,7 +16,7 @@
 <h3>Skills</h3>
 {% if user.profile.skills %}
     <ul class="skills-list">
-        {% for skill in user.profile.skills.split(',') %}
+        {% for skill in user.profile.skills|split:"," %}
             {% if skill %}
                 <li>{{ skill }}</li>
             {% endif %}
