@@ -51,11 +51,11 @@ class UserProfileCreationForm(UserCreationForm):
     )
     description = forms.CharField(
         required=False,
-        widget=forms.Textarea(attrs={'placeholder': 'Short bio...'})
+        widget=forms.Textarea(attrs={'placeholder': 'Short bio...', 'rows': 4})
     )
     skills = forms.CharField(
         required=False,
-        widget=forms.HiddenInput()
+        widget=forms.HiddenInput(),
     )
     profile_picture = forms.ImageField(required=False)
     resume = forms.FileField(required=False)
