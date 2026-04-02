@@ -1,4 +1,3 @@
-{% extends 'job_board/base.html' %}
 {% load static %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'auth/auth.css' %}">
@@ -7,12 +6,13 @@
 {% block content %}
 <div class="page-center">
     <div class="form-box">
+        <div id="logo">
+            <a href="{% url 'home' %}" class="logo">Hustlr</a>
+        </div>
         <h2>Create Your Profile</h2>
         <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-field profile-picture-field">
-                <label for="id_profile_picture">Profile Picture</label>
-                <!-- Image preview -->
                 <img id="profilePreview" src="{% static 'images/default_profile.png' %}" alt="Profile Preview" class="profile-preview">
                 <!-- File input -->
             </div>
@@ -35,6 +35,11 @@
 <script>
 const profileInput = document.getElementById("id_profile_picture");
 const profilePreview = document.getElementById("profilePreview");
+const skillsContainer = document.getElementById('skillsContainer');
+const skillInput = document.getElementById('skillInput');
+const hiddenSkills = document.getElementById('id_skills');
+
+let skills = [];
 
 profileInput.addEventListener("change", function() {
     const file = this.files[0];
@@ -46,6 +51,47 @@ profileInput.addEventListener("change", function() {
         reader.readAsDataURL(file);
     } else {
         profilePreview.src = "{% static 'images/default_profile.png' %}";
+    }
+});
+
+// render skills tags
+function renderSkills() {
+    // clear current tags except input
+    skillsContainer.querySelectorAll('.skill-tag').forEach(tag => tag.remove());
+
+    skills.forEach((skill, index) => {
+        const tag = document.createElement('span');
+        tag.classList.add('skill-tag');
+        tag.textContent = skill;
+
+        // add remove button
+        const removeBtn = document.createElement('span');
+        removeBtn.classList.add('remove-tag');
+        removeBtn.textContent = '×';
+        removeBtn.addEventListener('click', () => {
+            skills.splice(index, 1);
+            updateHiddenInput();
+            renderSkills();
+        });
+
+        tag.appendChild(removeBtn);
+        skillsContainer.insertBefore(tag, skillInput);
+    });
+}
+
+// update hidden input for form submission
+function updateHiddenInput() {
+    hiddenSkills.value = skills.join(',');
+}
+
+// handle Enter key
+skillInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && skillInput.value.trim() !== '') {
+        e.preventDefault();
+        skills.push(skillInput.value.trim());
+        skillInput.value = '';
+        updateHiddenInput();
+        renderSkills();
     }
 });
 </script>

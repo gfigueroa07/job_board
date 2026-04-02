@@ -55,7 +55,7 @@ class UserProfileCreationForm(UserCreationForm):
     )
     skills = forms.CharField(
         required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Skills, comma-separated'})
+        widget=forms.HiddenInput()
     )
     profile_picture = forms.ImageField(required=False)
     resume = forms.FileField(required=False)

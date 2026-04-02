@@ -12,7 +12,18 @@
 {% endif %}
 
 <p><strong>Description:</strong> {{ profile.description }}</p>
-<p><strong>Skills:</strong> {{ profile.skills }}</p>
+<h3>Skills</h3>
+{% if user.profile.skills %}
+    <ul class="skills-list">
+        {% for skill in user.profile.skills.split(',') %}
+            {% if skill %}
+                <li>{{ skill }}</li>
+            {% endif %}
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No skills added yet.</p>
+{% endif %}
 
 <h3>Average Rating</h3>
 {% if average_rating is not None %}
