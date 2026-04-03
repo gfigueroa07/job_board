@@ -9,10 +9,8 @@
 {% block content %}
 
 <div class="profile-container">
-
     <!-- HEADER -->
     <div class="profile-header">
-
         <div class="profile-left">
             <div class="profile-picture">
                 {% if profile.profile_picture %}
@@ -20,18 +18,14 @@
                 {% else %}
                     <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview" class="profile-preview">
                 {% endif %}
-
             </div>
-
             <div class="profile-info">
                 <h1>{{ profile.user }}</h1>
-
                 {% if messages %}
                     {% for message in messages %}
                         <p>{{ message }}</p>
                     {% endfor %}
                 {% endif %}
-
                 <!-- Rating -->
                 <div class="profile-rating">
                     <h4>Average Rating</h4>
@@ -43,16 +37,14 @@
                 </div>
             </div>
         </div>
-
         <!-- 3 DOT MENU (OWNER CONTROLS) -->
         {% if request.user.is_authenticated and profile.id == request.user.profile.id %}
         <div class="profile-menu">
-            <button class="menu-btn">⋮</button>
-
+            <button class="menu-btn">...</button>
             <div class="menu-dropdown">
+                <button id="exit-btn">✖</button>
                 <a href="{% url 'profile_edit' %}">Edit Profile</a>
                 <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
-
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit">Log out</button>
@@ -60,21 +52,15 @@
             </div>
         </div>
         {% endif %}
-
     </div>
-
-
     <!-- DESCRIPTION -->
     <div class="profile-section">
         <h3>Description</h3>
         <p>{{ profile.description }}</p>
     </div>
-
-
     <!-- SKILLS -->
     <div class="profile-section">
         <h3>Skills</h3>
-
         {% if user.profile.skills %}
             <ul class="skills-list">
                 {% for skill in user.profile.skills|split:"," %}
@@ -87,30 +73,36 @@
             <p>No skills added yet.</p>
         {% endif %}
     </div>
-
-
     <!-- ACTION LINKS -->
     <div class="profile-section profile-actions">
-
         {% if profile.resume %}
             <a href="{{ profile.resume.url }}" download>Download Resume</a>
         {% endif %}
-
         <a href="{% url 'reviews' profile.id %}">Reviews</a>
-
         {% if request.user.is_authenticated and profile != request.user.profile %}
             <a href="{% url 'review_create' profile.id %}">Leave a review</a>
         {% endif %}
-
         <a href="{% url 'user_jobs' profile.id %}">Jobs Listed</a>
-
         <form method="post" action="{% url 'profile_report' profile.id %}">
             {% csrf_token %}
             <button type="submit">Report</button>
         </form>
-
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menu = document.querySelector(".menu-dropdown");
+            const menuBtn = document.getElementById(".menu-btn");
+            const exitBtn = document.getElementById("exit-btn");
+            menuBtn.addEventListener("click", function () {
+                console.log("Menu click");
+                sidebar.classList.toggle("active");
+            });
 
+            exitBtn.addEventListener("click", function () {
+                console.log("Exit click");
+                sidebar.classList.remove("active");
+            });
+        });
+    </script>
 </div>
-
 {% endblock %}
