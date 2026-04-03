@@ -1,69 +1,113 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
 {% load custom_filters %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
+
 {% block content %}
-<h1>{{ profile.user }}'s Profile</h1>
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
 
-<p><strong>Description:</strong> {{ profile.description }}</p>
-<h3>Skills</h3>
-{% if user.profile.skills %}
-    <ul class="skills-list">
-        {% for skill in user.profile.skills|split:"," %}
-            {% if skill %}
-                <li>{{ skill }}</li>
-            {% endif %}
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No skills added yet.</p>
-{% endif %}
+<div class="profile-container">
 
-<h3>Average Rating</h3>
-{% if average_rating is not None %}
-    <p>⭐ {{ average_rating|floatformat:-1 }} / 5</p>
-{% else %}
-    <p>No ratings yet</p>
-{% endif %}
+    <!-- HEADER -->
+    <div class="profile-header">
 
-{% if profile.profile_picture %}
-    <img src="{{ profile.profile_picture.url }}" width="150">
-{% endif %}
+        <div class="profile-left">
+            <div class="profile-picture">
+                {% if profile.profile_picture %}
+                    <img class="profile" src="{{ profile.profile_picture.url }}">
+                {% endif %}
+            </div>
 
-{% if profile.resume %}
-    <a href="{{ profile.resume.url }}" download>Download Resume</a>
-{% endif %}
+            <div class="profile-info">
+                <h1>{{ profile.user }}</h1>
 
-<!-- Link to all reviews -->
-<a href="{% url 'reviews' profile.id %}">Reviews</a>
+                {% if messages %}
+                    {% for message in messages %}
+                        <p>{{ message }}</p>
+                    {% endfor %}
+                {% endif %}
 
-<!-- Leave a review: only for logged-in users who are not the profile owner -->
-{% if request.user.is_authenticated and profile != request.user.profile %}
-    <a href="{% url 'review_create' profile.id %}">Leave a review</a>
-{% endif %}
+                <!-- Rating -->
+                <div class="profile-rating">
+                    <h4>Average Rating</h4>
+                    {% if average_rating is not None %}
+                        <p>⭐ {{ average_rating|floatformat:-1 }} / 5</p>
+                    {% else %}
+                        <p>No ratings yet</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
 
-<!-- Link to jobs listed by this profile -->
-<a href="{% url 'user_jobs' profile.id %}">Jobs Listed</a>
+        <!-- 3 DOT MENU (OWNER CONTROLS) -->
+        {% if request.user.is_authenticated and profile.id == request.user.profile.id %}
+        <div class="profile-menu">
+            <button class="menu-btn">⋮</button>
 
-<!-- Owner-only controls -->
-{% if request.user.is_authenticated and profile.id == request.user.profile.id %}
-    <form method="post" action="{% url 'logout' %}">
-        {% csrf_token %}
-        <button type="submit">Log out</button>
-    </form>
-    <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
-{% endif %}
-<form method="post" action="{% url 'profile_report' profile.id %}">
-    {% csrf_token %}
-    <button type="submit">Report</button>
-</form>
-<!-- Return home button -->
-<p><a href="/">Return to home page</a></p>
+            <div class="menu-dropdown">
+                <a href="{% url 'profile_edit' profile.id %}">Edit Profile</a>
+                <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit">Log out</button>
+                </form>
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+
+
+    <!-- DESCRIPTION -->
+    <div class="profile-section">
+        <h3>Description</h3>
+        <p>{{ profile.description }}</p>
+    </div>
+
+
+    <!-- SKILLS -->
+    <div class="profile-section">
+        <h3>Skills</h3>
+
+        {% if user.profile.skills %}
+            <ul class="skills-list">
+                {% for skill in user.profile.skills|split:"," %}
+                    {% if skill %}
+                        <li>{{ skill }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No skills added yet.</p>
+        {% endif %}
+    </div>
+
+
+    <!-- ACTION LINKS -->
+    <div class="profile-section profile-actions">
+
+        {% if profile.resume %}
+            <a href="{{ profile.resume.url }}" download>Download Resume</a>
+        {% endif %}
+
+        <a href="{% url 'reviews' profile.id %}">Reviews</a>
+
+        {% if request.user.is_authenticated and profile != request.user.profile %}
+            <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+        {% endif %}
+
+        <a href="{% url 'user_jobs' profile.id %}">Jobs Listed</a>
+
+        <form method="post" action="{% url 'profile_report' profile.id %}">
+            {% csrf_token %}
+            <button type="submit">Report</button>
+        </form>
+
+    </div>
+
+</div>
+
 {% endblock %}

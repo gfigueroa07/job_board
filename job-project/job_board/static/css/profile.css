@@ -1,0 +1,32 @@
+.profile-header {
+    height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px; /* spacing between elements */
+    padding-top: 200px;
+}
+
+.profile-picture {
+    justify-content: center;
+    align-items: center;
+}
+.profile {
+    width: 350px;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 0.5rem;
+    border: 2px solid #ccc;
+    justify-content: center;
+    align-items: center;
+}
+
+.profile-info {
+    padding: 1rem;
+    width: 100%;
+    max-width: 400px;
+    height: 100%;
+    text-align: center;
+}
