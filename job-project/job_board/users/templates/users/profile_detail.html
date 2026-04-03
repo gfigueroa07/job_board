@@ -17,7 +17,10 @@
             <div class="profile-picture">
                 {% if profile.profile_picture %}
                     <img class="profile" src="{{ profile.profile_picture.url }}">
+                {% else %}
+                    <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview" class="profile-preview">
                 {% endif %}
+
             </div>
 
             <div class="profile-info">
@@ -47,7 +50,7 @@
             <button class="menu-btn">⋮</button>
 
             <div class="menu-dropdown">
-                <a href="{% url 'profile_edit' profile.id %}">Edit Profile</a>
+                <a href="{% url 'profile_edit' %}">Edit Profile</a>
                 <a href="{% url 'profile_delete' user.id %}">Delete Profile</a>
 
                 <form method="post" action="{% url 'logout' %}">
