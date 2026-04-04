@@ -53,6 +53,7 @@ def profile_edit(request):
         form = ProfileEditForm(request.POST, request.FILES, instance=profile)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Profile updated successfully!')
             return redirect('profile_detail', profile_id=profile.id)
     else:
         form = ProfileEditForm(instance=profile)

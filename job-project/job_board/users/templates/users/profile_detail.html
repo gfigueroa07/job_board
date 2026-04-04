@@ -22,9 +22,11 @@
             <div class="profile-info">
                 <h1>{{ profile.user }}</h1>
                 {% if messages %}
-                    {% for message in messages %}
-                        <p>{{ message }}</p>
-                    {% endfor %}
+                    <div class="messages">
+                        {% for message in messages %}
+                            <p class="{{ message.tags }}">{{ message }}</p>
+                        {% endfor %}
+                    </div>
                 {% endif %}
                 <!-- Rating -->
                 <div class="profile-rating">

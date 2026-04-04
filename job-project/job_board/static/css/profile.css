@@ -6,6 +6,22 @@
     display: flex;
 }
 
+.messages p {
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .profile-header {
     width: 80%;
     height: 200px;
@@ -36,10 +52,6 @@
 .profile-info {
     padding: 10px;
     text-align: center;
-}
-
-.profile-rating {
-    padding: 60px;
 }
 
 .profile-menu {
