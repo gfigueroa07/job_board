@@ -97,19 +97,15 @@ button {
     height: 100vh;
     border: 1px solid, black;
     border-radius: 20px;
-    background: #ffffff;
+    background: white;
     transition: transform 0.3s ease;
     display: none;    /* hidden by default */
     flex-direction: column;
+    z-index: 999;
 }
 
 .sidebar.active {
     display: flex;    /* show when clicked */
-}
-
-.sidebar.inactive {
-    display: none;
-    transform: translateX(-100%);
 }
 
 .sidebar li {
@@ -121,20 +117,6 @@ button {
     color: rgb(0, 0, 0);
 }
 
-#menu-toggle {
-    display: none;
-    font-size: 24px;
-    background: none;
-    border: none;
-    color: #0073b1;
-    cursor: pointer;
-}
-
-.menuButton {
-    display: none;
-    margin-right: 1px;
-    }
-    
 header nav#info {
     display: flex;
     justify-content: space-between;

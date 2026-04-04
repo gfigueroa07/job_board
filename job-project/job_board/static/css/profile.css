@@ -1,7 +1,6 @@
 .profile-container {
     height: 90vh;
-    gap: 80px; /* spacing between elements */
-    justify-content: center;
+    gap: 20px; /* spacing between elements */
     flex-direction: column;
     align-items: center;
     display: flex;
@@ -9,19 +8,20 @@
 
 .profile-header {
     width: 80%;
+    height: 200px;
     display: flex;
     border: 1px solid #00000067;
     background-color: #ffffff97;
     border-radius: 6px;
     transition: box-shadow 0.2s;
-    box-shadow: rgba(0, 0, 0, 0.45);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
     position: relative;
 }
 
 .profile-left {
     display: flex;
-    justify-content: space-between;
+    width: 50%;
 }
 
 .profile {
@@ -36,17 +36,13 @@
 .profile-info {
     padding: 10px;
     text-align: center;
-    
 }
 
 .profile-rating {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 60px;
+    padding: 60px;
 }
 
 .profile-menu {
-    background-color: red;
     position: absolute;
     right: 40px;
 }
@@ -64,40 +60,96 @@
     text-wrap-style: balance;
 }
 
-#exit-btn {
-    font-size: 24px;
-    background: none;
-    border: none;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-    position: absolute;
-    right: 10px;
-}
-
-#exit-btn:hover {
-    background-color: rgb(218, 218, 218);
-    text-wrap-style: balance;
-}
-
 /* Sidebar (dropdown) */
 .menu-dropdown {
     position: absolute;
     right: 0;
-    width: 50%;
-    height: 100vh;
-    border: 1px solid, black;
-    border-radius: 20px;
-    background: #ffffff;
-    transition: transform 0.3s ease;
-    display: none;    /* hidden by default */
+    top: 40px;
+    width: 180px;
+    height: auto;
+    display: none;
     flex-direction: column;
+    padding: 10px;
+    border: 1px solid #ccc;
 }
 
 .menu-dropdown.active {
     display: flex;    /* show when clicked */
 }
 
-.menu-dropdown.inactive {
-    display: none;
-    transform: translateX(-100%);
+.menu-dropdown a {
+    padding: 10px;
+    text-decoration: none;
+    color: #333;
+    border-radius: 4px;
+}
+
+.menu-dropdown a:hover {
+    background-color: #f0f0f0;
+}
+
+.menu-dropdown .delete-user {
+    color: red;
+}
+
+/* Description  */
+.profile-section {
+    width: 80%;
+    height: 200px;
+    display: column;
+    border: 1px solid #00000067;
+    background-color: #fffdfd97;
+    border-radius: 6px;
+    transition: box-shadow 0.2s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
+    padding: 20px;
+    position: relative;
+    max-height: 200px;
+}
+
+.profile-section h3 {
+    border-bottom: 1px solid #00000063;
+    color: #0073b1;
+    padding: 10px;
+}
+
+.profile-section p {
+    padding: 10px;
+}
+
+.skills-list {
+    padding: 10px;
+    border-radius: 20px;
+}
+
+.profile-actions {
+    display: flex;
+}
+
+.profile-actions a {
+    background-color: #0073b1;
+    color: white;
+    border: none;
+    padding: 6px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s;
+    height: 100%;
+    margin: 10px;
+}
+
+.profile-actions a:hover {
+    background-color: #0073b19f;
+}
+
+.profile-actions .report {
+    padding: 6px 6px;
+    background-color: rgb(153, 49, 49);
+    align-items: right;
+}
+
+.profile-actions .report:hover {
+    background-color: rgba(153, 49, 49, 0.731);
 }

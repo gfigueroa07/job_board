@@ -11,7 +11,7 @@ class Profile(models.Model):
     profile_name = models.CharField(max_length=30, unique=False, blank=True, null=False)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
     location = models.TextField(blank=False)
-    description = models.TextField(blank=True)
+    description = models.TextField(max_length=250, blank=True)
     avg_review_score = models.FloatField(default=0.0)
     skills = models.TextField(blank=True)
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
@@ -239,7 +239,7 @@ class Feedback(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
-    message = models.TextField(blank=True, null=True)  # allow blank for optional
+    message = models.TextField(blank=True, max_length=250, null=True)  # allow blank for optional
     page_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
