@@ -28,10 +28,10 @@ class ProfileForm(forms.ModelForm):
             raise forms.ValidationError("Title too short")   
         return profile_name
 
-class UserProfileCreationForm(UserCreationForm):
+class UserProfileCreationForm(forms.ModelForm):
     # User fields with placeholders
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+        max_length=15, widget=forms.TextInput(attrs={'placeholder': 'Username'})
     )
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
@@ -46,11 +46,11 @@ class UserProfileCreationForm(UserCreationForm):
 
     # Profile fields with placeholders
     location = forms.CharField(
-        required=False,
+        max_length=20, required=False,
         widget=forms.TextInput(attrs={'placeholder': 'Location'})
     )
     description = forms.CharField(
-        required=False,
+        max_length=250, required=False,
         widget=forms.Textarea(attrs={'placeholder': 'Short bio...', 'rows': 4})
     )
     skills = forms.CharField(
