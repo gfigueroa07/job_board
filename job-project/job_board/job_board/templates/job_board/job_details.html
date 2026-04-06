@@ -1,72 +1,78 @@
 {% extends 'job_board/base.html' %}
-{% block content %}
-<h1>Job Details</h1>
-
-{% if messages %}
-    {% for message in messages %}
-        <div>
-            <strong>{{ message.tags|title }}:</strong> {{ message }}
-        </div>
-    {% endfor %}
-{% endif %}
-
-<h2>{{ job.title }}</h2>
-
-{% if application %}
-    <p>Status: {{ application.status }}</p>
-{% endif %}
-
-<p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
-
-{% if job.images %}
-    <img src="{{ job.images.url }}" width="300">
-{% endif %}
-
-<p>{{ job.description }}</p>
-
-{% if job.due_date %}
-    <p><strong>Due By:</strong> {{ job.due_date }}</p>
-{% endif %}
-
-<p>
-    <strong>Posted by:</strong>
-    <a href="{% url 'profile_detail' job.profile.id %}">
-        {{ job.profile }}
-    </a>
-</p>
-
-<!-- Apply Section -->
-{% if not application %}
-    <a href="{% url 'job_apply' job.id %}">Apply</a>
-{% else %}
-    <p>Application Status: {{ application.status }}</p>
-{% endif %}
-
-<!-- Report -->
-<form method="post" action="{% url 'job_report' job.id %}">
-    {% csrf_token %}
-    <button type="submit">Report</button>
-</form>
-
-<!-- Owner Controls -->
-{% if job.profile == request.user.profile %}
-    <a href="{% url 'job_edit' job.id %}">Edit</a>
-
-    <form method="post" action="{% url 'job_delete' job.id %}">
-        {% csrf_token %}
-        <button type="submit">Delete</button>
-    </form>
-
-    <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
-{% endif %}
-
-<!-- Messaging -->
-{% if conversation %}
-    {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-        <a href="{% url 'conversation_details' conversation.id %}">Message</a>
-    {% endif %}
-{% endif %}
-
-<hr>
-<a href="{% url 'job_page' %}">Back to Jobs</a>
+{% load static %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/job_details.css' %}">
 {% endblock %}
+{% block content %}
+<div class="job_details">
+    <h1>Job Details</h1>
+    <div class="error">
+    {% if messages %}
+        {% for message in messages %}
+            <strong>{{ message.tags|title }}:</strong> {{ message }}
+        {% endfor %}
+    {% endif %}
+    </div>
+    <div class="job_container">
+        <h2>{{ job.title }}</h2>
+        {% if application %}
+            <p>Status: {{ application.status }}</p>
+        {% endif %}
+        <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
+        {% if job.due_date %}
+            <p><strong>Due By:</strong> {{ job.due_date }}</p>
+        {% endif %}
+    </div>
+    <div class="images">
+    {% if job.images %}
+        <img src="{{ job.images.url }}" width="300">
+    {% endif %}
+    </div>
+    <div class="description">
+    <p>{{ job.description }}</p>
+    </div>
+    <div class="poster_info">
+        <p>
+            <strong>Posted by:</strong>
+            <a href="{% url 'profile_detail' job.profile.id %}">
+                {{ job.profile }}
+            </a>
+        </p>
+    </div>
+    <div class="action_buttons">
+    <!-- Apply Section -->
+    {% if not application %}
+        <a href="{% url 'job_apply' job.id %}">Apply</a>
+    {% else %}
+        <p>Application Status: {{ application.status }}</p>
+    {% endif %}
+    <!-- Messaging -->
+    {% if conversation %}
+        {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
+            <a href="{% url 'conversation_details' conversation.id %}">Message</a>
+        {% endif %}
+    {% endif %}
+    <!-- Report -->
+    <form method="post" action="{% url 'job_report' job.id %}">
+        {% csrf_token %}
+        <button type="submit">Report</button>
+    </form>
+    </div>
+    <div class="owner_controls">
+    <!-- Owner Controls -->
+    {% if job.profile == request.user.profile %}
+        <a href="{% url 'job_edit' job.id %}">Edit</a>
+
+        <form method="post" action="{% url 'job_delete' job.id %}">
+            {% csrf_token %}
+            <button type="submit">Delete</button>
+        </form>
+
+        <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+    {% endif %}
+    </div>
+    <div class="back_button">
+        <a href="{% url 'job_page' %}">Back to Job Listings</a>
+    </div>
+</div>
+    {% endblock %}
