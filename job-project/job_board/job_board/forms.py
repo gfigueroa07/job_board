@@ -115,7 +115,6 @@ class JobDetailsForm(forms.ModelForm):
         fields = [
             'title',
             'description',
-            'images',
             'due_date',
         ]
     def clean_title(self):
@@ -129,7 +128,6 @@ class JobCreateForm(forms.ModelForm):
         model = JobListing
         fields = [
             'price',
-            'images',
             'title',
             'description',
             'due_date',

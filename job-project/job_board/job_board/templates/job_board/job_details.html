@@ -24,6 +24,7 @@
         {% endif %}
     </div>
     <div class="images">
+        {{ job.images }}
     {% if job.images %}
         <img src="{{ job.images.url }}" width="300">
     {% endif %}

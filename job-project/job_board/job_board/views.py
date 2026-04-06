@@ -4,7 +4,7 @@ from job_board .forms import ProfileForm, ProfileEditForm
 from django.urls import path
 from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm
-from users.models import JobListing, JobApplication, Conversation, Profile
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -12,7 +12,6 @@ from django.core.paginator import Paginator
 from .models import XaropItem
 
 def home(request):
-
     return render(request, 'job_board/home.html')
 
 def job_page(request):
@@ -62,6 +61,11 @@ def job_list(request):
         job_form = JobCreateForm(request.POST, request.FILES)
         job = job_form.save(commit=False)
         job.profile = request.user.profile
+        images = request.FILES.getlist('images')
+        if len(images) > 3:
+            messages.error(request, "Can't post more than 3 images.")
+            for img in images:
+                JobImage.objects.create(job=job, image=img)
         job.save()
         return redirect('job_page')
     else:
@@ -75,8 +79,15 @@ def job_edit(request, job_id):
         return redirect('job_details')
     if request.method == 'POST':
         form = JobDetailsForm(request.POST, request.FILES, instance=job)
-        if form.is_valid():
+        images = request.FILES.getlist('images')
+        total_images = job.images.count() + len(images)
+        if total_images > 3:
+            messages.error(request, "You can't have more than 3 images posted per job.")
+        elif form.is_valid():
             form.save()
+            for img in images:
+                JobImage.objects.create(job=job, image=img)
+            messages.success(request, "Job updated successfully.")
             return redirect('job_details', job_id=job.id)
     else:
         form = JobDetailsForm(instance=job)
