@@ -7,10 +7,10 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, max_length=15, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=30, unique=False, blank=True, null=False)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    location = models.TextField(blank=False)
+    location = models.TextField(max_length=20, blank=False)
     description = models.TextField(max_length=250, blank=True)
     avg_review_score = models.FloatField(default=0.0)
     skills = models.TextField(blank=True)
@@ -37,7 +37,7 @@ class JobListing(models.Model):
     category = models.CharField(max_length=50, choices=job_category, default='other')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     price = models.FloatField(blank=False, default=0.0)
-    title = models.TextField(max_length=200)
+    title = models.TextField(max_length=20)
     description = models.CharField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=job_status, default='open')
@@ -182,7 +182,7 @@ class Conversation(models.Model):
 class  Message(models.Model):
     conversation = models.ForeignKey(Conversation,  on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    content = models.TextField()
+    content = models.TextField(max_length=500)
     timestamp = models.DateTimeField(auto_now_add=True)
     created_at = models.DateTimeField(auto_now_add=True)  
     is_read = models.BooleanField(default=False)

@@ -27,7 +27,7 @@ def profile_create(request):
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
-            return redirect('home')  # or wherever you want
+            return redirect('login')  # or wherever you want
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
