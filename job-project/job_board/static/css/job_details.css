@@ -1,7 +1,4 @@
-
-
 .job_details {
-    height: 90vh;
     gap: 20px; /* spacing between elements */
     flex-direction: column;
     align-items: center;
@@ -9,13 +6,28 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.432);
 }
 
+h1 {
+    text-align: center;
+    padding: 20px;
+}
+.job_container {
+    padding: 20px;
+
+}
 .job_details .job-images .gallery {
     display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
+    align-items: center;
+    gap: 2px;
+    padding: 10px;
 }
 
 .job_details .job-images .gallery-item img {
-    border-radius: 8px;
+    align-items: center;
     object-fit: cover;
+    height: 80%;
+    width: 80%;
+}
+.job_details .description {
+    text-align: left;
+    align-items: left;
 }

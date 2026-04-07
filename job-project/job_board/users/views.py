@@ -42,7 +42,6 @@ def profile_detail(request, profile_id):
         'average_rating': average_rating,   
     })
 
-
 def profile_edit(request):
     if not request.user.is_authenticated:
         messages.error(request, 'No profile to edit. Please log in or create a profile.')
