@@ -23,11 +23,19 @@
             <p><strong>Due By:</strong> {{ job.due_date }}</p>
         {% endif %}
     </div>
-    <div class="images">
-        {{ job.images }}
-    {% if job.images %}
-        <img src="{{ job.images.url }}" width="300">
-    {% endif %}
+    <div class="job-images">
+        {% if images %}
+            <div class="gallery">
+                {% for img in images %}
+                    <div class="gallery-item">
+                        <img src="{{ img.image.url }}" alt="Job image {{ forloop.counter }}" width="300">
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No images uploaded for this job.</p>
+            <img src="{% static 'images/placeholder.png' %}" width="300" alt="Placeholder">
+        {% endif %}
     </div>
     <div class="description">
     <p>{{ job.description }}</p>

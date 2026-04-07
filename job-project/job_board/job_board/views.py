@@ -33,16 +33,16 @@ def job_page(request):
     })
 
 def job_details(request, job_id):
-    job = get_object_or_404(JobListing, id=job_id) 
+    job = get_object_or_404(JobListing, id=job_id)
+    images = job.images.all()  # Related name used
     application = None
-    conversation = None 
-    if request.user.is_authenticated:
-        if job.status == 'pending':
-            conversation = Conversation.objects.filter(job=job).filter(
-                Q(applicant=request.user) |
-                Q(job__profile__user=request.user)
-            ).first()
-    if hasattr(request.user, 'profile'):  
+    conversation = None
+    if request.user.is_authenticated and job.status == 'pending':
+        conversation = Conversation.objects.filter(job=job).filter(
+            Q(applicant=request.user) |
+            Q(job__profile__user=request.user)
+        ).first()
+    if hasattr(request.user, 'profile'):
         application = JobApplication.objects.filter(
             job=job,
             applicant=request.user.profile
@@ -50,7 +50,8 @@ def job_details(request, job_id):
     return render(request, 'job_board/job_details.html', {
         'job': job,
         'application': application,
-        'conversation': conversation
+        'conversation': conversation,
+        'images': images
     })
     
 def job_list(request):
@@ -83,6 +84,7 @@ def job_edit(request, job_id):
         total_images = job.images.count() + len(images)
         if total_images > 3:
             messages.error(request, "You can't have more than 3 images posted per job.")
+            return redirect('job_details', job_id=job.id)
         elif form.is_valid():
             form.save()
             for img in images:

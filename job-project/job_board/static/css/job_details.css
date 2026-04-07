@@ -1,9 +1,19 @@
 .job_details {
-    display: colum;
-    justify-content: center;
+    display: flex;
     align-items: center;
     min-height: 90vh;
     background-color: #f8f9fa;
     padding-top: 2rem;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.432);
+}
+
+.job_details .job-images .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.job_details .job-images .gallery-item img {
+    border-radius: 8px;
+    object-fit: cover;
 }

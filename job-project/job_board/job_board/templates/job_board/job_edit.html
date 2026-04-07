@@ -4,8 +4,9 @@
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    <input type="file" name="images" multiple>
+    
     {{ form.as_p }}
+    <input type="file" name="images" multiple>
     <button type="submit">Save changes</button>
 </form>
 <p><a href="/">Return to home page</a></p>
