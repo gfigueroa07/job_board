@@ -76,7 +76,7 @@
             {% endif %}
             {% if conversation %}
                 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-                <a class="message-btn" href=" {% url 'conversation_details' conversation.id %}">Message</a>
+                <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
                 {% endif %}
             {% endif %}
         </div>
@@ -88,7 +88,7 @@
             <span>•</span>
             <a href="{% url 'job_delete' job.id %}">Delete Job</a>
             <span>•</span>
-            <a href="#">View Applicants</a>
+            <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
         </div>
         {% endif %}
 

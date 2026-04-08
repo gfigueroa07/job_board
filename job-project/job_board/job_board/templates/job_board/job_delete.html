@@ -7,9 +7,9 @@
 <form method="post">
     {% csrf_token %}
     <button type="submit">Yes, delete</button>
-    <a href="{% url 'job_details' user.job.id %}">
+    <a href="{% url 'job_details' job.id %}">
         Cancel
     </a>
 </form>
-<p><a href="/">Return to home page</a></p>\
+<p><a href="/">Return to home page</a></p>
 {% endblock %}

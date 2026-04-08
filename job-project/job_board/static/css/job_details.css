@@ -177,12 +177,40 @@ hr {
     margin: 20px 0;
 }
 
-.report {
+.action-buttons a {
+    background-color: #0073b1;
+    color: white;
+    border: none;
+    padding: 6px 6px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s;
+    height: 100%;
+    margin: 10px;
+}
+
+.action-buttons a:hover {
+    background-color: #0073b19f;
+}
+
+.action-buttons .report {
     padding: 6px 6px;
     background-color: rgb(153, 49, 49);
     align-items: right;
 }
 
-.report:hover {
+.action-buttons .report:hover {
     background-color: rgba(153, 49, 49, 0.731);
+}
+
+.action-buttons .message {
+    padding: 6px 6px;
+    background-color: rgb(174, 174, 174);
+    align-items: right;
+}
+
+.action-buttons .report:hover {
+    background-color: rgba(174, 174, 174, 0.481);
 }
