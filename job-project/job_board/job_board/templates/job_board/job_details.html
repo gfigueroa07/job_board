@@ -3,85 +3,103 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/job_details.css' %}">
 {% endblock %}
-{% block content %}
-<h1>Job Details</h1>
-<div class="job_details">
-    
-    <div class="error">
-    {% if messages %}
-        {% for message in messages %}
-            <strong>{{ message.tags|title }}:</strong> {{ message }}
-        {% endfor %}
-    {% endif %}
-    </div>
-    <div class="job_container">
-        <h2>{{ job.title }}</h2>
-        <h3 class="job-status">{{ job.status }}</p>
-        <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
-        {% if job.due_date %}
-            <p><strong>Due By:</strong> {{ job.due_date }}</p>
-        {% endif %}
-    </div>
-    <div class="job-images">
-        {% if images %}
-            <div class="gallery">
-                {% for img in images %}
-                    <div class="gallery-item">
-                        <img src="{{ img.image.url }}" alt="Job image {{ forloop.counter }}" width="300">
-                    </div>
-                {% endfor %}
-            </div>
-        {% else %}
-            <p>No images uploaded for this job.</p>
-            <img src="{% static 'images/placeholder.png' %}" width="300" alt="Placeholder">
-        {% endif %}
-    </div>
-    <div class="description">
-        <h3>Description</h3>
-    <p>{{ job.description }}</p>
-    </div>
-    <div class="poster_info">
-        <p>
-            <strong>Posted by:</strong>
+{% block content %}  
+<body>
+
+<div class="page-container">
+
+    <h1 class="page-title">Job Details</h1>
+
+    <div class="job-card">
+
+        <!-- HEADER -->
+        <div class="job-header">
+            <h2 class="job-title">{{ job.title }}</h2>
+            <span class="status-badge">{{ job.status|title }}</span>
+        </div>
+
+        <hr>
+
+        <!-- PRICE + DUE -->
+        <div class="job-info">
+            <p><strong>Price:</strong> ${{ job.price }}</p>
+            {% if job.due_date %}
+                <p><strong>Due By:</strong> {{ job.due_date }}</p>
+            {% endif %}
+        </div>
+
+        <hr>
+
+        <!-- IMAGES -->
+        <div class="job-images">
+            {% for image in images %}
+                <img src="{{ image.image.url }}">
+            {% endfor %}
+        </div>
+
+        <hr>
+
+        <!-- DESCRIPTION -->
+        <div class="job-section">
+            <h3>Job Description</h3>
+            <p>{{ job.description }}</p>
+        </div>
+
+        <hr>
+
+        <!-- POSTED BY -->
+        <div class="posted-by">
+            <span>Posted by:</span>
+
+            {% if job.profile.profile_picture %}
+                <img class="profile" src="{{ job.profile.profile_picture.url }}">
+            {% else %}
+                <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
+            {% endif %}
+
             <a href="{% url 'profile_detail' job.profile.id %}">
-                {{ job.profile }}
+                {{ job.profile.user.username }}
             </a>
-        </p>
-    </div>
-    <div class="action_buttons">
-    <!-- Apply Section -->
-    {% if not application %}
-        <a href="{% url 'job_apply' job.id %}">Apply</a>
-    {% else %}
-        <p>Application Status: {{ application.status }}</p>
-    {% endif %}
-    <!-- Messaging -->
-    {% if conversation %}
-        {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-            <a href="{% url 'conversation_details' conversation.id %}">Message</a>
+        </div>
+
+        <hr>
+
+        <!-- BUTTONS -->
+        <div class="action-buttons">
+            {% if request.user.profile.id != job.profile.id %}
+                {% if not application %}
+                    <a href="{% url 'job_apply' job.id %}">Apply</a>
+                {% else %}
+                    {{ application.status }}
+                {% endif %}
+                    <a class="report" href="{% url 'job_report' job.id %}">Report Job</a>
+            {% endif %}
+            {% if conversation %}
+                {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
+                <a class="message-btn" href=" {% url 'conversation_details' conversation.id %}">Message</a>
+                {% endif %}
+            {% endif %}
+        </div>
+
+        <!-- OWNER LINKS -->
+        {% if request.user.profile == job.profile %}
+        <div class="owner-links">
+            <a href="{% url 'job_edit' job.id %}">Edit Job</a>
+            <span>•</span>
+            <a href="{% url 'job_delete' job.id %}">Delete Job</a>
+            <span>•</span>
+            <a href="#">View Applicants</a>
+        </div>
         {% endif %}
-    {% endif %}
-    <!-- Report -->
-    <form method="post" action="{% url 'job_report' job.id %}">
-        {% csrf_token %}
-        <button type="submit">Report</button>
-    </form>
-    </div>
-    <div class="owner_controls">
-    <!-- Owner Controls -->
-    {% if job.profile == request.user.profile %}
-        <a href="{% url 'job_edit' job.id %}">Edit</a>
 
-        <form method="post" action="{% url 'job_delete' job.id %}">
-            {% csrf_token %}
-            <button type="submit">Delete</button>
-        </form>
+        <!-- BACK -->
+        <div class="back-link">
+            <a href="{% url 'job_page' %}">← Back to Job Listings</a>
+        </div>
 
-        <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
-    {% endif %}
     </div>
-    <div class="back_button">
-        <a href="{% url 'job_page' %}">Back to Job Listings</a>
-    </div>
+
 </div>
-    {% endblock %}
+</body>
+</html>
+{% endblock %}
