@@ -22,7 +22,7 @@
 
         <!-- PRICE + DUE -->
         <div class="job-info">
-            <p><strong>Price:</strong> ${{ job.price }}</p>
+            <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
             {% if job.due_date %}
                 <p><strong>Due By:</strong> {{ job.due_date }}</p>
             {% endif %}

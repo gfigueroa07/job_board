@@ -20,8 +20,7 @@ def job_page(request):
     category = request.GET.get('category')
     if query:
         jobs = jobs.filter(title__icontains=query)
-    if category and category.strip():
-        
+    if category and category.strip():  
         jobs = jobs.filter(category=category)
     paginator = Paginator(jobs, 5)  # 5 jobs per page
     page_number = request.GET.get('page')

@@ -13,6 +13,7 @@ from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.paginator import Paginator
 
 # Create your views here.
 # def home(request):
@@ -227,7 +228,20 @@ def user_logout(request):
 def user_jobs(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     jobs = JobListing.objects.filter(profile=profile)
-    return render(request, 'users/user_jobs.html', {'profile': profile, 'jobs': jobs})
+    query = request.GET.get('q')
+    category = request.GET.get('category')
+    if query:
+        jobs = jobs.filter(title__icontains=query)
+    if category and category.strip():  
+        jobs = jobs.filter(category=category)
+    paginator = Paginator(jobs, 5)  # 5 jobs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'job_board/job_page.html', {
+        'page_obj': page_obj,
+        'job_count': jobs.count(),
+    })
 
 @login_required
 def user_jobs_applied(request):
