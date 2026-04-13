@@ -1,15 +1,32 @@
+{% load static %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/jobs.css' %}">
+{% endblock %}
+{% block content%}
+
 <h1>Jobs applied</h1>
-
-<h2>Jobs You Applied To</h2>
-
-{% for job_app in jobs %}
-    <div>
-        <p>Job: <a href="{% url 'job_details' job_app.job.id %}">{{ job_app.job.title }}</a></p>
-        <p>Status: {{ job_app.status }}</p>
-        <hr>
+    {% for job in page_obj %}
+        <div class="job-card">
+            <h3>
+                <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
+            </h3>
+            <p>Price: ${{ job.price|floatformat:2 }}</p>
+            <p>Category: {{ job.category }}</p>
+            <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
+            <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
+        </div>
+    {% empty %}
+        <p>No jobs found</p>
+    {% endfor %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <!-- <a href="?page=1&q={{ request.GET.q }}&category={{ request.GET.category }}">First</a> -->
+            <a href="?page={{ page_obj.previous_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Next</a>
+            <!-- <a href="?page={{ page_obj.paginator.num_pages }}&q={{ request.GET.q }}&category={{ request.GET.category }}">Last</a> -->
+        {% endif %}
     </div>
-{% empty %}
-    <p>No jobs applied yet.</p>
-{% endfor %}
-
-<p><a href="/">Return to home page</a></p>
+{% endblock %}

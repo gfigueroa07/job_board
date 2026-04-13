@@ -12,9 +12,11 @@
     <div class="logo">
         <img src="{% static 'images/logo.png' %}" alt="Hustlr Logo">
     </div>
+    {% if not request.user.is_authenticated %}  
         <p>Create an account or log in to see quick jobs near you.
-    <div class='get-started'>        
-        <a href="{% url 'login' %}" >Get Started →</a>
-    </div>
+        <div class='get-started'>        
+            <a href="{% url 'login' %}" >Get Started →</a>
+        </div>
+    {% endif %}
 </div>
 {% endblock %} 
