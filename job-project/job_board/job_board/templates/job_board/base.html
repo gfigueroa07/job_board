@@ -29,7 +29,7 @@
                 {% if user.is_authenticated and user.profile %}
                     <li><a href="{% url 'home' %}">Home</a></li>
 
-                    <li><a href="{% url 'my_jobs' %}">My Jobs</a></li>
+                    <li><a href="{% url 'my_jobs' user.profile.id %}">My Jobs</a></li>
                     <li><a href="{% url 'job_list' %}">Post a Job</a></li>
                     <li><a href="{% url 'user_jobs' user.profile.id %}">Listed Jobs</a></li>
 

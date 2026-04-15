@@ -234,7 +234,7 @@ def user_jobs(request, profile_id):
         jobs = jobs.filter(title__icontains=query)
     if category and category.strip():  
         jobs = jobs.filter(category=category)
-    paginator = Paginator(jobs, 5)  # 5 jobs per page
+    paginator = Paginator(jobs, 10)  # 10 jobs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
@@ -244,10 +244,24 @@ def user_jobs(request, profile_id):
     })
 
 @login_required
-def user_jobs_applied(request):
-    profile = request.user.profile
+def user_jobs_applied(request, profile_id):
+    profile = get_object_or_404(Profile, id=profile_id)
     jobs = JobApplication.objects.filter(applicant=profile)
-    return render(request, 'users/jobs_applied.html', {'profile': profile, 'jobs': jobs})
+    query = request.GET.get('q')
+    category = request.GET.get('category')
+    if query:
+        jobs = jobs.filter(title__icontains=query)
+    if category and category.strip():  
+        jobs = jobs.filter(category=category)
+    paginator = Paginator(jobs, 10)  # 10 jobs per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    return render(request, 'job_board/job_page.html', {
+        'page_obj': page_obj,
+        'job_count': jobs.count(),
+    })
+
     
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)

@@ -40,7 +40,7 @@ urlpatterns = [
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
     path('user/<int:profile_id>/jobs/', views.user_jobs, name='user_jobs'),
-    path('applied/jobs/', views.user_jobs_applied, name='my_jobs'),
+    path('applied/<int:profile_id>/jobs/', views.user_jobs_applied, name='my_jobs'),
     
     path('reviews/<int:profile_id>/', views.review_page, name='reviews'),
     path('reviews/<int:profile_id>/create/', views.review_create, name='review_create'),
