@@ -246,7 +246,8 @@ def user_jobs(request, profile_id):
 @login_required
 def user_jobs_applied(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    jobs = JobApplication.objects.filter(applicant=profile)
+    application = JobApplication.objects.filter(applicant=profile)
+    jobs = JobListing.objects.filter(id__in=application)
     query = request.GET.get('q')
     category = request.GET.get('category')
     if query:
