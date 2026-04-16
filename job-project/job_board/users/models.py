@@ -21,10 +21,10 @@ class Profile(models.Model):
     
 class JobListing(models.Model):
     job_status = [
-        ('OPEN', 'Open'),
-        ('PENDING', 'Pending'),
-        ('COMPLETED', 'Completed'),
-        ('CANCELLED', 'Cancelled'),
+        ('open', 'Open'),
+        ('pending', 'Pending'),
+        ('completed', 'Completed'),
+        ('closed', 'Closed'),
     ]
     job_category = [
         ('landscaping','Landscaping'),
@@ -131,7 +131,6 @@ class JobApplication(models.Model):
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
-        ('withdrawn', 'Withdrawn'),
     ]
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)

@@ -15,7 +15,9 @@
         <!-- HEADER -->
         <div class="job-header">
             <h2 class="job-title">{{ job.title }}</h2>
-            <span class="status-badge">{{ job.status|title }}</span>
+            <span class="status-badge status-{{ job.status|lower }}">
+                {{ job.status|title }}
+            </span>
         </div>
 
         <hr>

@@ -39,12 +39,17 @@ body {
 
 /* STATUS */
 .status-badge {
-    background: #4CAF50;
     color: white;
     padding: 6px 14px;
     border-radius: 8px;
     font-size: 14px;
 }
+
+/* Job status */
+.status-badge.status-open { background: green; }
+.status-badge.status-pending { background: gray; }
+.status-badge.status-closed { background: gray; }
+.status-badge.status-completed { background: gray; }
 
 /* INFO */
 .job-info {
@@ -211,6 +216,3 @@ hr {
     align-items: right;
 }
 
-.action-buttons .report:hover {
-    background-color: rgba(174, 174, 174, 0.481);
-}

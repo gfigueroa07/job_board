@@ -40,3 +40,16 @@ div.job-card h3 a:hover {
 div.job-card p {
     margin: 5px 0;
 }
+
+.status-badge {
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+/* Job status */
+.status-badge.status-open { background: green; }
+.status-badge.status-pending { background: gray; }
+.status-badge.status-closed { background: gray; }
+.status-badge.status-completed { background: gray; }
