@@ -247,7 +247,7 @@ def user_jobs(request, profile_id):
 def user_jobs_applied(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     application = JobApplication.objects.filter(applicant=profile)
-    jobs = JobListing.objects.filter(id__in=application)
+    jobs = JobListing.objects.filter(id__in=application.values_list('job', flat=True))
     query = request.GET.get('q')
     category = request.GET.get('category')
     if query:
@@ -258,7 +258,7 @@ def user_jobs_applied(request, profile_id):
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
-    return render(request, 'job_board/job_page.html', {
+    return render(request, 'users/jobs_applied.html', {
         'page_obj': page_obj,
         'job_count': jobs.count(),
     })
