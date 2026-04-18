@@ -152,3 +152,4 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SUPPORT_EMAIL = "support@hustlr.com"
 COMPANY_NAME = "Hustlr"
 
+SECRET_KEY = os.environ.get('SECRET_KEY')
