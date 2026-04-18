@@ -22,7 +22,7 @@ def job_page(request):
         jobs = jobs.filter(title__icontains=query)
     if category and category.strip():  
         jobs = jobs.filter(category=category)
-    paginator = Paginator(jobs, 10)  # 10 jobs per page
+    paginator = Paginator(jobs, 10)  # 10  jobs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
 
