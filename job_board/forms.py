@@ -4,13 +4,17 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
 
+
 class ProfileForm(forms.ModelForm):
     location = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Location'})
+        widget=forms.TextInput(attrs={'placeholder': 'Location'}),
+        required=False
     )
     description = forms.CharField(
-        widget=forms.Textarea(attrs={'placeholder': 'Write a short bio...'})
+        widget=forms.Textarea(attrs={'placeholder': 'Write a short bio...'}),
+        required=False
     )
+
     class Meta:
         model = Profile
         fields = [
@@ -20,66 +24,81 @@ class ProfileForm(forms.ModelForm):
             'skills',
             'resume',
         ]
+
     def clean_profile_name(self):
         profile_name = self.cleaned_data.get('profile_name')
+
+        if not profile_name:
+            return profile_name
+
         if Profile.objects.filter(profile_name=profile_name).exists():
             raise forms.ValidationError('This profile already exists.')
+
         if len(profile_name) < 5:
-            raise forms.ValidationError("Title too short")   
+            raise forms.ValidationError("Title too short")
+
         return profile_name
 
-class UserProfileCreationForm(forms.ModelForm):
-    # User fields with placeholders
+class UserProfileCreationForm(UserCreationForm):
     username = forms.CharField(
-        max_length=15, widget=forms.TextInput(attrs={'placeholder': 'Username'})
+        max_length=15,
+        widget=forms.TextInput(attrs={'placeholder': 'Username'})
     )
+
     password1 = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Password'})
     )
+
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
     )
-    # email = forms.EmailField(
-    #     required=True,
-    #     widget=forms.EmailInput(attrs={'placeholder': 'Email'})
-    # )
 
-    # Profile fields with placeholders
     location = forms.CharField(
-        max_length=20, required=False,
+        max_length=20,
+        required=False,
         widget=forms.TextInput(attrs={'placeholder': 'Location'})
     )
+
     description = forms.CharField(
-        max_length=250, required=False,
+        max_length=250,
+        required=False,
         widget=forms.Textarea(attrs={'placeholder': 'Short bio...', 'rows': 4})
     )
+
     skills = forms.CharField(
         required=False,
         widget=forms.HiddenInput(),
     )
+
     profile_picture = forms.ImageField(required=False)
     resume = forms.FileField(required=False)
 
     class Meta:
         model = User
         fields = [
-            'profile_picture', 'username', 'password1', 'password2',
-            'location', 'description', 'skills', 'resume'
+            'username',
+            'password1',
+            'password2',
         ]
 
     def save(self, commit=True):
-        user = super().save(commit=commit)
-        # Save profile info
+        user = super().save(commit=True)  # 🔥 UserCreationForm handles password hashing
+
         profile, created = Profile.objects.get_or_create(user=user)
+
         profile.location = self.cleaned_data.get('location')
         profile.description = self.cleaned_data.get('description')
         profile.skills = self.cleaned_data.get('skills')
+
         if self.cleaned_data.get('profile_picture'):
             profile.profile_picture = self.cleaned_data.get('profile_picture')
+
         if self.cleaned_data.get('resume'):
             profile.resume = self.cleaned_data.get('resume')
+
         if commit:
             profile.save()
+
         return user
         
 class ProfileEditForm(forms.ModelForm):

@@ -204,7 +204,7 @@ form button[type="submit"] {
 } */
 
 /* Responsive */
-/* @media (max-width: 600px) {
+@media (max-width: 600px) {
     #menu-toggle {
         display: block;
     }
@@ -230,4 +230,4 @@ form button[type="submit"] {
     nav .sidebar{
         width: 100%;
     }
-} */
+}

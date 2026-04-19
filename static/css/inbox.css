@@ -1,0 +1,188 @@
+/* CONTAINER */
+.inbox-container {
+    width: 420px;
+    margin: 30px auto;
+    background: white;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+    font-family: Arial, sans-serif;
+}
+
+/* HEADER */
+.inbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px;
+    border-bottom: 1px solid #eee;
+}
+
+.inbox-header h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.icon {
+    font-size: 18px;
+}
+
+/* SEARCH */
+.inbox-search {
+    padding: 12px 15px;
+}
+
+.inbox-search input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 25px;
+    border: 1px solid #ddd;
+    outline: none;
+}
+
+/* FILTERS */
+.inbox-filters {
+    display: flex;
+    gap: 10px;
+    padding: 10px 15px;
+}
+
+.inbox-filters button {
+    border: none;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: #eee;
+    cursor: pointer;
+    font-size: 13px;
+}
+
+.inbox-filters .active {
+    background: #1e5bb8;
+    color: white;
+}
+
+/* LIST */
+.inbox-list {
+    border-top: 1px solid #eee;
+}
+
+/* ITEM */
+.inbox-item {
+    display: flex;
+    padding: 15px;
+    gap: 12px;
+    text-decoration: none;
+    color: inherit;
+    border-bottom: 1px solid #eee;
+}
+
+.inbox-item:hover {
+    background: #f5f7fb;
+}
+
+/* AVATAR */
+.avatar img,
+.avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    min-width: 45px; /* VERY IMPORTANT */
+    overflow: hidden;
+    border-radius: 50%;
+}
+
+.avatar-placeholder {
+    background: #ccc;
+}
+
+.avatar img {
+    width: 45px !important;
+    height: 45px !important;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* CONTENT */
+.content {
+    flex: 1;
+}
+
+/* TOP ROW */
+.top-row {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+}
+
+/* NAME */
+.name {
+    font-size: 15px;
+}
+
+/* BADGE */
+.badge.unread {
+    background: #888;
+    color: white;
+    font-size: 11px;
+    padding: 3px 8px;
+    border-radius: 10px;
+}
+
+/* JOB TITLE */
+.job-title {
+    font-size: 13px;
+    color: #666;
+    margin-top: 2px;
+}
+
+/* MESSAGE */
+.last-message {
+    font-size: 13px;
+    color: #888;
+    margin-top: 5px;
+}
+
+/* RIGHT SIDE */
+.right-side {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+/* TIME */
+.time {
+    font-size: 12px;
+    color: #999;
+}
+
+/* STATUS */
+.status {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    color: white;
+}
+
+/* STATUS COLORS */
+.status-pending { background: #f0ad4e; }
+.status-accepted { background: #4CAF50; }
+.status-declined { background: #d9534f; }
+
+/* EMPTY */
+.empty {
+    text-align: center;
+    padding: 20px;
+    color: gray;
+}
