@@ -15,18 +15,16 @@
     </div>
     <!-- LIST -->
     <div class="inbox-list">
-
         {% for item in convo_data %}
         <a href="{% url 'conversation_details' item.conversation.id %}" class="inbox-item">
-
             <!-- PROFILE IMAGE -->
             <div class="avatar">
-                {% if item.conversation.applicant.profile.profile_picture %}
-                    <img src="{{ item.conversation.applicant.profile.profile_picture.url }}">
+                {% if item.other_user.profile_picture %}
+                    <img src="{{ item.other_user.profile_picture.url }}">
                 {% else %}
-                    <img src="{% static 'images/default_profile.png' %}" alt="Profile Preview">            
+                    <img src="{% static 'images/default_profile.png' %}">
                 {% endif %}
-                </div>
+            </div>
 
             <!-- TEXT CONTENT -->
             <div class="content">
@@ -34,28 +32,20 @@
                 <!-- NAME + STATUS -->
                 <div class="top-row">
                     <span class="name">
-                        {{ item.conversation.applicant.username }}
+                        {{ item.conversation.job.title }}
                     </span>
 
                     {% if item.has_unread %}
                         <span class="badge unread">Unread</span>
                     {% endif %}
                 </div>
-
-                <!-- JOB TITLE -->
-                <div class="job-title">
-                    {{ item.conversation.job.title }}
-                </div>
-
                 <!-- LAST MESSAGE -->
                 {% if item.last_message %}
                 <div class="last-message">
                     {{ item.last_message.content|truncatechars:40 }}
                 </div>
                 {% endif %}
-
             </div>
-
             <!-- TIME / STATUS -->
             <div class="right-side">
 

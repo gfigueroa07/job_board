@@ -20,6 +20,7 @@ from . import views
 import job_board.views
 from django.conf import settings
 from django.conf.urls.static import static
+# from .context_processors import unread_count
 
 
 
@@ -35,7 +36,9 @@ urlpatterns = [
     path('conversations/', views.inbox, name='inbox'),
     path('conversation/<int:convo_id>/', views.conversation_detail, name='conversation_details'),
     path('conversation/<int:convo_id>/report/', views.conversation_report, name='convo_report'),
-    path('notifications/unread-count/', views.unread_count, name='unread_count'),
+    
+    path("api/unread-count/", views.unread_count, name="unread_counts"),
+    path("api/mark-messages-read/", views.mark_messages_read, name="mark_messages_read"),
     
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),

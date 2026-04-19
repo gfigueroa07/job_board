@@ -7,84 +7,107 @@
 
 {% block content %}
 
-<div class="inbox-container">
-    <!-- LEFT: INBOX -->
-    <div class="inbox-sidebar">
-        <div class="inbox-header">
-            <h2>Messages</h2>
-        </div>
+<div class="chat-wrapper">
 
-        <!-- FILTERS -->
-        <div class="inbox-filters">
-            <button class="active">All</button>
-            <button>Unread</button>
-            <button>Archived</button>
-        </div>
-        <!-- CONVERSATIONS LIST -->
+    <!-- LEFT SIDEBAR -->
+    <div class="chat-sidebar">
         <div class="conversation-list">
+
             {% for convo in conversations %}
-            <a href="{% url 'conversation_detail' convo.id %}" class="conversation-item">
+            <a href="{% url 'conversation_details' convo.id %}" class="conversation-item">
+
                 <div class="avatar">
-                    <img src="{{ convo.other_user.profile.profile_picture.url }}" alt="">
+                    {% if convo.job.profile.profile_picture %}
+                        <img src="{{ convo.job.profile.profile_picture.url }}">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}">
+                    {% endif %}
                 </div>
+
                 <div class="conversation-info">
                     <div class="top-row">
-                        <span class="name">{{ convo.other_user.username }}</span>
-                        <span class="time">{{ convo.updated_at|timesince }} ago</span>
-                    </div>
-                    <div class="bottom-row">
-                        <span class="job-title">{{ convo.job.title }}</span>
-                        <span class="status status-{{ convo.status|lower }}">
-                            {{ convo.status }}
+                        <span class="name">
+                            {% if convo.applicant == request.user %}
+                                {{ convo.job.profile.user }}
+                            {% else %}
+                                {{ convo.applicant.username }}
+                            {% endif %}
                         </span>
+
+                        {% if convo.created_at %}
+                            <span class="time">{{ convo.created_at|timesince }} ago</span>
+                        {% endif %}
                     </div>
-                    <p class="last-message">
-                        {{ convo.last_message|truncatewords:6 }}
-                    </p>
+
+                    <div class="job-title">{{ convo.job.title }}</div>
+
+                    {% if convo.last_message %}
+                        <p class="last-message">
+                            {{ convo.last_message.content|truncatechars:50 }}
+                        </p>
+                    {% endif %}
                 </div>
+
             </a>
-            {% empty %}
-                <p>No conversations</p>
             {% endfor %}
 
         </div>
     </div>
-    <!-- RIGHT: CHAT -->
-    <div class="chat-section">
+
+    <!-- CHAT AREA -->
+    <div class="chat-main">
+
         {% if conversation %}
+
         <!-- HEADER -->
         <div class="chat-header">
+
             <div class="chat-user">
-                <img src="{{ conversation.other_user.profile.profile_picture.url }}">
+                {% if conversation.other_user.profile.profile_picture %}
+                    <img src="{{ conversation.other_user.profile.profile_picture.url }}">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}">
+                {% endif %}
+
                 <div>
                     <h3>{{ conversation.other_user.username }}</h3>
                     <p>{{ conversation.job.title }}</p>
                 </div>
             </div>
-            <div class="chat-status status-{{ conversation.status|lower }}">
-                {{ conversation.status }}
-            </div>
+
+            {% if request.user != conversation.job.profile.user  %}
+                <a class="report" href="{% url 'convo_report' conversation.id %}">Report Conversation</a>
+            {% endif %}
+
         </div>
+
         <!-- MESSAGES -->
-        <div class="chat-messages">
-            {% for message in messages %}
+        <div class="chat-body">
+
+            {% for message in convo_messages %}
                 <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
                     <p>{{ message.content }}</p>
-                    <span class="time">{{ message.created_at|timesince }} ago</span>
+                    <span class="time">{{ message.timestamp|timesince }} ago</span>
                 </div>
             {% endfor %}
+
         </div>
+
         <!-- INPUT -->
         <form method="POST" class="chat-input">
             {% csrf_token %}
             <input type="text" name="content" placeholder="Type a message..." required>
             <button type="submit">Send</button>
         </form>
+        <script>
+            fetch("/api/mark-messages-read/");
+        </script>
         {% else %}
-            <div class="no-chat">
-                <p>Select a conversation</p>
-            </div>
+        <div class="no-chat">
+            <p>Select a conversation</p>
+        </div>
         {% endif %}
+
     </div>
 </div>
 

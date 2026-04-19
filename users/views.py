@@ -15,6 +15,7 @@ from datetime import timedelta
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 
+
 # Create your views here.
 # def home(request):
 #     return render(request, 'users/home.html')
@@ -356,25 +357,39 @@ def review_report(request, review_id):
 
 @login_required
 def conversation_detail(request, convo_id):
+
     conversation = get_object_or_404(Conversation, id=convo_id)
+
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
         return redirect('job_details', conversation.job.id)
+
+    # define other_user
+    if request.user == conversation.applicant:
+        other_user = conversation.job.profile.user
+    else:
+        other_user = conversation.applicant
+
+    conversation.other_user = other_user
+
     if request.method == 'POST':
         content = request.POST.get('content')
         if content and content.strip():
             Message.objects.create(
                 conversation=conversation,
                 sender=request.user,
-                content=content         
+                content=content
             )
             return redirect("conversation_details", convo_id=convo_id)
+
     convo_messages = conversation.messages.all().order_by('timestamp')
+
     convo_messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
+
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'convo_messages': convo_messages,
     })
-
+    
 def conversation_report(request, convo_id):
     conversation  = get_object_or_404(Conversation, id=convo_id)
     if request.method == 'POST':
@@ -406,40 +421,42 @@ def conversation_report(request, convo_id):
 
 @login_required
 def inbox(request):
-    profile = None
-    try: 
-        profile = request.user
-    except:
-        pass
-    if profile:
-        conversations = Conversation.objects.filter(
-            Q(applicant=profile) |
-            Q(job__profile__user=request.user)
-            ).annotate(last_message_time=Max('messages__created_at')
-            ).order_by('-last_message_time')
-        convo_data = []
-        for convo in conversations:
-            last_message = convo.messages.order_by('-created_at').first()
-            has_unread = convo.messages.filter(
-                is_read=False
-            ).exclude(sender=request.user).exists()
-            convo_data.append({
-                'conversation': convo,
-                'last_message': last_message,
-                'has_unread': has_unread
-            })
-        return render(request, 'users/inbox.html', {
-            'convo_data': convo_data
+
+    user = request.user
+
+    conversations = Conversation.objects.filter(
+        Q(applicant=user) |
+        Q(job__profile__user=user)
+    ).annotate(
+        last_message_time=Max('messages__created_at')
+    ).order_by('-last_message_time')
+
+    convo_data = []
+
+    for convo in conversations:
+
+        last_message = convo.messages.order_by('-created_at').first()
+
+        has_unread = convo.messages.filter(
+            is_read=False
+        ).exclude(sender=request.user).exists()
+
+        # FIX: compute other_profile HERE
+        if user == convo.applicant:
+            other_user = convo.job.profile
+        else:
+            other_user = convo.applicant
+
+        convo_data.append({
+            'conversation': convo,
+            'last_message': last_message,
+            'has_unread': has_unread,
+            'other_user': other_user
         })
-    else:
-        conversations = Conversation.objects.none()
 
-def unread_count(request):
-    count = Message.objects.filter(
-        is_read=False
-    ).exclude(sender=request.user).count()
-
-    return JsonResponse({'count': count})
+    return render(request, 'users/inbox.html', {
+        'convo_data': convo_data
+    })
 
 @login_required
 def notifications(request):
@@ -478,3 +495,32 @@ def submit_report(request):
             report.save()
             return redirect('home')
     return render(request, 'users/feedback.html', {'form': form})
+
+def unread_count(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"count": 0})
+
+    message_count = Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).count()
+
+    notification_count = Notifications.objects.filter(
+        user=request.user,
+        is_read=False
+    ).count()
+
+    return JsonResponse({
+        "messages": message_count,
+        "notifications": notification_count,
+        "total": message_count + notification_count
+    })
+
+def mark_messages_read(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"status": "unauthorized"})
+
+    Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).update(is_read=True)
+
+    return JsonResponse({"status": "ok"})

@@ -1,0 +1,155 @@
+/* WRAPPER */
+.applicants-wrapper {
+    max-width: 800px;
+    margin: 40px auto;
+    font-family: Arial, sans-serif;
+    background: #f4f6f9;
+}
+
+/* HEADER */
+.applicants-header {
+    background: #fff;
+    padding: 15px 20px;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+    margin-bottom: 15px;
+}
+
+.applicants-header h2 {
+    margin: 0;
+}
+
+.applicants-header p {
+    margin: 5px 0 0;
+    color: #666;
+    font-size: 14px;
+}
+
+/* LIST */
+.applicants-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* CARD */
+.applicant-card {
+    background: #fff;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #e5e5e5;
+}
+
+/* TOP ROW */
+.applicant-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.name {
+    font-weight: bold;
+    color: #333;
+    text-decoration: none;
+}
+
+/* STATUS */
+.status {
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 12px;
+    background: #eee;
+}
+
+.status-pending {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.status-accepted {
+    background: #d4edda;
+    color: #155724;
+}
+
+.status-rejected {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* MESSAGE */
+.message-box {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #444;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+/* ACTION BUTTONS */
+.actions {
+    margin-top: 12px;
+    display: flex;
+    gap: 10px;
+}
+
+.btn {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+/* ACCEPT */
+.accept {
+    background: #28a745;
+    color: white;
+}
+
+.accept:hover {
+    background: #218838;
+}
+
+/* REJECT */
+.reject {
+    background: #dc3545;
+    color: white;
+}
+
+.reject:hover {
+    background: #c82333;
+}
+
+/* FINAL STATUS */
+.final-status {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* ALERTS */
+.alert {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    font-size: 13px;
+}
+
+.alert.success {
+    background: #d4edda;
+    color: #155724;
+}
+
+.alert.error {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* EMPTY */
+.empty {
+    text-align: center;
+    padding: 30px;
+    color: #888;
+}
