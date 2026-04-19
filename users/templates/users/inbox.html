@@ -1,39 +1,85 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/inbox.css' %}">
 {% endblock %}
+
 {% block content %}
-<h2>Inbox</h2>
 
-{% for item in convo_data %}
-    <div style="margin-bottom: 15px;">
-        
-        <!-- Job Title -->
-        <a href="{% url 'conversation_details' item.conversation.id %}">
-            <strong>{{ item.conversation.job }}</strong>
+<div class="inbox-container">
+    <!-- HEADER -->
+    <div class="inbox-header">
+        <h2>Inbox</h2>
+        <span class="icon">💬</span>
+    </div>
+    <!-- LIST -->
+    <div class="inbox-list">
+
+        {% for item in convo_data %}
+        <a href="{% url 'conversation_details' item.conversation.id %}" class="inbox-item">
+
+            <!-- PROFILE IMAGE -->
+            <div class="avatar">
+                {% if item.conversation.applicant.profile.profile_picture %}
+                    <img src="{{ item.conversation.applicant.profile.profile_picture.url }}">
+                {% else %}
+                    <img src="{% static 'images/default_profile.png' %}" alt="Profile Preview">            
+                {% endif %}
+                </div>
+
+            <!-- TEXT CONTENT -->
+            <div class="content">
+
+                <!-- NAME + STATUS -->
+                <div class="top-row">
+                    <span class="name">
+                        {{ item.conversation.applicant.username }}
+                    </span>
+
+                    {% if item.has_unread %}
+                        <span class="badge unread">Unread</span>
+                    {% endif %}
+                </div>
+
+                <!-- JOB TITLE -->
+                <div class="job-title">
+                    {{ item.conversation.job.title }}
+                </div>
+
+                <!-- LAST MESSAGE -->
+                {% if item.last_message %}
+                <div class="last-message">
+                    {{ item.last_message.content|truncatechars:40 }}
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- TIME / STATUS -->
+            <div class="right-side">
+
+                {% if item.last_message %}
+                <span class="time">
+                    {{ item.last_message.created_at|timesince }} ago
+                </span>
+                {% endif %}
+
+                {% if item.conversation.status %}
+                <span class="status status-{{ item.conversation.status|lower }}">
+                    {{ item.conversation.status }}
+                </span>
+                {% endif %}
+
+            </div>
+
         </a>
-
-        <br>
-
-        <!-- Last Message Preview -->
-        {% if item.last_message %}
-            <small>
-                {{ item.last_message.sender }}: 
-                {{ item.last_message.content|truncatechars:40 }}
-                {{ item.last_message.created_at|timesince }} ago
-            </small>
-        {% endif %}
-
-        <br>
-
-        <!-- Unread Indicator -->
-        {% if item.has_unread %}
-            <strong>New Message</strong>
-        {% endif %}
+        {% empty %}
+            <p class="empty">No conversations</p>
+        {% endfor %}
 
     </div>
-{% endfor %}
 
-<p><a href="/">Return to home page</a></p>
+</div>
+
 {% endblock %}
