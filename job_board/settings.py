@@ -22,9 +22,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-p7w(3%dne&#1$#-piwpd!9j&8d0h*ji+k6@o2gmswt*v!0b0g1'
+# SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+if DEBUG:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+else:
+    ALLOWED_HOSTS = ['.onrender.com']
 
 ALLOWED_HOSTS = ['.onrender.com']
 
@@ -150,5 +155,3 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SUPPORT_EMAIL = "support@hustlr.com"
 COMPANY_NAME = "Hustlr"
-
-SECRET_KEY = os.environ.get('SECRET_KEY')
