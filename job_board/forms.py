@@ -69,6 +69,7 @@ class UserProfileCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         user = super().save(commit=commit)
+        user.set_password(self.cleaned_data['password1'])
         # Save profile info
         profile, created = Profile.objects.get_or_create(user=user)
         profile.location = self.cleaned_data.get('location')
