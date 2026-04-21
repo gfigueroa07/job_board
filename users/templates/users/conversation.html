@@ -73,9 +73,8 @@
                     <p>{{ conversation.job.title }}</p>
                 </div>
             </div>
-            {% if request.user != conversation.job.profile.user  %}
-                <a class="report" href="{% url 'convo_report' conversation.id %}">Report Conversation</a>
-            {% endif %}
+            {% if request.user == conversation.job.profile.user or request.user == conversation.applicant %}
+                <a href="{% url 'report_create' 'conversation' conversation.id %}?next={{ request.path }}">Report</a>            {% endif %}
         </div>
 
         <!-- MESSAGES -->

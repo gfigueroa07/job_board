@@ -83,10 +83,9 @@
             {% endif %}
             <a href="{% url 'user_jobs' profile.id %}">Jobs Listed</a>
             <a href="{% url 'reviews' profile.id %}">Reviews</a>
-            {% if request.user.is_authenticated and profile != request.user.profile %}
+            {% if profile != request.user.profile %}
                 <a href="{% url 'review_create' profile.id %}">Leave a review</a>
-                <a class='report' href="{% url 'profile_report' profile.id %}">Report Profile</a>
-            {% endif %}
+                <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            {% endif %}
 
         </div>
     </div>

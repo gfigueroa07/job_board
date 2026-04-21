@@ -14,8 +14,7 @@
             </small>
             <form method="post" action="{% url 'review_report' review.id %}">
                 {% csrf_token %}
-                <button type="submit">Report</button>
-            </form>
+                <a href="{% url 'report_create' 'review' review.id %}?next={{ request.path }}">Report</a>            </form>
             {% if review.review_written == request.user.profile %}
                 <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
                 <form method="post" action="{% url 'review_delete' review.id %}">
