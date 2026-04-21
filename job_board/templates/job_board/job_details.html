@@ -74,8 +74,7 @@
                 {% else %}
                     {{ application.status }}
                 {% endif %}
-                    <a class="report" href="{% url 'job_report' job.id %}">Report Job</a>
-            {% endif %}
+                <a href="{% url 'report_create' 'job' job.id %}?next={{ request.path }}">Report</a>            {% endif %}
             {% if conversation %}
                 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
                 <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>

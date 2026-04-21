@@ -1,13 +1,19 @@
-{% if profile_report %}
-    <h2>Report Profile</h2>
-{% elif job_report %}
-    <h2>Report Job</h2>
-{% elif review_report %}
-    <h2>Report Review</h2>
-{% endif %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Report</button>
-</form>
-<p><a href="/">Return to home page</a></p>
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'css/report.css' %}">
+
+<div class="report-overlay">
+    <div class="report-box">
+
+        <h3>Report</h3>
+
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+
+            <input type="hidden" name="next" value="{{ next }}">
+            <button type="submit">Submit</button>
+        </form>
+
+    </div>
+</div>

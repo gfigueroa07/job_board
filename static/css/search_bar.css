@@ -40,3 +40,12 @@
 .search-bar-box button:hover {
     background-color: #0073b19f;
 }
+
+@media(max-width: 400px){
+    .search-wrapper {
+    width: 80%;
+    max-width: 80%;
+    padding-top: 10px;
+    }
+
+}

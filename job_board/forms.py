@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, ProfileReport, JobReport, JobApplication, ReviewReport, Conversation, Message, ConversationReport, Feedback
+from users .models import Profile, JobListing, Review, JobApplication, Conversation, Message, Feedback, Report
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
@@ -119,14 +119,6 @@ class ProfileEditForm(forms.ModelForm):
             'skills',
             'resume',
         ]
-
-class ProfileReportForm(forms.ModelForm):
-    class Meta:
-        model = ProfileReport
-        fields = [
-            'reason',
-            'message'
-        ]
               
 class JobDetailsForm(forms.ModelForm):
     class Meta:
@@ -163,14 +155,6 @@ class JobApplicationForm(forms.ModelForm):
             'message',
         ]
         model = JobApplication
-
-class JobReportForm(forms.ModelForm):
-    class Meta:
-        model = JobReport
-        fields = [
-            'reason',
-            'message'
-        ]
         
 class UserReviewsForm(forms.ModelForm):
     def clean_rating(self):
@@ -194,22 +178,7 @@ class UserReviewsForm(forms.ModelForm):
                 'max': 5
             })
         }
-       
-class ReviewReportForm(forms.ModelForm):
-    class Meta:
-        model = ReviewReport
-        fields = [
-            'reason',
-            'message'
-        ]
-
-class ConversationReportForm(forms.ModelForm):
-    class Meta:
-        model = ConversationReport
-        fields = [
-            'reason',
-            'message'
-        ]
+             
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
@@ -219,9 +188,58 @@ class FeedbackForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         # default: message optional
         self.fields['message'].required = False
-    
-    
-    
+
+class ReportForm(forms.ModelForm):
+    class Meta:
+        model = Report
+        fields = ['reason', 'description']
+
+        widgets = {
+            'reason': forms.Select(choices=[
+                ('spam', 'Spam'),
+                ('abuse', 'Abusive Content'),
+                ('fake', 'Fake Content'),
+                ('other', 'Other'),
+            ]),
+            'description': forms.Textarea(attrs={
+                'rows': 4,
+                'placeholder': 'Optional details...'
+            }),
+        }
+        
+# class ProfileReportForm(forms.ModelForm):
+#     class Meta:
+#         model = ProfileReport
+#         fields = [
+#             'reason',
+#             'message'
+#         ]
+
+# class ReviewReportForm(forms.ModelForm):
+#     class Meta:
+#         model = ReviewReport
+#         fields = [
+#             'reason',
+#             'message'
+#         ]
+
+# class ConversationReportForm(forms.ModelForm):
+#     class Meta:
+#         model = ConversationReport
+#         fields = [
+#             'reason',
+#             'message'
+#         ]    
+
+# class JobReportForm(forms.ModelForm):
+#     class Meta:
+#         model = JobReport
+#         fields = [
+#             'reason',
+#             'message'
+#         ]
+        
+        
 # Django has built-in form validation. A form is basically a set of input fields be they text, dates, images, whatever
 # These form objects need to be used for Django to run validations using your Models
 from django import forms

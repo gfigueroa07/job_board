@@ -1,5 +1,4 @@
 {% load static %}
-<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,8 +14,8 @@
             <a href='{% url 'home' %}' class='logo'>Hustlr</a>
             <div class='nav-right'>
             {% if user.is_authenticated and user.profile %}
-                <a href="{% url 'inbox' %}">✉</a>
-                <a href="{% url 'notifications' %}">🕭 ({{ unread_count }})</a>
+                <a href="{% url 'inbox' %}">✉ ({{ unread_message_count }})</a>
+                <a href="{% url 'notifications' %}">🕭 ({{ unread_notification_count }})</a>
                 <a href="{% url 'profile_detail' user.profile.id %}">👤</a>
             {% else %}
             <div class='login'>
@@ -84,6 +83,23 @@
                 slidesPerView: 'auto'
             });
         });
+        function updateCounts() {
+            fetch("/api/unread-count/")
+                .then(res => res.json())
+                .then(data => {
+
+                    document.getElementById("msg-count").innerText = data.messages;
+                    document.getElementById("notif-count").innerText = data.notifications;
+
+                });
+        }
+
+        // run every 5 seconds
+        setInterval(updateCounts, 5000);
+
+        // run immediately on load
+        updateCounts();
+
     </script>
 </body>
 </html>

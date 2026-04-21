@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, ProfileReportForm, JobReportForm, JobApplicationForm, ReviewReportForm, ConversationReportForm, FeedbackForm, UserProfileCreationForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
-from users .models import Profile, Review, User, JobListing, ProfileReport, JobReport, JobApplication, ReviewReport, Message, Conversation, ConversationReport, Notifications, Feedback
+from users .models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
@@ -14,6 +14,8 @@ from django.utils import timezone
 from datetime import timedelta
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
+from django.contrib.contenttypes.models import ContentType
+
 
 # Create your views here.
 # def home(request):
@@ -72,19 +74,19 @@ def profile_delete(request, user_id):
 def profile_report(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     if request.method == 'POST':
-        form = ProfileReportForm(request.POST)
+        form = ReportForm(request.POST)
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None
             if request.user.is_authenticated:
                 reporter_profile = request.user.profile
-                if ProfileReport.objects.filter(reported_profile=profile, reporter_profile=reporter_profile).exists():
+                if Report.objects.filter(reported_profile=profile, reporter_profile=reporter_profile).exists():
                     messages.warning(request, "You have already reported this profile.")
                     return redirect('profile_detail', profile_id=profile.id)
             else:
                 reporter_ip = get_client_ip(request)
                 time_limit = timezone.now() - timedelta(hours=24)
-                if ProfileReport.objects.filter(reported_profile=profile, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                if Report.objects.filter(reported_profile=profile, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
                     messages.warning(request, "You have already reported this profile in the last 24 hours.")
                     return redirect('profile_detail', profile_id=profile.id)
             report = form.save(commit=False)
@@ -95,25 +97,25 @@ def profile_report(request, profile_id):
             messages.success(request, "Thank you for your report.")
             return redirect('profile_detail', profile_id=profile.id)
     else:
-        form = ProfileReportForm()
+        form = ReportForm()
     return render(request, 'users/report.html', {'form': form, 'profile': profile})
 
 def job_report(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     if request.method == 'POST':
-        form = JobReportForm(request.POST)
+        form = ReportForm(request.POST)
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None
             if request.user.is_authenticated:
                 reporter_profile = request.user.profile
-                if JobReport.objects.filter(reported_job=job, reporter_profile=reporter_profile).exists():
+                if Report.objects.filter(reported_job=job, reporter_profile=reporter_profile).exists():
                     messages.warning(request, "You have already reported this job.")
                     return redirect('job_details', job_id=job.id)
             else:
                 reporter_ip = get_client_ip(request)
                 time_limit = timezone.now() - timedelta(hours=24)
-                if JobReport.objects.filter(reported_job=job, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                if Report.objects.filter(reported_job=job, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
                     messages.warning(request, "You have already reported this job in the last 24 hours.")
                     return redirect('job_details', job_id=job.id)
             report = form.save(commit=False)
@@ -124,7 +126,7 @@ def job_report(request, job_id):
             messages.success(request, "Thank you for your report.")
             return redirect('job_details', job_id=job.id)
     else:
-        form = JobReportForm()
+        form = ReportForm()
     return render(request, 'users/report.html', {'form': form, 'job': job})
 
 @login_required
@@ -328,19 +330,19 @@ def review_delete(request, review_id):
 def review_report(request, review_id):
     review  = get_object_or_404(Review, id=review_id)
     if request.method == 'POST':
-        form = ReviewReportForm(request.POST)
+        form = ReportForm(request.POST)
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None
             if request.user.is_authenticated:
                 reporter_profile = request.user.profile
-                if ReviewReport.objects.filter(reporter_review=review, reporter_profile=reporter_profile).exists():
+                if Report.objects.filter(reporter_review=review, reporter_profile=reporter_profile).exists():
                     messages.warning(request, "You have already reported this review.")
                     return redirect('reviews', profile_id=review.review_received.id)
             else:
                 reporter_ip = get_client_ip(request)
                 time_limit = timezone.now() - timedelta(hours=24)
-                if ReviewReport.objects.filter(reported_review=review, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                if Report.objects.filter(reported_review=review, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
                     messages.warning(request, "You have already reported this review in the last 24 hours.")
                     return redirect('reviews', profile_id=review.review_received.id)
             report = form.save(commit=False)
@@ -351,46 +353,60 @@ def review_report(request, review_id):
             messages.success(request, "Thank you for your report.")
             return redirect('reviews', profile_id=review.review_received.id)
     else:
-        form = ReviewReportForm()
+        form = ReportForm()
     return render(request, 'users/report.html', {'form': form, 'review': review})
 
 @login_required
 def conversation_detail(request, convo_id):
+
     conversation = get_object_or_404(Conversation, id=convo_id)
+
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
         return redirect('job_details', conversation.job.id)
+
+    # define other_user
+    if request.user == conversation.applicant:
+        other_user = conversation.job.profile.user
+    else:
+        other_user = conversation.applicant
+
+    conversation.other_user = other_user
+
     if request.method == 'POST':
         content = request.POST.get('content')
         if content and content.strip():
             Message.objects.create(
                 conversation=conversation,
                 sender=request.user,
-                content=content         
+                content=content
             )
             return redirect("conversation_details", convo_id=convo_id)
+
     convo_messages = conversation.messages.all().order_by('timestamp')
+
     convo_messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
+
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'convo_messages': convo_messages,
     })
-
+    
 def conversation_report(request, convo_id):
     conversation  = get_object_or_404(Conversation, id=convo_id)
     if request.method == 'POST':
-        form = ConversationReportForm(request.POST)
+        form = ReportForm(request.POST)
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None
             if request.user.is_authenticated:
                 reporter_profile = request.user.profile
-                if ConversationReport.objects.filter(reported_convo=conversation, reporter_profile=reporter_profile).exists():
+                if Report.objects.filter(reported_convo=conversation, reporter_profile=reporter_profile).exists():
                     messages.warning(request, "You have already reported this conversation.")
                     return redirect('conversation_details', convo_id=conversation.id)
             else:
                 reporter_ip = get_client_ip(request)
                 time_limit = timezone.now() - timedelta(hours=24)
-                if ConversationReport.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
+                if Report.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
                     messages.warning(request, "You have already reported this conversation in the last 24 hours.")
                     return redirect('conversation_details', convo_id=conversation.id)
             report = form.save(commit=False)
@@ -401,45 +417,47 @@ def conversation_report(request, convo_id):
             messages.success(request, "Thank you for your report.")
             return redirect('conversation_details', convo_id=conversation.id)
     else:
-        form = ConversationReportForm()
+        form = ReportForm()
     return render(request, 'users/report.html', {'form': form, 'conversation': conversation})
 
 @login_required
 def inbox(request):
-    profile = None
-    try: 
-        profile = request.user
-    except:
-        pass
-    if profile:
-        conversations = Conversation.objects.filter(
-            Q(applicant=profile) |
-            Q(job__profile__user=request.user)
-            ).annotate(last_message_time=Max('messages__created_at')
-            ).order_by('-last_message_time')
-        convo_data = []
-        for convo in conversations:
-            last_message = convo.messages.order_by('-created_at').first()
-            has_unread = convo.messages.filter(
-                is_read=False
-            ).exclude(sender=request.user).exists()
-            convo_data.append({
-                'conversation': convo,
-                'last_message': last_message,
-                'has_unread': has_unread
-            })
-        return render(request, 'users/inbox.html', {
-            'convo_data': convo_data
+
+    user = request.user
+
+    conversations = Conversation.objects.filter(
+        Q(applicant=user) |
+        Q(job__profile__user=user)
+    ).annotate(
+        last_message_time=Max('messages__created_at')
+    ).order_by('-last_message_time')
+
+    convo_data = []
+
+    for convo in conversations:
+
+        last_message = convo.messages.order_by('-created_at').first()
+
+        has_unread = convo.messages.filter(
+            is_read=False
+        ).exclude(sender=request.user).exists()
+
+        # FIX: compute other_profile HERE
+        if user == convo.applicant:
+            other_user = convo.job.profile
+        else:
+            other_user = convo.applicant
+
+        convo_data.append({
+            'conversation': convo,
+            'last_message': last_message,
+            'has_unread': has_unread,
+            'other_user': other_user
         })
-    else:
-        conversations = Conversation.objects.none()
 
-def unread_count(request):
-    count = Message.objects.filter(
-        is_read=False
-    ).exclude(sender=request.user).count()
-
-    return JsonResponse({'count': count})
+    return render(request, 'users/inbox.html', {
+        'convo_data': convo_data
+    })
 
 @login_required
 def notifications(request):
@@ -478,3 +496,85 @@ def submit_report(request):
             report.save()
             return redirect('home')
     return render(request, 'users/feedback.html', {'form': form})
+
+def unread_count(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"count": 0})
+
+    message_count = Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).count()
+
+    notification_count = Notifications.objects.filter(
+        user=request.user,
+        is_read=False
+    ).count()
+
+    return JsonResponse({
+        "messages": message_count,
+        "notifications": notification_count,
+        "total": message_count + notification_count
+    })
+
+def mark_messages_read(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"status": "unauthorized"})
+
+    Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).update(is_read=True)
+
+    return JsonResponse({"status": "ok"})
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    return request.META.get('REMOTE_ADDR')
+
+
+def report_create(request, model_name, object_id):
+    """
+    Generic report view:
+    - model_name: 'job', 'profile', 'conversation', 'review'
+    - object_id: id of the object being reported
+    """
+    # Map URL string → actual model
+    MODEL_MAP = {
+        'job': 'users.JobListing',
+        'profile': 'users.Profile',
+        'conversation': 'users.Conversation',
+        'review': 'users.Review',
+    }
+    if model_name not in MODEL_MAP:
+        return redirect('/')
+    app_label, model_class = MODEL_MAP[model_name].split('.')
+    # get the actual model class dynamically
+    from django.apps import apps
+    Model = apps.get_model(app_label, model_class)
+    # fetch object safely
+    obj = get_object_or_404(Model, id=object_id)
+    next_url = request.GET.get('next', '/')
+    if request.method == 'POST':
+        form = ReportForm(request.POST)
+        if form.is_valid():
+            report = form.save(commit=False)
+            # attach reporter (or anonymous)
+            if request.user.is_authenticated:
+                report.reporter = request.user
+            else:
+                report.reporter = None
+                report.ip_address = get_client_ip(request)
+            # GenericForeignKey assignment
+            report.content_type = ContentType.objects.get_for_model(Model)
+            report.object_id = obj.id
+            report.save()
+            return redirect(next_url)
+    else:
+        form = ReportForm()
+    return render(request, 'users/report.html', {
+        'form': form,
+        'reported_object': obj,
+        'model_name': model_name,
+        'next': next_url
+    })

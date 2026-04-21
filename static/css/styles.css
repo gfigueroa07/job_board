@@ -209,6 +209,10 @@ form button[type="submit"] {
         display: block;
     }
 
+    .body {
+        width: 80%;
+    }
+
     .nav-links {
         display: none;
         flex-direction: column;
@@ -224,10 +228,18 @@ form button[type="submit"] {
     header nav#info {
         flex-direction: column;
         align-items: flex-end;
+        width: 80%;
     }
 }
+
 @media(max-width: 400px){
     nav .sidebar{
         width: 100%;
     }
+
+    .search-wrapper {
+    width: 400px;
+    padding-top: 10px;
+    }
+
 }

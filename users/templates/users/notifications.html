@@ -1,19 +1,60 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
+
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/notifications.css' %}">
 {% endblock %}
-<h1>Notifications</h1>
 
+{% block content %}
 
+<div class="notifications-wrapper">
 
-{% for notification in notifications %}
-    <div>
-        <p>{{ notification.message }}</p>
-        <small>{{ notification.created_at }}</small>
-        <hr>
+    <!-- HEADER -->
+    <div class="notifications-header">
+        <h2>Notifications</h2>
     </div>
-{% endfor %}
 
+    <!-- LIST -->
+    <div class="notifications-list">
 
-<p><a href="/">Return to home page</a></p>
+        {% for notification in notifications %}
+        <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
+
+            <!-- ICON -->
+            <div class="notification-icon">
+                {% if notification.notification_type == 'application' %}
+                    📄
+                {% elif notification.notification_type == 'review' %}
+                    ⭐
+                {% else %}
+                    🔔
+                {% endif %}
+            </div>
+
+            <!-- CONTENT -->
+            <div class="notification-content">
+
+                <p class="message">
+                    {{ notification.message }}
+                </p>
+
+                <div class="meta">
+                    <span class="time">
+                        {{ notification.created_at|timesince }} ago
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+        {% empty %}
+            <div class="empty">
+                No notifications yet
+            </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

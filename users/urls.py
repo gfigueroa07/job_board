@@ -20,6 +20,7 @@ from . import views
 import job_board.views
 from django.conf import settings
 from django.conf.urls.static import static
+# from .context_processors import unread_count
 
 
 
@@ -29,13 +30,15 @@ urlpatterns = [
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/<int:user_id>/delete/', views.profile_delete, name='profile_delete'),
-    path('profile/<int:profile_id>/report/', views.profile_report, name='profile_report'),
+    # path('profile/<int:profile_id>/report/', views.profile_report, name='profile_report'),
     
     path('notifications/', views.notifications, name='notifications'),
     path('conversations/', views.inbox, name='inbox'),
     path('conversation/<int:convo_id>/', views.conversation_detail, name='conversation_details'),
-    path('conversation/<int:convo_id>/report/', views.conversation_report, name='convo_report'),
-    path('notifications/unread-count/', views.unread_count, name='unread_count'),
+    # path('conversation/<int:convo_id>/report/', views.conversation_report, name='convo_report'),
+    
+    path("api/unread-count/", views.unread_count, name="unread_counts"),
+    path("api/mark-messages-read/", views.mark_messages_read, name="mark_messages_read"),
     
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
@@ -46,14 +49,15 @@ urlpatterns = [
     path('reviews/<int:profile_id>/create/', views.review_create, name='review_create'),
     path('reviews/<int:review_id>/edit/', views.review_edit, name='review_edit'),
     path('reviews/<int:review_id>/delete/', views.review_delete, name='review_delete'),    
-    path('review/<int:review_id>/report/', views.review_report, name='review_report'),
+    # path('review/<int:review_id>/report/', views.review_report, name='review_report'),
     
-    path('job/<int:job_id>/report/', views.job_report, name='job_report'),
+    # path('job/<int:job_id>/report/', views.job_report, name='job_report'),
     path('job/<int:job_id>/apply/', views.job_application, name='job_apply'),
     path('job/<int:job_id>/applicants', views.job_applicants, name='job_applicants'),
     
-     path('feedback/', views.submit_report, name='feedback')
-
+    path('feedback/', views.submit_report, name='feedback'),
+    path('report/<str:model_name>/<int:object_id>/', views.report_create, name='report_create'
+),
 
 ]
 
