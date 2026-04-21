@@ -68,30 +68,34 @@
                 {% else %}
                     <img src="{% static 'images/default_profile.png' %}">
                 {% endif %}
-
                 <div>
                     <h3>{{ conversation.other_user.username }}</h3>
                     <p>{{ conversation.job.title }}</p>
                 </div>
             </div>
-
             {% if request.user != conversation.job.profile.user  %}
                 <a class="report" href="{% url 'convo_report' conversation.id %}">Report Conversation</a>
             {% endif %}
-
         </div>
 
         <!-- MESSAGES -->
         <div class="chat-body">
-
-            {% for message in convo_messages %}
-                <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">
-                    <p>{{ message.content }}</p>
-                    <span class="time">{{ message.timestamp|timesince }} ago</span>
-                </div>
-            {% endfor %}
-
+    {% for message in convo_messages %}
+        <div class="message {% if message.sender == request.user %}sent{% else %}received{% endif %}">  
+            <div class="message-row">
+                {% if message.sender != request.user %}
+                    {% if message.sender.profile.profile_picture %}
+                        <img src="{{ message.sender.profile.profile_picture.url }}">
+                    {% else %}
+                        <img src="{% static 'images/default_profile.png' %}">
+                    {% endif %}
+                {% endif %}
+                <p>{{ message.content }}</p>
+            </div>
+            <span class="time">{{ message.timestamp|timesince }} ago</span>
         </div>
+    {% endfor %}
+</div>
 
         <!-- INPUT -->
         <form method="POST" class="chat-input">

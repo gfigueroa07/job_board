@@ -40,3 +40,17 @@
 .get-started a {
     color: white;
 }
+
+@media(max-width: 600px){
+    .search-wrapper {
+    width: 400px;
+    max-width: 80%;
+    padding-top: 10px;
+    }
+
+    .home-container {
+        width: fit-content;
+    }
+
+}
+
