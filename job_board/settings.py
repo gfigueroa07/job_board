@@ -25,14 +25,11 @@ SECRET_KEY = 'django-insecure-p7w(3%dne&#1$#-piwpd!9j&8d0h*ji+k6@o2gmswt*v!0b0g1
 # SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DEBUG", "False") == "True"
-# if DEBUG:
-#     ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
-# else:
-#     ALLOWED_HOSTS = ['.onrender.com']
-
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+if DEBUG:
+    ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
+else:
+    ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
@@ -94,10 +91,18 @@ if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.parse(
             DATABASE_URL,
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+if os.environ.get("DATABASE_URL"):
+    # Production (Render)
+    DATABASES = {
+        "default": dj_database_url.parse(
+            os.environ.get("DATABASE_URL"),
             conn_max_age=600
         )
     }
 else:
+    # Local development
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
