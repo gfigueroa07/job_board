@@ -16,16 +16,18 @@
                 <img id="profilePreview" src="{% static 'images/default_profile.png' %}" alt="Profile Preview" class="profile-preview">
             </div>
             {% for field in form %}
-                <div class="form-field">
-                    {{ field }}
-                    {% if field.errors %}
-                        <div class="error">
-                            {% for error in field.errors %}
-                                <p>{{ error }}</p>
-                            {% endfor %}
-                        </div>
-                    {% endif %}
-                </div>
+                {% if field.name != 'profile_picture' and field.name != 'resume' %}
+                    <div class="form-field">
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="error">
+                                {% for error in field.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
             <button type="submit">Register</button>
         </form>
