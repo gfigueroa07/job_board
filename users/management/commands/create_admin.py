@@ -8,9 +8,9 @@ class Command(BaseCommand):
     help = "Automatically create admin user if it does not exist"
 
     def handle(self, *args, **kwargs):
-        username = os.environ.get("gfigueroa07")
-        email = os.environ.get("guillermofigueroa2840@gmail.com")
-        password = os.environ.get("Snoopylana7!")
+        username = os.environ.get("ADMIN_USERNAME")
+        email = os.environ.get("ADMIN_EMAIL")
+        password = os.environ.get("ADMIN_PASSWORD")
 
         if not username or not password:
             self.stdout.write("Missing admin env vars")
