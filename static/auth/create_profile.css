@@ -33,8 +33,10 @@ textarea{
 }
 
 .upload-btn {
-    display: block;          /* critical */
-    width: 40%;
+    
+    display: inline-block;          /* critical */
+    justify-content: space-between;
+    width: 70%;
     padding: 0.75rem;
     border-radius: 8px;
     border: 1px solid #ccc;
@@ -48,6 +50,7 @@ textarea{
 .upload-btn:hover {
     background-color: #0073b19f;
 }
+
 .form-field input,
 .form-field textarea {
     width: 100%;

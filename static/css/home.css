@@ -43,12 +43,16 @@
 
 @media(max-width: 600px){
     .search-wrapper {
-    width: 400px;
-    max-width: 80%;
-    padding-top: 10px;
+        width: 400px;
+        max-width: 80%;
+        padding-top: 10px;
     }
 
     .home-container {
+        width: fit-content;
+    }
+
+    .header {
         width: fit-content;
     }
 
