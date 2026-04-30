@@ -70,8 +70,14 @@ class UserProfileCreationForm(UserCreationForm):
         widget=forms.HiddenInput(),
     )
 
-    profile_picture = forms.ImageField(required=False)
-    resume = forms.FileField(required=False)
+    profile_picture = forms.ImageField(
+        required=False, 
+        help_text="Upload a profile image"
+    )
+    resume = forms.FileField(
+        required=False,
+        label="Upload Resume"
+    )
 
     class Meta:
         model = User
