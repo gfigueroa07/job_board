@@ -32,6 +32,22 @@ textarea{
     resize: none;
 }
 
+.upload-btn {
+    display: block;          /* critical */
+    width: 40%;
+    padding: 0.75rem;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    text-align: center;      /* center text */
+    cursor: pointer;        /* makes it feel clickable */
+    background-color: #0073b1;
+    color: white;
+}
+
+.upload-btn:hover {
+    background-color: #0073b19f;
+}
 .form-field input,
 .form-field textarea {
     width: 100%;
