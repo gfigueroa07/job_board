@@ -136,3 +136,17 @@ body {
     color: #666;
     font-size: 14px;
 }
+
+@media (max-width: 600px) {
+    .body {
+        max-width: fit-content;
+    }
+    
+    #login-container  {
+        max-width: fit-content;
+    }
+}
+
+@media(max-width: 400px){
+
+}

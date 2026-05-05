@@ -23,14 +23,22 @@ from django.contrib.contenttypes.models import ContentType
 
 def profile_create(request):
     if request.user.is_authenticated:
-        profile = request.user.profile
-        messages.error(request, "Please log out before creating a profile.")
-        return redirect('profile_detail', profile_id=profile.id)
+        if hasattr(request.user, 'profile'):
+            profile = request.user.profile
+            messages.error(request, "Please log out before creating a profile.")
+            return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            form.save()
-            return redirect('login')  # or wherever you want
+            profile = form.save(commit=False)
+            # 🔑 IMPORTANT: explicitly assign file
+            profile.save()
+            print("SAVED FILE:", profile.profile_picture)  # debug
+            try:
+                print("PATH:", profile.profile_picture.path)
+            except Exception as e:
+                print("PATH ERROR:", e)
+            return redirect('login')
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})

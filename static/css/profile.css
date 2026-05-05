@@ -165,3 +165,21 @@
 .profile-actions .report:hover {
     background-color: rgba(153, 49, 49, 0.731);
 }
+
+@media(max-width: 600px) {
+    .profile-container {
+        max-width: fit-content;
+    }
+
+    .profile-header {
+        max-width: fit-content;
+    }
+
+    .profile-container {
+        max-width: fit-content;
+    }
+
+    .profile-section {
+        max-width: fit-content;
+    }
+}

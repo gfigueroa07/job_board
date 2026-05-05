@@ -147,3 +147,8 @@ button[type="submit"]:hover {
     cursor: pointer;
     font-weight: bold;
 }
+
+#id_profile_picture {
+    position: absolute;
+    left: -9999px;
+}
