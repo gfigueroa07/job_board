@@ -13,12 +13,17 @@ html, body {
 }
 
 #login-container {
-    max-width: 80%;
+    width: 80%;
+    max-width: 420px;
     padding: 25px;
     background-color: rgba(255, 255, 255, 0.808);
     border-radius: 10px;
     border-color: black;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
+}
+
+#logo {
+    padding-bottom: 50px;
 }
 
 .logo {
@@ -90,8 +95,9 @@ html, body {
 }
 
 .form-group input {
-    width: 80%;
+    width: 100%;
     padding: 10px;
+    box-sizing: border-box;
 }
 
 .error {
