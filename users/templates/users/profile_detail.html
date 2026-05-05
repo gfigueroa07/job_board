@@ -14,9 +14,9 @@
         <div class="profile-left">
             <div class="profile-picture">
                 {% if profile.profile_picture %}
-                    <img class="profile" src="{{ profile.profile_picture.url }}">
+                    <img class="profile" src="{{ profile.profile_picture.url }}" alt="Profile Picture">
                 {% else %}
-                    <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview" class="profile-preview">
+                    <img class='profile profile-preview' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
                 {% endif %}
             </div>
             <div class="profile-info">

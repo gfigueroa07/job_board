@@ -24,7 +24,7 @@
 
 .profile-header {
     width: 80%;
-    height: 200px;
+    height: auto;
     display: flex;
     border: 1px solid #00000067;
     background-color: #ffffff97;
@@ -37,6 +37,8 @@
 
 .profile-left {
     display: flex;
+    align-items: center;
+    gap: 15px;
     width: 50%;
 }
 
@@ -51,7 +53,7 @@
 
 .profile-info {
     padding: 10px;
-    text-align: center;
+    text-align: left;
 }
 
 .profile-menu {
@@ -107,7 +109,7 @@
 /* Description  */
 .profile-section {
     width: 80%;
-    height: 200px;
+    height: auto;
     display: column;
     border: 1px solid #00000067;
     background-color: #fffdfd97;
@@ -116,7 +118,7 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
     position: relative;
-    max-height: 200px;
+    max-height: none;
 }
 
 .profile-section h3 {
@@ -166,20 +168,30 @@
     background-color: rgba(153, 49, 49, 0.731);
 }
 
-@media(max-width: 600px) {
-    .profile-container {
-        max-width: fit-content;
+@media (max-width: 600px) {
+    .profile-header,
+    .profile-section {
+        width: 95%;
+        height: auto;
     }
 
     .profile-header {
-        max-width: fit-content;
+        flex-direction: column;
+        align-items: center;
     }
 
-    .profile-container {
-        max-width: fit-content;
+    .profile-left {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
     }
 
-    .profile-section {
-        max-width: fit-content;
+    .profile-actions {
+        flex-direction: column;
+    }
+
+    .profile-actions a {
+        width: 100%;
+        text-align: center;
     }
 }
