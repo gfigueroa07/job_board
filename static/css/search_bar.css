@@ -43,15 +43,20 @@
 
 @media(max-width: 600px){
     .search-wrapper {
-    width: 80%;
+    width: auto;
     padding-top: 10px;
+    }
+
+    .home-container {
+        max-width: fit-content;
+        width: auto;
     }
 
 }
 
 @media(max-width: 400px){
     .search-wrapper {
-    width: 80%;
+    width: auto;
     padding-top: 10px;
     }
 
