@@ -1,8 +1,11 @@
 {% load static %}
+
 {% block extra_css %}
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="{% static 'auth/auth.css' %}">
 <link rel="stylesheet" href="{% static 'auth/create_profile.css' %}">
 {% endblock %}
+
 {% block content %}
 <div class="page-center">
     <div class="form-box">
@@ -21,13 +24,7 @@
                     class="profile-preview"
                 >
                 <!-- Hidden actual input (Django still uses this) -->
-                <input 
-                    type="file"
-                    name="{{ form.profile_picture.name }}"
-                    id="{{ form.profile_picture.id_for_label }}"
-                    accept="image/*"
-                    style="display: none;"
-                >
+                {{ form.profile_picture }}
                 <!-- Custom upload button -->
                 <label for="{{ form.profile_picture.id_for_label }}" class="upload-btn">
                     Upload Profile Picture

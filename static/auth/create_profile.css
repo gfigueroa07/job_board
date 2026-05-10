@@ -1,11 +1,14 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
 
 .page-center {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 90vh;
+    min-height: 100vh;
     background-color: #f8f9fa;
-    padding-top: 2rem;
 }
 
 .form-box {
@@ -15,7 +18,6 @@
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.432);
     width: 100%;
     max-width: 400px;
-    height: 100%;
 }
 
 .form-box h2 {
@@ -146,4 +148,17 @@ button[type="submit"]:hover {
     margin-left: 0.5rem;
     cursor: pointer;
     font-weight: bold;
+}
+
+#id_profile_picture {
+    position: absolute;
+    left: -9999px;
+}
+
+
+@media (max-width: 600px) {
+    .form-box {
+        width: 80%;
+        height: auto;
+    }
 }
