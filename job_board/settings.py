@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os, dj_database_url
+import os, dj_database_url, cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -68,6 +68,7 @@ TEMPLATES = [
         'DIRS': [
                     BASE_DIR / 'job_board' / 'templates',
                     BASE_DIR / 'users' / 'templates',
+                    
             ],
         
         'APP_DIRS': True,
