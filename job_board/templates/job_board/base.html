@@ -14,8 +14,8 @@
             <a href='{% url 'home' %}' class='logo'>Hustlr</a>
             <div class='nav-right'>
             {% if user.is_authenticated and user.profile %}
-                <a href="{% url 'inbox' %}">✉ ({{ unread_message_count }})</a>
-                <a href="{% url 'notifications' %}">🕭 ({{ unread_notification_count }})</a>
+                <a href="{% url 'inbox' %}">✉ {{ unread_message_count }}</a>
+                <a href="{% url 'notifications' %}">🕭 {{ unread_notification_count }}</a>
                 <a href="{% url 'profile_detail' user.profile.id %}">👤</a>
             {% else %}
             <div class='login'>

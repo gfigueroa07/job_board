@@ -41,17 +41,40 @@
     background-color: #0073b19f;
 }
 
-@media(max-width: 600px){
+@media (max-width: 600px){
+
     .search-wrapper {
-    width: auto;
-    padding-top: 10px;
+        width: 100%;
+        padding-top: 10px;
+        padding-inline: 10px;
+        box-sizing: border-box;
     }
 
     .home-container {
-        max-width: fit-content;
-        width: auto;
+        width: 100%;
     }
 
+    .search-bar-box {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .search-bar-box input[type="text"] {
+        flex: 2;
+        min-width: 0;
+    }
+
+    .search-bar-box select {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .search-bar-box button {
+        flex: 0.8;
+        min-width: 0;
+    }
 }
 
 @media(max-width: 400px){
