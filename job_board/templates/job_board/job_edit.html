@@ -1,12 +1,12 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
-{% block content %}
+
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/job_details.css' %}">
 {% endblock %}
 
-
+{% block content %}
 <div class="page-container">
     <h1 class="page-title">Edit Job</h1>
     <div class="job-card">
@@ -20,15 +20,14 @@
             </div>
             <hr>
             <div class="form-group">
-                <label for="{{ form.price.id_for_label }}">Price</label>
-                <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
+                <p>Price: ${{ job.price|floatformat:2 }}</p>
                 {{ form.price.errors }}
             </div>
             <hr>
             <div class="form-group">
                 <label for="{{ form.description.id_for_label }}">Description</label>
-                {{ form.description }}
-                {{ form.description.errors }}
+                {{ job.description }}
+                {{ job.description.errors }}
             </div>
             <hr>
             <input type="file" name="images" multiple>
