@@ -6,10 +6,10 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 class ProfileForm(forms.ModelForm):
-    location = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Location'}),
-        required=False
-    )
+    # location = forms.CharField(
+    #     widget=forms.TextInput(attrs={'placeholder': 'Location'}),
+    #     required=False
+    # )
     description = forms.CharField(
         widget=forms.Textarea(attrs={'placeholder': 'Write a short bio...'}),
         required=False
@@ -18,7 +18,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'location',
+            # 'location',
             'profile_picture',
             'description',
             'skills',
@@ -53,11 +53,11 @@ class UserProfileCreationForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
     )
 
-    location = forms.CharField(
-        max_length=20,
-        required=False,
-        widget=forms.TextInput(attrs={'placeholder': 'Location'})
-    )
+    # location = forms.CharField(
+    #     max_length=20,
+    #     required=False,
+    #     widget=forms.TextInput(attrs={'placeholder': 'Location'})
+    # )
 
     description = forms.CharField(
         max_length=250,
@@ -92,7 +92,7 @@ class UserProfileCreationForm(UserCreationForm):
 
         profile, created = Profile.objects.get_or_create(user=user)
 
-        profile.location = self.cleaned_data.get('location')
+        # profile.location = self.cleaned_data.get('location')
         profile.description = self.cleaned_data.get('description')
         profile.skills = self.cleaned_data.get('skills')
 
@@ -132,7 +132,7 @@ class JobDetailsForm(forms.ModelForm):
         fields = [
             'title',
             'description',
-            'due_date',
+            # 'due_date',
         ]
     def clean_title(self):
         title = self.cleaned_data['title']
@@ -147,8 +147,8 @@ class JobCreateForm(forms.ModelForm):
             'price',
             'title',
             'description',
-            'due_date',
-            'category',
+            # 'due_date',
+            'category'
         ]
         widgets = {
             'description': forms.Textarea(attrs={'rows': 4}),

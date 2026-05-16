@@ -1,13 +1,46 @@
 {% extends 'job_board/base.html' %}
+{% load static %}
 {% block content %}
-<h2>Edit Job</h2>
 
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    
-    {{ form.as_p }}
-    <input type="file" name="images" multiple>
-    <button type="submit">Save changes</button>
-</form>
-<p><a href="/">Return to home page</a></p>
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/job_details.css' %}">
+{% endblock %}
+
+
+<div class="page-container">
+    <h1 class="page-title">Edit Job</h1>
+    <div class="job-card">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="{{ form.title.id_for_label }}">Title</label>
+                {{ form.title }}
+                {{ form.title.errors }}
+            </div>
+            <hr>
+            <div class="form-group">
+                <label for="{{ form.price.id_for_label }}">Price</label>
+                <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
+                {{ form.price.errors }}
+            </div>
+            <hr>
+            <div class="form-group">
+                <label for="{{ form.description.id_for_label }}">Description</label>
+                {{ form.description }}
+                {{ form.description.errors }}
+            </div>
+            <hr>
+            <input type="file" name="images" multiple>
+            <button type="submit">Save Changes</button>
+        </form>
+
+        <div class="back-link">
+            <a href="{% url 'job_details' job.id %}">
+                ← Cancel
+            </a>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
