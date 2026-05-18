@@ -12,7 +12,6 @@
     <div class="job-card">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
-
             <div class="form-group">
                 <label for="{{ form.title.id_for_label }}">Title</label>
                 {{ form.title }}
@@ -20,17 +19,28 @@
             </div>
             <hr>
             <div class="form-group">
-                <p>Price: ${{ job.price|floatformat:2 }}</p>
+                <label for="{{ form.price.id_for_label }}">
+                    Price
+                </label>
+                {{ form.price }}
                 {{ form.price.errors }}
             </div>
             <hr>
+            <!-- IMAGES -->
+            <div class="job-images">
+                {% for image in images %}
+                    <img src="{{ image.image.url }}">
+                {% endfor %}
+            </div>
+            <input type="file" name="images" multiple>
+            <hr>
+            
             <div class="form-group">
                 <label for="{{ form.description.id_for_label }}">Description</label>
-                {{ job.description }}
-                {{ job.description.errors }}
+                {{ form.description }}
+                {{ form.description.errors }}
             </div>
             <hr>
-            <input type="file" name="images" multiple>
             <button type="submit">Save Changes</button>
         </form>
 

@@ -133,7 +133,12 @@ class JobDetailsForm(forms.ModelForm):
             'title',
             'description',
             # 'due_date',
+            'price',
         ]
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 4}),
+            'price': forms.NumberInput(attrs={'step': 0.01}),
+        }
     def clean_title(self):
         title = self.cleaned_data['title']
         if len(title) < 5:
