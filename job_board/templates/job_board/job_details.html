@@ -56,12 +56,14 @@
                 {% if not application %}
                     <a href="{% url 'job_apply' job.id %}">Apply</a>
                 {% else %}
-                    {{ application.status }}
+                    <span class="status-badge status-{{ application.status|lower }}">
+                        {{ application.status|title }}
+                    </span>
                 {% endif %}
                 <a href="{% url 'report_create' 'job' job.id %}?next={{ request.path }}">Report</a>            {% endif %}
             {% if conversation %}
                 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-                <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
+                    <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
                 {% endif %}
             {% endif %}
         </div>

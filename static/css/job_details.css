@@ -25,6 +25,29 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
+.job-card input,
+.job-card textarea,
+.job-card select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.job-card textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+/* FIXED TEXTAREA SIZE */
+.job-card textarea {
+    height: 180px;
+    resize: none; /* prevents dragging */
+}
+
 /* HEADER */
 .job-header {
     display: flex;
@@ -33,9 +56,13 @@ body {
 }
 
 .form-group {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
 }
 
 .job-title {
@@ -56,6 +83,11 @@ body {
 .status-badge.status-pending { background: gray; }
 .status-badge.status-closed { background: gray; }
 .status-badge.status-completed { background: gray; }
+
+/* Application Status */ 
+.status-badge.status-pending { background: gray; }
+.status-badge.status-accepted { background: green; }
+.status-badge.status-rejected { background: #d9534f; }
 
 /* INFO */
 .job-info {
@@ -81,6 +113,30 @@ body {
     border-radius: 6px;
 }
 
+.job-images {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.image-box {
+    width: 30%;
+    text-align: center;
+}
+
+.image-box img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+.delete-check {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+}
 /* SECTION */
 .job-section h3 {
     margin-bottom: 10px;
@@ -202,6 +258,18 @@ hr {
     margin: 10px;
 }
 
+.action-buttons span {
+    color: white;
+    border: none;
+    padding: 6px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s;
+    height: 100%;
+    margin: 10px;
+}
+
 .action-buttons a:hover {
     background-color: #0073b19f;
 }
@@ -218,7 +286,7 @@ hr {
 
 .action-buttons .message {
     padding: 6px 6px;
-    background-color: rgb(174, 174, 174);
+    background-color: #0073b1;
     align-items: right;
 }
 

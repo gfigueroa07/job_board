@@ -29,12 +29,17 @@
             <!-- IMAGES -->
             <div class="job-images">
                 {% for image in images %}
-                    <img src="{{ image.image.url }}">
+                    <div class="image-box">
+                        <img src="{{ image.image.url }}">
+                        <label class="delete-check">
+                            Delete
+                            <input type="checkbox" name="delete_images" value="{{ image.id }}">
+                        </label>
+                    </div>
                 {% endfor %}
             </div>
             <input type="file" name="images" multiple>
             <hr>
-            
             <div class="form-group">
                 <label for="{{ form.description.id_for_label }}">Description</label>
                 {{ form.description }}
