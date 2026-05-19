@@ -41,7 +41,7 @@
             <input type="file" name="images" multiple>
             <hr>
             <div class="form-group">
-                <label for="{{ form.description.id_for_label }}">Description</label>
+                <label for="{{ form.description.id_for_label }}">Job Description</label>
                 {{ form.description }}
                 {{ form.description.errors }}
             </div>
@@ -56,5 +56,21 @@
         </div>
 
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("id_description");
+
+            function autoResize() {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            }
+
+            textarea.addEventListener("input", autoResize);
+
+            autoResize(); // resize on page load
+        });
+    </script>
 </div>
+
+
 {% endblock %}

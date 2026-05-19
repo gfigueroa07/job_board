@@ -136,6 +136,7 @@ class JobDetailsForm(forms.ModelForm):
             'price',
         ]
         widgets = {
+            'title': forms.TextInput(),
             'description': forms.Textarea(attrs={'rows': 4}),
             'price': forms.NumberInput(attrs={'step': 0.01}),
         }
@@ -156,6 +157,7 @@ class JobCreateForm(forms.ModelForm):
             'category'
         ]
         widgets = {
+            'title': forms.Textarea(attrs={'rows': 1}),
             'description': forms.Textarea(attrs={'rows': 4}),
             'price': forms.NumberInput(attrs={'step': 0.01}),
         }

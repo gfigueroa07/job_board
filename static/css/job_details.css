@@ -39,13 +39,18 @@ body {
 
 .job-card textarea {
     min-height: 150px;
-    resize: vertical;
+    resize: none;
 }
 
-/* FIXED TEXTAREA SIZE */
-.job-card textarea {
-    height: 180px;
-    resize: none; /* prevents dragging */
+#id_title {
+    padding: 4px 8px;
+    font-size: 16px;
+}
+
+#id_description {
+    overflow: hidden;
+    resize: none;
+    min-height: 120px;
 }
 
 /* HEADER */
