@@ -85,8 +85,8 @@
             <a href="{% url 'reviews' profile.id %}">Reviews</a>
             {% if profile != request.user.profile %}
                 <a href="{% url 'review_create' profile.id %}">Leave a review</a>
-                <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            {% endif %}
-
+                <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            
+            {% endif %}
         </div>
     </div>
     <script>
