@@ -29,7 +29,7 @@
                             {{ review.review_written }}
                         </a>
                         <p class='rating'>Rating: {{ review.rating }}/5</p>
-                        <small class='date'>{{review.created_at}}</small>
+                        <small class='date'>{{review.created_at|timesince }} ago</small>
                     </div>
                     <!-- 3 DOT MENU (OWNER CONTROLS) -->
                     <div class="profile-menu">
@@ -39,22 +39,25 @@
                                 <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            
                             {% endif %}
                             <a href="{% url 'review_edit' review.id %}">Edit Review</a>
-                            <a class='delete-review 'href="{% url 'review_delete' review.id %}">Delete Review</a>
+                            <form method="post" action="{% url 'review_delete' review.id %}">
+                                {% csrf_token %}
+                                <button type="submit">Delete</button>
+                            </form>
                         </div>
                     </div>
                 </div>
                 <div class='review-content'>
                     <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
                 </div>
-                <div class='review-actions'>
+                {% comment %} <div class='review-actions'>
                     {% if review.review_written == request.user.profile %}
                         <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
                         <form method="post" action="{% url 'review_delete' review.id %}">
-                        {% csrf_token %}
-                        <button type="submit">Delete</button>
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
                         </form>
                     {% endif %}
-                </div>
+                </div> {% endcomment %}
             </div>
         {% endfor %}
     {% else %}
