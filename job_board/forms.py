@@ -108,15 +108,18 @@ class UserProfileCreationForm(UserCreationForm):
         return user
         
 class ProfileEditForm(forms.ModelForm):
-    def clean_profile_name(self):
-        profile_name = self.cleaned_data['profile_name']
-        if Profile.objects.filter(profile_name=profile_name).exists():
-            raise forms.ValidationError(
-                'This profile already exists.'
-            )
-        if len(profile_name) < 5:
-            raise ValidationError("Title too short")   
-        return profile_name  
+    # def clean_profile_name(self):
+    #     profile_name = self.cleaned_data.get('profile_name')
+
+    #     if Profile.objects.filter(profile_name=profile_name)\
+    #         .exclude(pk=self.instance.pk)\
+    #         .exists():
+    #         raise forms.ValidationError("This profile already exists.")
+
+    #     if len(profile_name) < 5:
+    #         raise forms.ValidationError("Title too short")
+
+    #     return profile_name
     class Meta:
         model = Profile
         fields = [
@@ -194,14 +197,18 @@ class UserReviewsForm(forms.ModelForm):
         model = Review
         fields = [
             'rating',
-            'images',
+            # 'images',
             'comment',
         ]
         widgets = {
             'rating': forms.NumberInput(attrs={
                 'required': True, 
                 'min': 1, 
-                'max': 5
+                'max': 5,
+                'placeholder': '1-5',
+            }),
+            'comment': forms.Textarea(attrs={
+                'placeholder': 'Share your experience with this user...',
             })
         }
              
