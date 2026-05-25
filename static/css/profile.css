@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     gap: 20px;
 }
 
@@ -22,7 +23,9 @@
 }
 
 .profile-header {
-    width: 80%;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
     height: auto;
     display: flex;
     border: 1px solid #00000067;
@@ -117,20 +120,23 @@
 
 /* Description */
 .profile-section {
-    width: 80%;
+    width: 100%;
+    max-width: 900px;
+    margin: 10 auto;
     height: auto;
     display: flex;
     flex-direction: column;
     border: 1px solid #00000067;
     background-color: #fffdfd97;
-    border-radius: 6px;
+    border-radius: 6px;     
     transition: box-shadow 0.2s;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
     position: relative;
     max-height: none;
-    align-items: center;
+    align-items: stretch;
     gap: 15px;
+    align-self: stretch;
 }
 
 .profile-section h3 {
@@ -184,6 +190,13 @@
     background-color: rgba(153, 49, 49, 0.731);
 }
 
+.profile-picture-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
 .profile-preview {
     width: 120px;
     height: 120px;
@@ -193,11 +206,35 @@
     border: 2px solid #ccc;
 }
 
-form input[type="text"], form select {
-    padding: 8px;
-    margin-right: 10px;
+.profile-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.profile-section input,
+.profile-section textarea,
+.profile-section select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.profile-section textarea {
+    min-height: 150px;
+    resize: none;
+}
+
+.save-changes {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-size: 16px;
 }
 
 @media (max-width: 480px) {

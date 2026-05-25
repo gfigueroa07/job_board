@@ -128,7 +128,14 @@ class ProfileEditForm(forms.ModelForm):
             'skills',
             'resume',
         ]
-              
+        widgets = {
+            'description': forms.Textarea(attrs={
+                'rows': 4,
+                'maxlength': 250,
+                'class': 'auto-resize',
+            }),
+        }   
+          
 class JobDetailsForm(forms.ModelForm):
     class Meta:
         model = JobListing

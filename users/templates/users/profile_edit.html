@@ -14,7 +14,7 @@
 
         <!-- HEADER -->
         <div class="profile-header">
-            <div class="form-group">
+            <div class="profile-left">
                 <div class="form-field profile-picture-field">
                     <img 
                         id="profilePreview" 
@@ -27,46 +27,42 @@
                     <!-- Custom upload button -->
                 </div>
 
-                <div class="form-group">
+                <div class="profile-info">
                     <h1>{{ profile.user }}</h1>
                 </div>
             </div>
         </div>
 
         <!-- DESCRIPTION -->
-        <div class="form-group">
+        <div class="profile-section">
             <label for="{{ form.description.id_for_label }}">Description</label>
             {{ form.description }}
             {{ form.description.errors }}
         </div>
 
         <!-- SKILLS -->
-        <div class="form-group">
+        <div class="profile-section">
             <label for="{{ form.skills.id_for_label}}">Skills</label>
             {{ form.skills }}
             {{ form.skills.errors}}
         </div>
-        <button type="submit">Save Changes</button>
+        <button type="submit" class='save-changes'>Save Changes</button>
     </form>
 </div>
 
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        const menu = document.querySelector(".menu-dropdown");
-        const menuBtn = document.querySelector(".menu-btn");
-        const exitBtn = document.getElementById("exit-btn");
+            const textarea = document.getElementById("id_description");
 
-        menuBtn.addEventListener("click", function () {
-            console.log("Menu click");
-            menu.classList.toggle("active");
-        });
+            function autoResize() {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            }
 
-        exitBtn.addEventListener("click", function () {
-            console.log("Exit click");
-            menu.classList.remove("active");
+            textarea.addEventListener("input", autoResize);
+
+            autoResize(); // resize on page load
         });
-    });
 </script>
 
-</div>
 {% endblock %}
