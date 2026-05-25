@@ -52,26 +52,32 @@ def job_details(request, job_id):
         'conversation': conversation,
         'images': images
     })
-    
+
+@login_required
 def job_list(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Login before posting a job.')
         return redirect('login')
     if request.method == 'POST':
-        job_form = JobCreateForm(request.POST, request.FILES)
-        job = job_form.save(commit=False)
-        job.profile = request.user.profile
-        images = request.FILES.getlist('images')
-        if len(images) > 3:
-            messages.error(request, "Can't post more than 3 images.")
-            for img in images:
-                JobImage.objects.create(job=job, image=img)
-        job.save()
-        return redirect('job_page')
+        form = JobCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            images = request.FILES.getlist('images')
+            if len(images) > 3:
+                messages.error(request, "Can't post more than 3 images.")
+            else:
+                job = form.save(commit=False)
+                job.profile = request.user.profile
+                job.save()
+                for img in images:
+                    JobImage.objects.create(job=job, image=img)
+                messages.success(request, 'Job posted successfully.')
+                return redirect('job_page')
     else:
-        job_form = JobCreateForm()
-    return render(request, 'job_board/job_list.html', {'job_form' : job_form})
-
+        form = JobCreateForm()
+    return render(request, 'job_board/job_list.html', {
+        'form': form
+    })
+    
 @login_required
 def job_edit(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)

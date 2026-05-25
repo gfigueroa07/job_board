@@ -25,11 +25,12 @@
     background-color: #fffdfd97;
     border-radius: 6px;
     transition: box-shadow 0.2s;
+    box-sizing: border-box;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
     position: relative;
     max-height: none;
-    margin: 20px;
+    margin: 20px auto;
 }
 
 .reviewer-info {
@@ -43,7 +44,7 @@
     object-fit: cover;
 }
 
-.profile-menu {
+.review-menu {
     position: absolute;
     right: 40px;
     align-items: center;
@@ -68,11 +69,14 @@
     right: 0;
     top: 40px;
     width: 180px;
-    height: auto;
     display: none;
     flex-direction: column;
     padding: 10px;
+    background-color: #f1f1f1;
     border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    z-index: 100;
 }
 
 .menu-dropdown.active {

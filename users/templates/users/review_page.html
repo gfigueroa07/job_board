@@ -32,17 +32,18 @@
                         <small class='date'>{{review.created_at|timesince }} ago</small>
                     </div>
                     <!-- 3 DOT MENU (OWNER CONTROLS) -->
-                    <div class="profile-menu">
+                    <div class="review-menu">
                         <button class="menu-btn">...</button>
                         <div class="menu-dropdown">
                             {% if review.review_written != request.user.profile %}
-                                <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            
+                                <a href="{% url 'review_report' review.id %}?next={{ request.path }}">Report</a>            
+                            {% elif review.review_written == request.user.profile %}
+                                <a href="{% url 'review_edit' review.id %}">Edit Review</a>
+                                <form method="post" action="{% url 'review_delete' review.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Delete</button>
+                                </form>
                             {% endif %}
-                            <a href="{% url 'review_edit' review.id %}">Edit Review</a>
-                            <form method="post" action="{% url 'review_delete' review.id %}">
-                                {% csrf_token %}
-                                <button type="submit">Delete</button>
-                            </form>
                         </div>
                     </div>
                 </div>
@@ -65,17 +66,13 @@
     {% endif %}
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const menu = document.querySelector(".menu-dropdown");
-            const menuBtn = document.querySelector(".menu-btn");
-            const exitBtn = document.getElementById("exit-btn");
-            menuBtn.addEventListener("click", function () {
-                console.log("Menu click");
-                menu.classList.toggle("active");
-            });
-
-            exitBtn.addEventListener("click", function () {
-                console.log("Exit click");
-                menu.classList.remove("active");
+            const menuButtons = document.querySelectorAll(".menu-btn");
+            menuButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const dropdown =
+                        button.parentElement.querySelector(".menu-dropdown");
+                    dropdown.classList.toggle("active");
+                });
             });
         });
     </script>

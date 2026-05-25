@@ -29,20 +29,21 @@ class JobListing(models.Model):
         ('closed', 'Closed'),
     ]
     job_category = [
-        ('landscaping','Landscaping'),
-        ('cleaning','Cleaning'),
-        ('garbage_removal','Garbage Removal'),
-        ('automotive','Automotive'),
-        ('handyman','Handyman'),
-        ('other','Other'),
+        ('landscaping', 'Landscaping'),
+        ('cleaning', 'Cleaning'),
+        ('moving', 'Moving & Hauling'),
+        ('automotive', 'Automotive'),
+        ('handyman', 'Handyman'),
+        ('delivery', 'Delivery'),
+        ('other', 'Other'),
     ]
-    category = models.CharField(max_length=50, choices=job_category, default='Other')
+    category = models.CharField(max_length=50, choices=job_category, default='other')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
     price = models.FloatField(blank=False, default=0.0)
-    title = models.TextField(max_length=20)
-    description = models.CharField(max_length=800, blank=False)
+    title = models.CharField(max_length=50)
+    description = models.TextField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
-    status = models.CharField(max_length=10, choices=job_status, default='Open')
+    status = models.CharField(max_length=10, choices=job_status, default='open')
     due_date = models.TextField(max_length=20, blank=True, null=True)
     
     def __str__(self):

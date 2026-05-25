@@ -157,9 +157,22 @@ class JobCreateForm(forms.ModelForm):
             'category'
         ]
         widgets = {
-            'title': forms.Textarea(attrs={'rows': 1}),
-            'description': forms.Textarea(attrs={'rows': 4}),
-            'price': forms.NumberInput(attrs={'step': 0.01}),
+            'title': forms.TextInput(attrs={
+                'maxlength': 50,
+                'placeholder': 'Need lawn mowing',
+            }),
+            
+            'description': forms.Textarea(attrs={
+                'rows': 4,
+                'maxlength': 800,
+                'placeholder': 'Describe the job, tools needed, etc.'
+            }),
+            
+            'price': forms.NumberInput(attrs={
+                'step': 0.01,
+                'placeholder': '50.00',
+                'min': 1,
+            }),
         }
 
 class JobApplicationForm(forms.ModelForm):
