@@ -4,20 +4,13 @@ body {
     color: #333;
 }
 
-/* PAGE */
+/* LAYOUT */
 .page-container {
     max-width: 900px;
     margin: 40px auto;
     padding: 20px;
 }
 
-.page-title {
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 20px;
-}
-
-/* CARD */
 .job-card {
     background: white;
     border-radius: 10px;
@@ -25,40 +18,34 @@ body {
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* HEADER */
-.job-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+/* FORMS */
+.job-card input,
+.job-card textarea,
+.job-card select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    box-sizing: border-box;
+    margin-top: 8px;
+}
+
+.job-card textarea {
+    min-height: 150px;
+    resize: none;
+}
+
+/* TYPOGRAPHY */
+.page-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 20px;
 }
 
 .job-title {
     font-size: 28px;
     font-weight: bold;
-}
-
-/* STATUS */
-.status-badge {
-    color: white;
-    padding: 6px 14px;
-    border-radius: 8px;
-    font-size: 14px;
-}
-
-/* Job status */
-.status-badge.status-open { background: green; }
-.status-badge.status-pending { background: gray; }
-.status-badge.status-closed { background: gray; }
-.status-badge.status-completed { background: gray; }
-
-/* INFO */
-.job-info {
-    text-align: center;
-    font-size: 18px;
-}
-
-.job-info p {
-    margin: 8px 0;
 }
 
 /* IMAGES */
@@ -75,38 +62,43 @@ body {
     border-radius: 6px;
 }
 
-/* SECTION */
-.job-section h3 {
-    margin-bottom: 10px;
-}
-
-.job-section p {
-    line-height: 1.6;
-}
-
-/* POSTED BY */
-.posted-by {
+.job-images {
     display: flex;
-    align-items: center;
-    gap: 10px;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
-.profile {
-    width: 35px;
-    height: 35px;
-    border-radius: 50%;
+.image-box {
+    width: 30%;
+    text-align: center;
+}
+
+.image-box img {
+    width: 100%;
+    height: 180px;
     object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
 
-.view-profile {
-    margin-left: 5px;
-    color: #2a6edb;
-    text-decoration: none;
+/* STATUS */
+.status-badge {
+    color: white;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 14px;
 }
 
-.view-profile:hover {
-    text-decoration: underline;
-}
+/* Job status */
+.status-badge.status-open { background: green; }
+.status-badge.status-pending { background: gray; }
+.status-badge.status-closed { background: gray; }
+.status-badge.status-completed { background: gray; }
+
+/* Application Status */ 
+.status-badge.status-pending { background: gray; }
+.status-badge.status-accepted { background: green; }
+.status-badge.status-rejected { background: #d9534f; }
 
 /* BUTTONS */
 .action-buttons {
@@ -142,6 +134,84 @@ body {
 
 .btn:hover {
     opacity: 0.9;
+}
+
+
+
+#id_title {
+    padding: 4px 8px;
+    font-size: 16px;
+}
+
+#id_description {
+    overflow: hidden;
+    resize: none;
+    min-height: 120px;
+}
+
+/* HEADER */
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+/* INFO */
+.job-info {
+    text-align: center;
+    font-size: 18px;
+}
+
+.job-info p {
+    margin: 8px 0;
+}
+
+.delete-check {
+    display: block;
+    margin-top: 8px;
+    font-size: 14px;
+}
+/* SECTION */
+.job-section h3 {
+    margin-bottom: 10px;
+}
+
+.job-section p {
+    line-height: 1.6;
+}
+
+/* POSTED BY */
+.posted-by {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile {
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.view-profile {
+    margin-left: 5px;
+    color: #2a6edb;
+    text-decoration: none;
+}
+
+.view-profile:hover {
+    text-decoration: underline;
 }
 
 /* OWNER LINKS */
@@ -196,6 +266,18 @@ hr {
     margin: 10px;
 }
 
+.action-buttons span {
+    color: white;
+    border: none;
+    padding: 6px 6px;
+    border-radius: 4px;
+    font-weight: bold;
+    text-decoration: none;
+    transition: background 0.2s;
+    height: 100%;
+    margin: 10px;
+}
+
 .action-buttons a:hover {
     background-color: #0073b19f;
 }
@@ -212,7 +294,7 @@ hr {
 
 .action-buttons .message {
     padding: 6px 6px;
-    background-color: rgb(174, 174, 174);
+    background-color: #0073b1;
     align-items: right;
 }
 

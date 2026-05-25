@@ -3,15 +3,11 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/job_details.css' %}">
 {% endblock %}
-{% block content %}  
-<body>
-
+{% block content %}
+  
 <div class="page-container">
-
     <h1 class="page-title">Job Details</h1>
-
     <div class="job-card">
-
         <!-- HEADER -->
         <div class="job-header">
             <h2 class="job-title">{{ job.title }}</h2>
@@ -19,9 +15,7 @@
                 {{ job.status|title }}
             </span>
         </div>
-
         <hr>
-
         <!-- PRICE + DUE -->
         <div class="job-info">
             <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
@@ -29,59 +23,50 @@
                 <p><strong>Due By:</strong> {{ job.due_date }}</p>
             {% endif %}
         </div>
-
         <hr>
-
         <!-- IMAGES -->
         <div class="job-images">
             {% for image in images %}
-                <img src="{{ image.image.url }}">
+                <img src="{{ image.image.url }}">   
             {% endfor %}
         </div>
-
         <hr>
-
         <!-- DESCRIPTION -->
         <div class="job-section">
             <h3>Job Description</h3>
             <p>{{ job.description }}</p>
         </div>
-
         <hr>
-
         <!-- POSTED BY -->
         <div class="posted-by">
             <span>Posted by:</span>
-
             {% if job.profile.profile_picture %}
                 <img class="profile" src="{{ job.profile.profile_picture.url }}">
             {% else %}
                 <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
             {% endif %}
-
             <a href="{% url 'profile_detail' job.profile.id %}">
                 {{ job.profile.user.username }}
             </a>
         </div>
-
         <hr>
-
         <!-- BUTTONS -->
         <div class="action-buttons">
             {% if request.user.profile.id != job.profile.id %}
                 {% if not application %}
                     <a href="{% url 'job_apply' job.id %}">Apply</a>
                 {% else %}
-                    {{ application.status }}
+                    <span class="status-badge status-{{ application.status|lower }}">
+                        {{ application.status|title }}
+                    </span>
                 {% endif %}
                 <a href="{% url 'report_create' 'job' job.id %}?next={{ request.path }}">Report</a>            {% endif %}
             {% if conversation %}
                 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-                <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
+                    <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
                 {% endif %}
             {% endif %}
         </div>
-
         <!-- OWNER LINKS -->
         {% if request.user.profile == job.profile %}
         <div class="owner-links">
@@ -92,15 +77,10 @@
             <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
         </div>
         {% endif %}
-
         <!-- BACK -->
         <div class="back-link">
             <a href="{% url 'job_page' %}">← Back to Job Listings</a>
         </div>
-
     </div>
-
 </div>
-</body>
-</html>
 {% endblock %}

@@ -1,31 +1,80 @@
-<h2>Reviews</h2>
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
-{% if reviews %}
-    {% for review in reviews %}
-        <div class="review">
-            <p>Rating: {{ review.rating }}/5</p>
-            <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
-            <small>
-                Reviewed by <a href="{% url 'profile_detail' review.review_written.id %}">{{ review.review_written.user.username }}</a>
-            </small>
-            <form method="post" action="{% url 'review_report' review.id %}">
-                {% csrf_token %}
-                <a href="{% url 'report_create' 'review' review.id %}?next={{ request.path }}">Report</a>            </form>
-            {% if review.review_written == request.user.profile %}
-                <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
-                <form method="post" action="{% url 'review_delete' review.id %}">
-                {% csrf_token %}
-                <button type="submit">Delete</button>
-                </form>
-            {% endif %}
-            <hr>
-        </div>
-    {% endfor %}
-{% else %}
-    <p>No reviews yet.</p>
-{% endif %}
-<p><a href="/">Return to home page</a></p>
+{% extends 'job_board/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h1 class="page-title">Reviews</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% if reviews %}
+        {% for review in reviews %}
+            <div class="review-card">
+                <div class='review-header'>
+                    <div class='img'>
+                        {% if review.review_written.profile_picture %}
+                            <img class="profile" src="{{ review.review_written.profile_picture.url }}">
+                        {% else %}
+                            <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
+                        {% endif %}
+                    </div>
+                    <div class='reviewer-info'>
+                        <a href="{% url 'profile_detail' review.review_written.id %}">
+                            {{ review.review_written }}
+                        </a>
+                        <p class='rating'>Rating: {{ review.rating }}/5</p>
+                        <small class='date'>{{review.created_at|timesince }} ago</small>
+                    </div>
+                    <!-- 3 DOT MENU (OWNER CONTROLS) -->
+                    <div class="review-menu">
+                        <button class="menu-btn">...</button>
+                        <div class="menu-dropdown">
+                            {% if review.review_written != request.user.profile %}
+                                <a href="{% url 'review_report' review.id %}?next={{ request.path }}">Report</a>            
+                            {% elif review.review_written == request.user.profile %}
+                                <a href="{% url 'review_edit' review.id %}">Edit Review</a>
+                                <form method="post" action="{% url 'review_delete' review.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit">Delete</button>
+                                </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class='review-content'>
+                    <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
+                </div>
+                {% comment %} <div class='review-actions'>
+                    {% if review.review_written == request.user.profile %}
+                        <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
+                        <form method="post" action="{% url 'review_delete' review.id %}">
+                            {% csrf_token %}
+                            <button type="submit">Delete</button>
+                        </form>
+                    {% endif %}
+                </div> {% endcomment %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No reviews yet.</p>
+    {% endif %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const menuButtons = document.querySelectorAll(".menu-btn");
+            menuButtons.forEach((button) => {
+                button.addEventListener("click", function () {
+                    const dropdown =
+                        button.parentElement.querySelector(".menu-dropdown");
+                    dropdown.classList.toggle("active");
+                });
+            });
+        });
+    </script>
+</div>
+{% endblock %}

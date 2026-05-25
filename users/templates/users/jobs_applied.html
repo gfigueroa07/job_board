@@ -17,7 +17,7 @@
             <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
         </div>
     {% empty %}
-        <p>No jobs found</p>
+        <p>You haven't applied to jobs yet.</p>
     {% endfor %}
     <div class="pagination">
         {% if page_obj.has_previous %}

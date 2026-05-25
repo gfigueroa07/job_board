@@ -273,7 +273,6 @@ def user_jobs_applied(request, profile_id):
         'job_count': jobs.count(),
     })
 
-    
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)

@@ -52,26 +52,32 @@ def job_details(request, job_id):
         'conversation': conversation,
         'images': images
     })
-    
+
+@login_required
 def job_list(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Login before posting a job.')
         return redirect('login')
     if request.method == 'POST':
-        job_form = JobCreateForm(request.POST, request.FILES)
-        job = job_form.save(commit=False)
-        job.profile = request.user.profile
-        images = request.FILES.getlist('images')
-        if len(images) > 3:
-            messages.error(request, "Can't post more than 3 images.")
-            for img in images:
-                JobImage.objects.create(job=job, image=img)
-        job.save()
-        return redirect('job_page')
+        form = JobCreateForm(request.POST, request.FILES)
+        if form.is_valid():
+            images = request.FILES.getlist('images')
+            if len(images) > 3:
+                messages.error(request, "Can't post more than 3 images.")
+            else:
+                job = form.save(commit=False)
+                job.profile = request.user.profile
+                job.save()
+                for img in images:
+                    JobImage.objects.create(job=job, image=img)
+                messages.success(request, 'Job posted successfully.')
+                return redirect('job_page')
     else:
-        job_form = JobCreateForm()
-    return render(request, 'job_board/job_list.html', {'job_form' : job_form})
-
+        form = JobCreateForm()
+    return render(request, 'job_board/job_list.html', {
+        'form': form
+    })
+    
 @login_required
 def job_edit(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
@@ -79,20 +85,41 @@ def job_edit(request, job_id):
         return redirect('job_details')
     if request.method == 'POST':
         form = JobDetailsForm(request.POST, request.FILES, instance=job)
-        images = request.FILES.getlist('images')
-        total_images = job.images.count() + len(images)
+
+        # NEW uploaded images
+        new_images = request.FILES.getlist('images')
+
+        # Images selected for deletion
+        delete_ids = request.POST.getlist('delete_images')
+
+        # Delete selected images
+        if delete_ids:
+            JobImage.objects.filter(id__in=delete_ids, job=job).delete()
+
+        # Count AFTER deletion
+        current_count = job.images.count()
+        total_images = current_count + len(new_images)
+
         if total_images > 3:
-            messages.error(request, "You can't have more than 3 images posted per job.")
-            return redirect('job_details', job_id=job.id)
-        elif form.is_valid():
+            messages.error(request, "Maximum 3 images allowed.")
+            return redirect('job_edit', job_id=job.id)
+
+        if form.is_valid():
             form.save()
-            for img in images:
+
+            # Save new uploads
+            for img in new_images:
                 JobImage.objects.create(job=job, image=img)
+
             messages.success(request, "Job updated successfully.")
             return redirect('job_details', job_id=job.id)
     else:
         form = JobDetailsForm(instance=job)
-    return render(request, 'job_board/job_edit.html', {'form': form, 'job': job})
+    return render(request, 'job_board/job_edit.html', {
+        'form': form, 
+        'job': job, 
+        'images': job.images.all(),
+    })
 
 @login_required
 def job_delete(request, job_id):
