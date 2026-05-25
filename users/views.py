@@ -30,15 +30,8 @@ def profile_create(request):
     if request.method == 'POST':
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
-            profile = form.save(commit=False)
-            # 🔑 IMPORTANT: explicitly assign file
-            profile.save()
-            print("SAVED FILE:", profile.profile_picture)  # debug
-            try:
-                print("PATH:", profile.profile_picture.path)
-            except Exception as e:
-                print("PATH ERROR:", e)
-            return redirect('login')
+            profile = form.save()
+            return redirect('profile_detail', profile_id=profile.id) 
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
