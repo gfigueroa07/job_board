@@ -31,6 +31,7 @@
     position: relative;
     max-height: none;
     margin: 20px auto;
+    align-items: center;
 }
 
 .reviewer-info {
@@ -105,4 +106,53 @@
 }
 .review-actions a, button {
     margin: 10px;
+}
+
+/* ONLY affects create/edit form layout */
+.review-form-header,
+.review-form-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+/* Rating input */
+.review-form-header input {
+    width: 80px;
+    max-width: 100%;
+    padding: 8px;
+    margin-top: 8px;
+}
+
+/* Comment textarea */
+.review-form-content textarea {
+    width: 100%;
+    min-height: 120px;
+    padding: 12px;
+    margin-top: 8px;
+    resize: none;
+    overflow-y: hidden;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: 16px;
+}
+
+.review-submit-btn {
+    width: 50%;
+    max-width: 300px;
+    min-width: 180px;
+    padding: 12px 16px;
+    border: none;
+    border-radius: 6px;
+    background-color: #0073b1;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.review-submit-btn:hover {
+    background-color: #0073b19f;
 }

@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 100%;
     gap: 20px;
 }
 
@@ -22,7 +23,9 @@
 }
 
 .profile-header {
-    width: 80%;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
     height: auto;
     display: flex;
     border: 1px solid #00000067;
@@ -38,7 +41,9 @@
     display: flex;
     align-items: center;
     gap: 15px;
-    width: 50%;
+    flex: 1;
+    width: auto;
+    min-width: 0;
 }
 
 .profile {
@@ -95,7 +100,7 @@
 }
 
 .menu-dropdown.active {
-    display: flex;    /* show when clicked */
+    display: flex;
 }
 
 .menu-dropdown a {
@@ -113,26 +118,34 @@
     color: red;
 }
 
-/* Description  */
+/* Description */
 .profile-section {
-    width: 80%;
+    width: 100%;
+    max-width: 900px;
+    margin: 10 auto;
     height: auto;
     display: flex;
     flex-direction: column;
     border: 1px solid #00000067;
     background-color: #fffdfd97;
-    border-radius: 6px;
+    border-radius: 6px;     
     transition: box-shadow 0.2s;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
     position: relative;
     max-height: none;
+    align-items: stretch;
+    gap: 15px;
+    align-self: stretch;
 }
 
 .profile-section h3 {
     border-bottom: 1px solid #00000063;
     color: #0073b1;
     padding: 10px;
+    align-self: flex-start;
+    width: 100%;
+    text-align: left;
 }
 
 .profile-section p {
@@ -146,20 +159,21 @@
 
 .profile-actions {
     display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding-bottom: 20px;
+    margin-top: 15px;
 }
 
 .profile-actions a {
     background-color: #0073b1;
     color: white;
-    border: none;
-    padding: 6px 6px;
+    padding: 6px 12px;
     border-radius: 4px;
-    cursor: pointer;
     font-weight: bold;
     text-decoration: none;
     transition: background 0.2s;
-    height: 100%;
-    margin: 10px;
 }
 
 .profile-actions a:hover {
@@ -174,6 +188,53 @@
 
 .profile-actions .report:hover {
     background-color: rgba(153, 49, 49, 0.731);
+}
+
+.profile-picture-field {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-preview {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%; /* circle like Facebook */
+    margin-bottom: 0.5rem;
+    border: 2px solid #ccc;
+}
+
+.profile-section form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+}
+
+.profile-section input,
+.profile-section textarea,
+.profile-section select {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+.profile-section textarea {
+    min-height: 150px;
+    resize: none;
+}
+
+.save-changes {
+    display: block;
+    margin: 20px auto 0;
+    padding: 10px 25px;
+    border-radius: 6px;
+    font-size: 16px;
 }
 
 @media (max-width: 480px) {
@@ -225,7 +286,6 @@
         margin-top: 10px;
         align-self: flex-end;
     }
-
 }
 
 @media (max-width: 768px) {

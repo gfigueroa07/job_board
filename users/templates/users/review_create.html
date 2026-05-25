@@ -1,8 +1,49 @@
-<h2>Leave a review for {{ profile.user.username }}</h2>
-{% comment %} <input type="number" name="rating" min="1" max="5" step="1"> {% endcomment %}
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Submit review</button>
-</form>
-<p><a href="/">Return to home page</a></p>
+{% extends 'job_board/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/reviews.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="page-container">
+    <h1 class="page-title">Leave a review for {{ profile.user.username }}</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <p>{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}     
+        <div class="review-card">
+            <div class='review-header review-form-header'>
+                <label for='{{ form.rating.id_for_label }}'>Rating</label>
+                {{ form.rating }}
+                {{ form.rating.errors }}
+            </div>
+            <div class='review-content review-form-content'>
+                <label for="{{ form.comment.id_for_label }}">Comment</label>
+                {{ form.comment }}
+                {{ form.comment.errors }}
+            </div>
+            <button type="submit" class="review-submit-btn">Submit Review</button>
+        </div>
+    </form>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const textarea = document.getElementById("id_comment");
+
+            if (!textarea) return;
+
+            function autoResize() {
+                textarea.style.height = "auto";
+                textarea.style.height = textarea.scrollHeight + "px";
+            }
+
+            textarea.addEventListener("input", autoResize);
+
+            autoResize();
+        });
+    </script>
+</div>
+{% endblock %}
