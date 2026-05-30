@@ -8,6 +8,7 @@
 
 html, body {
     height: 100%;
+    width: 100%;
 }
 
 body {
@@ -20,11 +21,22 @@ body {
     margin: 0;
     padding: 0;
     padding-top: 1rem;
+    position: relative;
+}
+
+body.modal-open {
+    overflow: hidden;
 }
 
 main {
     flex: 1;
-    padding: 20px;
+}
+
+.page-container {
+    width: 100%;
+    max-width: 1200px;
+    margin-inline: auto;
+    padding-inline: 20px;
 }
 
 /* Header & navigation */
@@ -194,31 +206,12 @@ form button[type="submit"] {
     padding: 8px 15px;
 }
 
-/* Search form */
-/* .category {
-    text-align: center;
-}
-
-form input[type="text"], form select {
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-form button[type="submit"] {
-    padding: 8px 15px;
-} */
-
 /* Responsive */
 @media (max-width: 600px) {
     /* #menu-toggle {
         display: block;
     } */
 
-    .body {
-        max-width: fit-content;
-    }
 
     .nav-links {
         display: none;

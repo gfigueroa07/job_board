@@ -4,6 +4,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/report.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -85,24 +86,49 @@
             <a href="{% url 'reviews' profile.id %}">Reviews</a>
             {% if profile != request.user.profile %}
                 <a href="{% url 'review_create' profile.id %}">Leave a review</a>
-                <a href="{% url 'report_create' 'profile' profile.id %}?next={{ request.path }}">Report</a>            
+                <button class="report" onclick="openReport('profile', '{{ profile.id }}')">
+                    Report
+                </button>     
             {% endif %}
         </div>
     </div>
     <script>
         document.addEventListener("DOMContentLoaded", function () {
-            const menu = document.querySelector(".menu-dropdown");
-            const menuBtn = document.querySelector(".menu-btn");
-            const exitBtn = document.getElementById("exit-btn");
-            menuBtn.addEventListener("click", function () {
-                console.log("Menu click");
-                menu.classList.toggle("active");
+
+            const overlay = document.getElementById("reportModal");
+            const box = overlay.querySelector(".report-box");
+
+            window.openReport = function () {
+                overlay.classList.add("active");
+                document.body.style.overflow = "hidden";
+            };
+
+            window.closeReport = function () {
+                overlay.classList.remove("active");
+                document.body.style.overflow = "";
+            };
+
+            overlay.addEventListener("click", function (e) {
+                if (!box.contains(e.target)) {
+                    closeReport();
+                }
             });
 
-            exitBtn.addEventListener("click", function () {
-                console.log("Exit click");
-                menu.classList.remove("active");
+            document.addEventListener("keydown", function (e) {
+                if (e.key === "Escape") {
+                    closeReport();
+                }
             });
+            // profile menu (FIX missing exitBtn bug)
+            const menu = document.querySelector(".menu-dropdown");
+            const menuBtn = document.querySelector(".menu-btn");
+
+            if (menuBtn && menu) {
+                menuBtn.addEventListener("click", function () {
+                    menu.classList.toggle("active");
+                });
+            }
+
         });
     </script>
 </div>

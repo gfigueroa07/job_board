@@ -1,19 +1,17 @@
 {% load static %}
-
 <link rel="stylesheet" href="{% static 'css/report.css' %}">
 
-<div class="report-overlay">
-    <div class="report-box">
-
+<div class="report-overlay" id="reportOverlay">
+    <div class="report-box" id="reportBox">
         <h3>Report</h3>
 
         <form method="POST">
             {% csrf_token %}
             {{ form }}
-
             <input type="hidden" name="next" value="{{ next }}">
             <button type="submit">Submit</button>
         </form>
 
+        <button type="button" class="btn-cancel" onclick="closeReport()">← Cancel</button>
     </div>
 </div>

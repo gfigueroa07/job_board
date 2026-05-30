@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from job_board .forms import ProfileForm, ProfileEditForm
+from job_board .forms import ProfileForm, ProfileEditForm, ReportForm
 from django.urls import path
 from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm
@@ -33,24 +33,32 @@ def job_page(request):
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
+    form = ReportForm(initial={
+        'reported_job': job
+    })
     images = job.images.all()  # Related name used
     application = None
     conversation = None
     if request.user.is_authenticated and job.status == 'pending':
-        conversation = Conversation.objects.filter(job=job).filter(
+        conversation = Conversation.objects.filter(
+            job=job,
+            ).filter(
             Q(applicant=request.user) |
             Q(job__profile__user=request.user)
         ).first()
-    if hasattr(request.user, 'profile'):
+    if request.user.is_authenticated:
         application = JobApplication.objects.filter(
             job=job,
             applicant=request.user.profile
         ).first()
+    else:
+        application = None
     return render(request, 'job_board/job_details.html', {
         'job': job,
         'application': application,
         'conversation': conversation,
-        'images': images
+        'images': images,
+        'form': form
     })
 
 @login_required

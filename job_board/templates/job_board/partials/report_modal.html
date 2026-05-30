@@ -1,0 +1,16 @@
+<div class="report-overlay" id="reportModal">
+    <div class="report-box">
+        <h3>Report</h3>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <input type="hidden" name="content_type" id="reportType">
+            <input type="hidden" name="object_id" id="reportId">
+            <input type="hidden" name="next" value="{{ request.path }}">
+            <div class="form-actions">
+                <button type="submit">Submit</button>
+                <button type="button" class="btn-cancel" onclick="closeReport()">← Cancel</button>
+            </div>
+            </form>
+    </div>
+</div>  

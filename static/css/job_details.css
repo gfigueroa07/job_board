@@ -6,9 +6,10 @@ body {
 
 /* LAYOUT */
 .page-container {
+    width: 100%;
     max-width: 900px;
     margin: 40px auto;
-    padding: 20px;
+    padding-inline: 20px;
 }
 
 .job-card {
@@ -52,33 +53,15 @@ body {
 .job-images {
     display: flex;
     gap: 15px;
-    justify-content: space-between;
-}
-
-.job-images img {
-    width: 32%;
-    height: 180px;
-    object-fit: cover;
-    border-radius: 6px;
-}
-
-.job-images {
-    display: flex;
-    gap: 15px;
     flex-wrap: wrap;
 }
 
-.image-box {
-    width: 30%;
-    text-align: center;
-}
-
-.image-box img {
+.job-images img {
+    flex: 1 1 250px;
     width: 100%;
+    max-width: 100%;
     height: 180px;
     object-fit: cover;
-    border-radius: 6px;
-    border: 1px solid #ccc;
 }
 
 /* STATUS */
@@ -100,13 +83,6 @@ body {
 .status-badge.status-accepted { background: green; }
 .status-badge.status-rejected { background: #d9534f; }
 
-/* BUTTONS */
-.action-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
-}
 
 .btn {
     padding: 12px 20px;
@@ -154,6 +130,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
 }
 
 .form-group {
@@ -195,6 +173,7 @@ body {
     display: flex;
     align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
 }
 
 .profile {
@@ -252,6 +231,14 @@ hr {
     margin: 20px 0;
 }
 
+/* BUTTONS */
+.action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
 .action-buttons a {
     background-color: #0073b1;
     color: white;
@@ -283,7 +270,7 @@ hr {
 }
 
 .action-buttons .report {
-    padding: 6px 6px;
+    width: 100%;
     background-color: rgb(153, 49, 49);
     align-items: right;
 }
@@ -298,3 +285,33 @@ hr {
     align-items: right;
 }
 
+@media (max-width: 600px) {
+    .job-images img {
+        flex-basis: 100%;
+    }
+
+    .page-title {
+        font-size: 26px;
+    }
+
+    .job-title {
+        font-size: 22px;
+    }
+
+    .job-card {
+        padding: 15px;
+    }
+
+    .job-header,
+    .posted-by,
+    .action-buttons {
+        align-items: flex-start;
+    }
+
+    .action-buttons a,
+    .action-buttons span {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+    }
+}

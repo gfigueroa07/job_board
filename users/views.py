@@ -38,12 +38,16 @@ def profile_create(request):
 
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = Review.objects.filter(review_received=profile)
+    reviews = Review.objects.filter(review_received=profile)   
     average_rating = Review.objects.filter(review_received=profile).aggregate(Avg('rating'))['rating__avg']
+    form = ReportForm(initial={
+        'reported_user': profile.id
+    })
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
-        'average_rating': average_rating,   
+        'average_rating': average_rating,
+        'form': form,   
     })
 
 def profile_edit(request):

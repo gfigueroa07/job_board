@@ -3,7 +3,8 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    gap: 20px;
+    padding-inline: 20px;
+    box-sizing: border-box;
 }
 
 .messages p {
@@ -58,16 +59,17 @@
 .profile-info {
     padding: 10px;
     text-align: left;
+    min-width: 0;
+}
+
+.profile-info h1 {
+    overflow-wrap: break-word;
 }
 
 .profile-menu {
     position: absolute;
-    right: 40px;
-    background-color: rgba(240, 240, 240, 0.95);
-    backdrop-filter: blur(6px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    border-radius: 8px;
-    z-index: 100;
+    top: 20px;
+    right: 20px;
 }
 
 .menu-btn {
@@ -122,7 +124,7 @@
 .profile-section {
     width: 100%;
     max-width: 900px;
-    margin: 10 auto;
+    margin: 10px auto;
     height: auto;
     display: flex;
     flex-direction: column;
@@ -132,11 +134,8 @@
     transition: box-shadow 0.2s;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     padding: 20px;
-    position: relative;
     max-height: none;
-    align-items: stretch;
     gap: 15px;
-    align-self: stretch;
 }
 
 .profile-section h3 {
@@ -240,8 +239,12 @@
 @media (max-width: 480px) {
     .profile-header,
     .profile-section {
-        width: 95%;
-        padding: 10px;
+        width: 100%;
+        max-width: 900px;
+    }
+
+    .profile-actions {
+        flex-direction: column;
     }
 
     .profile-actions a {
@@ -257,8 +260,8 @@
 @media (max-width: 600px) {
     .profile-header,
     .profile-section {
-        width: 95%;
-        height: auto;
+        width: 100%;
+        max-width: 900px;
     }
 
     .profile-header {
@@ -291,7 +294,8 @@
 @media (max-width: 768px) {
     .profile-header,
     .profile-section {
-        width: 95%;
+        width: 100%;
+        max-width: 900px;
     }
 
     .profile-header {
@@ -308,7 +312,7 @@
         flex-direction: column;
     }
 
-    .profile-actions a {
+    .profile-actions a{
         width: 100%;
         text-align: center;
     }
