@@ -15,6 +15,7 @@ from datetime import timedelta
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
+from .context_processors import handle_report_submission
 
 
 # Create your views here.
@@ -43,6 +44,8 @@ def profile_detail(request, profile_id):
     form = ReportForm(initial={
         'reported_user': profile.id
     })
+    if handle_report_submission(request):
+        return redirect(request.path)
     return render(request, 'users/profile_detail.html', {
         'profile': profile,
         'reviews': reviews,
@@ -273,7 +276,16 @@ def user_jobs_applied(request, profile_id):
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)
-    return render(request, 'users/review_page.html', {'profile': profile, 'reviews': reviews})
+    form = ReportForm(initial={
+        'reported_review': reviews
+        })
+    if handle_report_submission(request):
+        return redirect(request.path)
+    return render(request, 'users/review_page.html', {
+        'profile': profile, 
+        'reviews': reviews,
+        'form': form
+        })
 
 @login_required
 def review_create(request, profile_id):
@@ -334,7 +346,9 @@ def review_delete(request, review_id):
 def review_report(request, review_id):
     review  = get_object_or_404(Review, id=review_id)
     if request.method == 'POST':
-        form = ReportForm(request.POST)
+        form = ReportForm(initial={
+        'reported_review': review
+        })
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None
@@ -364,7 +378,9 @@ def review_report(request, review_id):
 def conversation_detail(request, convo_id):
 
     conversation = get_object_or_404(Conversation, id=convo_id)
-
+    form = ReportForm(initial={
+        'reported_conversation': conversation
+        })
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
         return redirect('job_details', conversation.job.id)
 
@@ -389,16 +405,20 @@ def conversation_detail(request, convo_id):
     convo_messages = conversation.messages.all().order_by('timestamp')
 
     convo_messages.filter(is_read=False).exclude(sender=request.user).update(is_read=True)
-
+    if handle_report_submission(request):
+        return redirect(request.path)
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'convo_messages': convo_messages,
+        'form': form
     })
     
 def conversation_report(request, convo_id):
     conversation  = get_object_or_404(Conversation, id=convo_id)
     if request.method == 'POST':
-        form = ReportForm(request.POST)
+        form = ReportForm(initial={
+        'reported_conversation': conversation
+        })
         if form.is_valid():
             reporter_profile = None
             reporter_ip = None

@@ -103,16 +103,9 @@ body {
     color: #333;
 }
 
-.report {
-    background: #d9534f;
-    color: white;
-}
-
 .btn:hover {
     opacity: 0.9;
 }
-
-
 
 #id_title {
     padding: 4px 8px;
@@ -270,7 +263,7 @@ hr {
 }
 
 .action-buttons .report {
-    width: 100%;
+    
     background-color: rgb(153, 49, 49);
     align-items: right;
 }

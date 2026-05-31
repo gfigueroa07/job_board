@@ -99,6 +99,8 @@
             const box = overlay.querySelector(".report-box");
 
             window.openReport = function () {
+                document.getElementById("reportType").value = contentType;
+                document.getElementById("reportId").value = objectId;
                 overlay.classList.add("active");
                 document.body.style.overflow = "hidden";
             };
