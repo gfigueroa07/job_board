@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="page-container">
+<div class="reviews-container">
     <h1 class="page-title">Reviews</h1>
     {% if messages %}
         {% for message in messages %}
@@ -36,7 +36,9 @@
                         <button class="menu-btn">...</button>
                         <div class="menu-dropdown">
                             {% if review.review_written != request.user.profile %}
-                                <a href="{% url 'review_report' review.id %}?next={{ request.path }}">Report</a>            
+                                <button class="report" onclick="openReport('review_report', '{{ review.id }}')">
+                                    Report
+                                </button>              
                             {% elif review.review_written == request.user.profile %}
                                 <a href="{% url 'review_edit' review.id %}">Edit Review</a>
                                 <form method="post" action="{% url 'review_delete' review.id %}">

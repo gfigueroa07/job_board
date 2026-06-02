@@ -13,6 +13,19 @@ form button[type="submit"] {
     padding: 8px 15px;
 }
 
+.page-container {
+    width: min(100%, 1200px);
+    margin-inline: auto;
+    padding-inline: 20px;
+}
+
+.job-count {
+    margin: 15px 0 20px;
+    color: #666;
+    font-size: 0.95rem;
+    text-align: center;
+}
+
 /* Job listing cards */
 div.job-card {
     border: 1px solid #ddd;
@@ -48,8 +61,23 @@ div.job-card p {
     font-size: 14px;
 }
 
+.pagination, h1 {
+    text-align: center;
+}
 /* Job status */
 .status-badge.status-open { background: green; }
 .status-badge.status-pending { background: gray; }
 .status-badge.status-closed { background: gray; }
 .status-badge.status-completed { background: gray; }
+
+@media (max-width: 600px) {
+    .search-form {
+        flex-direction: column;
+    }
+
+    .search-form input,
+    .search-form select,
+    .search-form button {
+        width: 100%;
+    }
+}

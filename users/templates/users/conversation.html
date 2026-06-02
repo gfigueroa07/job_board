@@ -74,7 +74,10 @@
                 </div>
             </div>
             {% if request.user == conversation.job.profile.user or request.user == conversation.applicant %}
-                <a href="{% url 'report_create' 'conversation' conversation.id %}?next={{ request.path }}">Report</a>            {% endif %}
+                <button class="report" onclick="openReport('conversation_details', '{{ convo.id }}')">
+                    Report
+                </button>               
+            {% endif %}
         </div>
 
         <!-- MESSAGES -->

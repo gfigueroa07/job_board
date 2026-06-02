@@ -6,6 +6,7 @@
     <title>Hustlr</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="{% static 'css/report.css' %}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -50,7 +51,10 @@
         </nav>
     </header>
     <main>
+        {% include "job_board/partials/report_modal.html" %}
+        <div class="page-container">
     {% block content %}{% endblock %}
+        </div>
     </main>
     <footer>
         <p>&copy; <span id="year"></span> Hustlr. All Rights Reserved.</p>
@@ -102,6 +106,25 @@
         // run immediately on load
         updateCounts();
 
+        function openReport(type, id) {
+            const modal = document.getElementById("reportModal");
+            const typeInput = document.getElementById("reportType");
+            const idInput = document.getElementById("reportId");
+
+            if (!modal || !typeInput || !idInput) return;
+
+            typeInput.value = type;
+            idInput.value = id;
+
+            modal.classList.add("active");
+        }
+
+        function closeReport() {
+            const modal = document.getElementById("reportModal");
+            if (!modal) return;
+
+            modal.classList.remove("active");
+        }
     </script>
 </body>
 </html>

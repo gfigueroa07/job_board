@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content%}
     <h1>Jobs Listed</h1>
-    <p>{{ job_count }} jobs found</p>
+    <p class="job-count">{{ job_count }} job(s) found</p>
     {% for job in page_obj %}
         <div class="job-card">
             <h3>
