@@ -11,10 +11,11 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
-import os, dj_database_url, cloudinary
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
+import os, dj_database_url, cloudinary, cloudinary.uploader, cloudinary.api
+from dotenv import load_dotenv
+
+load_dotenv()
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,19 +25,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-p7w(3%dne&#1$#-piwpd!9j&8d0h*ji+k6@o2gmswt*v!0b0g1'
-# SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable is missing")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-
-# DEBUG = os.environ.get("DEBUG", "False").lower() == "True"
-DEBUG = os.environ.get("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = os.environ.get(
     "ALLOWED_HOSTS",
     "127.0.0.1,localhost,.onrender.com"
 ).split(",")
-print("DEBUG:", DEBUG)
 # Application definition
 
 INSTALLED_APPS = [
@@ -92,7 +90,6 @@ WSGI_APPLICATION = 'job_board.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
 
 STORAGES = {
     "default": {
@@ -101,6 +98,16 @@ STORAGES = {
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
     },
+}
+
+DEBUG = os.environ.get("DEBUG", "False") == "True"
+
+DATABASE_URL = os.environ.get("DATABASE_URL")
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
+    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
 }
 
 if DATABASE_URL:
@@ -120,22 +127,6 @@ else:
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators
 
-
-CLOUDINARY_STORAGE = {
-    'CLOUD_NAME': os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    'API_KEY': os.environ.get('CLOUDINARY_API_KEY'),
-    'API_SECRET': os.environ.get('CLOUDINARY_API_SECRET'),
-}
-
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-)
-
-print("CLOUD NAME:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
-print("API KEY:", os.environ.get("CLOUDINARY_API_KEY"))
-print("API SECRET EXISTS:", bool(os.environ.get("CLOUDINARY_API_SECRET")))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
