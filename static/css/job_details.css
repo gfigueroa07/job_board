@@ -232,18 +232,39 @@ hr {
     flex-wrap: wrap;
 }
 
-.action-buttons a {
+.action-buttons a,
+.action-buttons button {
     background-color: #0073b1;
     color: white;
-    border: none;
+    display: inline-block;
     padding: 6px 6px;
     border-radius: 4px;
+    border: none;
     cursor: pointer;
     font-weight: bold;
+    font-size: 16px;
+    font-family: inherit;
     text-decoration: none;
-    transition: background 0.2s;
-    height: 100%;
     margin: 10px;
+    box-sizing: border-box;
+}
+
+.action-buttons a {
+    background: #0073b1;
+    color: white;
+}
+
+.action-buttons .report {
+    background: rgb(153, 49, 49);
+    color: white;
+}
+
+.action-buttons .report:hover {
+    background-color: rgba(153, 49, 49, 0.731);
+}
+
+.action-buttons a:hover {
+    background-color: #0073b19f;
 }
 
 .action-buttons span {
@@ -256,20 +277,6 @@ hr {
     transition: background 0.2s;
     height: 100%;
     margin: 10px;
-}
-
-.action-buttons a:hover {
-    background-color: #0073b19f;
-}
-
-.action-buttons .report {
-    
-    background-color: rgb(153, 49, 49);
-    align-items: right;
-}
-
-.action-buttons .report:hover {
-    background-color: rgba(153, 49, 49, 0.731);
 }
 
 .action-buttons .message {
@@ -302,7 +309,8 @@ hr {
     }
 
     .action-buttons a,
-    .action-buttons span {
+    .action-buttons span,
+    .action-buttons .report {
         width: 100%;
         text-align: center;
         margin: 0;
