@@ -93,7 +93,15 @@ WSGI_APPLICATION = 'job_board.wsgi.application'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
 DATABASE_URL = os.environ.get("DATABASE_URL")
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 if DATABASE_URL:
     DATABASES = {
@@ -125,6 +133,9 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
 )
 
+print("CLOUD NAME:", os.environ.get("CLOUDINARY_CLOUD_NAME"))
+print("API KEY:", os.environ.get("CLOUDINARY_API_KEY"))
+print("API SECRET EXISTS:", bool(os.environ.get("CLOUDINARY_API_SECRET")))
 
 AUTH_PASSWORD_VALIDATORS = [
     {
