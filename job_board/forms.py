@@ -105,7 +105,7 @@ class UserProfileCreationForm(UserCreationForm):
         if commit:
             profile.save()
 
-        return user
+        return profile
         
 class ProfileEditForm(forms.ModelForm):
     # def clean_profile_name(self):
