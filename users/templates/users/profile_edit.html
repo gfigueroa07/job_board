@@ -16,19 +16,25 @@
         <div class="profile-header">
             <div class="profile-left">
                 <div class="form-field profile-picture-field">
-                    <img 
+                    {% if profile.profile_picture %}
+                        <img id='profilePreview'
+                        src="{{ profile.profile_picture.url }}"
+                        alt="Profile Preview"
+                        class="profile-preview">
+                    {% else %}
+                        <img 
                         id="profilePreview" 
                         src="{% static 'images/default_profile.png' %}" 
                         alt="Profile Preview" 
-                        class="profile-preview"
-                    >
+                        class="profile-preview">
+                    {% endif %}
                     <!-- Hidden actual input (Django still uses this) -->
                     {{ form.profile_picture }}
+                    
                     <!-- Custom upload button -->
-                </div>
-
-                <div class="profile-info">
-                    <h1>{{ profile.user }}</h1>
+                    <label for="{{ form.profile_picture.id_for_label }}" class="upload-btn">
+                        Upload Profile Picture
+                    </label>
                 </div>
             </div>
         </div>
@@ -51,6 +57,21 @@
 </div>
 
 <script>
+const profileInput = document.getElementById("id_profile_picture");    
+const profilePreview = document.getElementById("profilePreview");
+
+profileInput.addEventListener("change", function() {
+    const file = this.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.addEventListener("load", function() {
+            profilePreview.src = reader.result; // update preview image
+        });
+        reader.readAsDataURL(file);
+    } else {
+        profilePreview.src = "{% static 'images/default_profile.png' %}";
+    }
+});
     document.addEventListener("DOMContentLoaded", function () {
             const textarea = document.getElementById("id_description");
 
@@ -63,6 +84,7 @@
 
             autoResize(); // resize on page load
         });
+        
 </script>
 
 {% endblock %}

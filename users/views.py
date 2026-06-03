@@ -67,7 +67,10 @@ def profile_edit(request):
             return redirect('profile_detail', profile_id=profile.id)
     else:
         form = ProfileEditForm(instance=profile)
-    return render(request, 'users/profile_edit.html', {'form': form})
+    return render(request, 'users/profile_edit.html', {
+        'form': form,
+        'profile': profile,
+        })
 
 @login_required
 def profile_delete(request, user_id):

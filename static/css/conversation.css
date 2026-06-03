@@ -5,8 +5,8 @@
     background: #f4f6f9;
     font-family: Arial, sans-serif;
     margin-top: 50px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
 }
-
 
 /* LIST TAKES REMAINING SPACE */
 .conversation-list {

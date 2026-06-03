@@ -95,7 +95,7 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
 
-            const overlay = document.getElementById("reportModal");
+            {% comment %} const overlay = document.getElementById("reportModal");
             const box = overlay.querySelector(".report-box");
 
             window.openReport = function () {
@@ -120,7 +120,7 @@
                 if (e.key === "Escape") {
                     closeReport();
                 }
-            });
+            }); {% endcomment %}
             // profile menu (FIX missing exitBtn bug)
             const menu = document.querySelector(".menu-dropdown");
             const menuBtn = document.querySelector(".menu-btn");

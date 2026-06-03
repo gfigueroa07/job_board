@@ -56,14 +56,15 @@
             {% if request.user.profile.id != job.profile.id %}
                 {% if not application %}
                     <a href="{% url 'job_apply' job.id %}">Apply</a>
-                    <button class="report" onclick="openReport('job', '{{ job.id }}')">
-                        Report
-                    </button>  
                 {% else %}
                     <span class="status-badge status-{{ application.status|lower }}">
                         {{ application.status|title }}
                     </span>
+                    
                 {% endif %}
+                <button class="report" onclick="openReport('job', '{{ job.id }}')">
+                    Report
+                </button>
             {% endif %}
             {% if conversation %}
                 {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
