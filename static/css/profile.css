@@ -40,6 +40,7 @@
 
 .profile-left {
     display: flex;
+    flex-direction: column;
     align-items: center;
     gap: 15px;
     flex: 1;
@@ -194,6 +195,7 @@
     flex-direction: column;
     align-items: center;
     gap: 10px;
+    
 }
 
 .profile-preview {
@@ -210,6 +212,7 @@
     flex-direction: column;
     gap: 15px;
     width: 100%;
+    align-items: center;
 }
 
 .profile-section input,
@@ -260,9 +263,9 @@
     .profile-section {
         width: 100%;
         max-width: 900px;
-    }
+    } 
 
-    .profile-actions {
+   .profile-actions {
         flex-direction: column;
     }
 
@@ -274,7 +277,7 @@
         width: 100px;
         height: 100px;
     }
-}
+} 
 
 @media (max-width: 600px) {
     .profile-header,
@@ -318,13 +321,12 @@
     }
 
     .profile-header {
-        display: flex;
+        display: column;
         align-items: center;
     }
 
     .profile-left {
         flex-direction: column;
-        width: 100%;
     }
 
     .profile-actions {
