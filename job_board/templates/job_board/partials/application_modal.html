@@ -1,0 +1,14 @@
+
+<div class="apply-overlay" id="applyModal">
+    <div class="apply-box">
+        <h3>{{ job.title }}</h3>
+        <form method+"POST">
+            {% csrf_token %}
+            {{ form }}
+            <div class="form-actions">
+                <button type="submit">Submit</button>
+                <button type="button" class="btn-cancel" onclick="closeReport()">← Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
