@@ -100,8 +100,7 @@ STORAGES = {
     },
 }
 
-DEBUG = os.environ.get("DEBUG", "False") == "True"
-
+DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 CLOUDINARY_STORAGE = {
