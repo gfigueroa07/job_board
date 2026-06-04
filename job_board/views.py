@@ -34,7 +34,7 @@ def job_page(request):
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     form = ReportForm(initial={
-        'reported_job': job
+        'reported_job': job.id
     })
     images = job.images.all()  # Related name used
     application = None

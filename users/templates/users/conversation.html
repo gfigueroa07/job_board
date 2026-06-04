@@ -74,7 +74,7 @@
                 </div>
             </div>
             {% if request.user == conversation.job.profile.user or request.user == conversation.applicant %}
-                <button class="report" onclick="openReport('conversation_details', '{{ convo.id }}')">
+                <button class="report" onclick="openReport('conversation', '{{ conversation.id }}')">
                     Report
                 </button>               
             {% endif %}

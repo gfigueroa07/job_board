@@ -1,4 +1,4 @@
-from .models import Conversation, Message, Notifications
+from .models import Conversation, Message, Notifications, Profile, Review, JobListing
 from django.http import JsonResponse
 from django.contrib import messages
 from job_board.forms import ReportForm
@@ -30,26 +30,33 @@ def unread_counts(request):
 def handle_report_submission(request):
     if request.method != "POST":
         return None
-
+    
     form = ReportForm(request.POST)
-
+    
     if not form.is_valid():
         return None
-
     report = form.save(commit=False)
-
     if request.user.is_authenticated:
         report.reporter = request.user
-
-    content_type = ContentType.objects.get(
-        model=request.POST.get("content_type")
-    )
-
-    report.content_type = content_type
-    report.object_id = int(request.POST.get("object_id"))
-
+    ALLOWED_MODELS = {
+        "profile": Profile,
+        "job": JobListing,
+        "review": Review,
+        "conversation": Conversation,
+    }
+    
+    model_name = request.POST.get("content_type")
+    model_class = ALLOWED_MODELS.get(model_name)
+    if model_class is None:
+        return None
+    try:
+        object_id = int(request.POST.get("object_id"))
+    except (TypeError, ValueError):
+        return None
+    if not model_class.objects.filter(pk=object_id).exists():
+        return None
+    report.content_type = ContentType.objects.get_for_model(model_class)
+    report.object_id = object_id
     report.save()
-
     messages.success(request, "Report submitted.")
-
     return report

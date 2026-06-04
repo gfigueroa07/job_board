@@ -278,15 +278,15 @@ def user_jobs_applied(request, profile_id):
 
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    reviews = Review.objects.filter(review_received=profile)
+    review = Review.objects.filter(review_received=profile)
     form = ReportForm(initial={
-        'reported_review': reviews
+        'reported_review': review
         })
     if handle_report_submission(request):
         return redirect(request.path)
     return render(request, 'users/review_page.html', {
         'profile': profile, 
-        'reviews': reviews,
+        'reviews': review,
         'form': form
         })
 

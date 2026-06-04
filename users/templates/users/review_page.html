@@ -36,7 +36,7 @@
                         <button class="menu-btn">...</button>
                         <div class="menu-dropdown">
                             {% if review.review_written != request.user.profile %}
-                                <button class="report" onclick="openReport('review_report', '{{ review.id }}')">
+                                <button class="report" onclick="openReport('review', '{{ review.id }}')">
                                     Report
                                 </button>              
                             {% elif review.review_written == request.user.profile %}
