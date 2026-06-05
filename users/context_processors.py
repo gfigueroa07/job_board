@@ -1,9 +1,10 @@
-from .models import Conversation, Message, Notifications, Profile, Review, JobListing
+from .models import Conversation, Message, Notifications, Profile, Review, JobListing, JobApplication
 from django.http import JsonResponse
 from django.contrib import messages
-from job_board.forms import ReportForm
+from job_board.forms import ReportForm, JobApplicationForm
 from django.contrib.contenttypes.models import ContentType
-
+from django.shortcuts import render, redirect, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 def unread_messages(request):
     if request.user.is_authenticated:

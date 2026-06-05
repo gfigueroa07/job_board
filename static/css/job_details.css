@@ -310,7 +310,8 @@ hr {
 
     .action-buttons a,
     .action-buttons span,
-    .action-buttons .report {
+    .action-buttons .report,
+    .action-buttons .apply {
         width: 100%;
         text-align: center;
         margin: 0;

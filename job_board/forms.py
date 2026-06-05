@@ -187,10 +187,17 @@ class JobCreateForm(forms.ModelForm):
 
 class JobApplicationForm(forms.ModelForm):
     class Meta:
+        model = JobApplication
         fields = [
             'message',
         ]
-        model = JobApplication
+        widgets = {
+            'message': forms.Textarea(attrs={
+                'rows': 4,
+                'maxlength': 250,
+                'placeholder': 'Optional details...'
+            })
+        }
         
 class UserReviewsForm(forms.ModelForm):
     def clean_rating(self):

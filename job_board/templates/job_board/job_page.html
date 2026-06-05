@@ -9,7 +9,9 @@
 {% block content%}
     <div class="page-container">
         <h1>Browse Jobs</h1>
-        {% include 'job_board/partials/search_bar.html' %}
+        <div class='search-wrapper'>
+            {% include 'job_board/partials/search_bar.html' %}
+        </div>
         <p class="job-count">{{ job_count }} jobs found</p>
         {% for job in page_obj %}
             <div class="job-card">

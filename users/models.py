@@ -12,7 +12,7 @@ class Profile(models.Model):
     user = models.OneToOneField(User, max_length=15, on_delete=models.CASCADE)
     profile_name = models.CharField(max_length=30, unique=False, blank=True, null=False)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    location = models.TextField(max_length=20, blank=False)
+    location = models.CharField(max_length=20, blank=False)
     description = models.TextField(max_length=250, blank=True)
     avg_review_score = models.FloatField(default=0.0)
     skills = models.TextField(blank=True)
@@ -44,7 +44,7 @@ class JobListing(models.Model):
     description = models.TextField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=10, choices=job_status, default='open')
-    due_date = models.TextField(max_length=20, blank=True, null=True)
+    due_date = models.CharField(max_length=20, blank=True, null=True)
     
     def __str__(self):
         return self.title

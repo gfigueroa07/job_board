@@ -2,12 +2,6 @@
 .category {
     text-align: center;
 }
-form input[type="text"], form select {
-    padding: 8px;
-    margin-right: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
 
 form button[type="submit"] {
     padding: 8px 15px;
@@ -17,6 +11,12 @@ form button[type="submit"] {
     width: min(100%, 1200px);
     margin-inline: auto;
     padding-inline: 20px;
+
+}
+
+.search-wrapper {
+    display: flex;
+    justify-content: center;
 }
 
 .job-count {

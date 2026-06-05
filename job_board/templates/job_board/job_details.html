@@ -3,9 +3,10 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/job_details.css' %}">
+<link rel="stylesheet" href="{% static 'auth/apply.css' %}">
 {% endblock %}
-
 {% block content %}
+{% include "job_board/partials/application_modal.html" %}
 <div class="page-container">
     <h1 class="page-title">Job Details</h1>
     <div class="job-card">
@@ -55,12 +56,13 @@
         <div class="action-buttons">
             {% if request.user.profile.id != job.profile.id %}
                 {% if not application %}
-                    <a href="{% url 'job_apply' job.id %}">Apply</a>
+                    <button type='button' class="apply" onclick="applyJob()">
+                        Apply
+                    </button>
                 {% else %}
                     <span class="status-badge status-{{ application.status|lower }}">
                         {{ application.status|title }}
                     </span>
-                    
                 {% endif %}
                 <button class="report" onclick="openReport('job', '{{ job.id }}')">
                     Report
@@ -87,5 +89,19 @@
             <a href="{% url 'job_page' %}">← Back to Job Listings</a>
         </div>
     </div>
+    <script>
+        function applyJob() {
+            const modal = document.getElementById("applyModal");
+            if (!modal) {
+                return;
+            }
+            modal.classList.add("active");
+        }
+        function closeApply() {
+            const modal = document.getElementById("applyModal");
+            if (!modal) return;
+            modal.classList.remove("active");
+        }
+    </script>
 </div>
 {% endblock %}

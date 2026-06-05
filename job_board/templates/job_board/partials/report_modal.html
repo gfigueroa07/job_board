@@ -3,7 +3,7 @@
         <h3>Report</h3>
         <form method="POST">
             {% csrf_token %}
-            {{ form }}
+            {{ report_form }}
             <input type="hidden" name="content_type" id="reportType">
             <input type="hidden" name="object_id" id="reportId">
             <input type="hidden" name="next" value="{{ request.path }}">

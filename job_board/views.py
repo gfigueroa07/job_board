@@ -3,7 +3,7 @@ from django.contrib import messages
 from job_board .forms import ProfileForm, ProfileEditForm, ReportForm
 from django.urls import path
 from django.http import HttpResponse
-from .forms import JobDetailsForm, JobCreateForm
+from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm
 from users.models import JobListing, JobApplication, Conversation, Profile, JobImage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
@@ -22,6 +22,7 @@ def job_page(request):
         jobs = jobs.filter(title__icontains=query)
     if category and category.strip():  
         jobs = jobs.filter(category=category)
+    jobs = jobs.order_by('-id')
     paginator = Paginator(jobs, 10)  # 10  jobs per page
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -33,7 +34,7 @@ def job_page(request):
 
 def job_details(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
-    form = ReportForm(initial={
+    report_form = ReportForm(initial={
         'reported_job': job.id
     })
     images = job.images.all()  # Related name used
@@ -55,12 +56,27 @@ def job_details(request, job_id):
         application = None
     if handle_report_submission(request):
         return redirect(request.path)
+    if request.method == "POST":
+        print("POST RECEIVED")
+        apply_form = JobApplicationForm(request.POST)
+
+        if apply_form.is_valid():
+            application = apply_form.save(commit=False)
+            application.job = job
+            application.applicant = request.user.profile
+            application.save()
+
+            messages.success(request, "Application submitted.")
+            return redirect('job_details', job_id=job.id)
+    else:
+        apply_form = JobApplicationForm()
     return render(request, 'job_board/job_details.html', {
         'job': job,
         'application': application,
         'conversation': conversation,
         'images': images,
-        'form': form
+        'report_form': report_form,
+        'apply_form': apply_form
     })
 
 @login_required

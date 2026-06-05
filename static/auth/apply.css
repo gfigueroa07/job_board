@@ -1,47 +1,62 @@
-.report-overlay {
+.apply-overlay {
     position: fixed;
     inset: 0;
-
-    width: 100vw;
-    height: 100vh;
-
-    display: none;
-
+    display: flex;
     justify-content: center;
     align-items: center;
-    transition: opacity .25s ease, visibility .25s ease;
+
     background: rgba(0,0,0,0.5);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;   /* ⭐ IMPORTANT */
+
+    transition: opacity .25s ease, visibility .25s ease;
+
     z-index: 999999;
     padding-inline: 30px;
 }
 
-.report-overlay.active {
-    display: flex;
+.apply-overlay.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;   /* ⭐ IMPORTANT */
 }
 
-.report-box {
+.apply-box {
     width: 100%;
     max-width: 520px;
     background: white;
     padding: 20px;
     border-radius: 15px;
+
+    transform: translateY(30px) scale(.95);
+    opacity: 0;
+
+    transition: all .25s ease;
 }
 
-.report-box h3 {
+.apply-overlay.active .apply-box {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+}
+
+.apply-box h3 {
     margin-bottom: 15px;
 }
 
-.report-box select,
-.report-box textarea {
+.apply-box textarea {
     width: 100%;
+    min-height: 120px;
     padding: 8px;
     margin-top: 5px;
     margin-bottom: 15px;
     border-radius: 6px;
     border: 1px solid #ccc;
+    resize: none;
 }
 
-.report-actions {
+.apply-actions {
     display: flex;
     justify-content: space-between;
 }
@@ -62,10 +77,6 @@
     color: black;
 }
 
-.btn-cancel:hover {
-    background-color: #bdbcbc;
-}
-
 button, h3 {
     text-align: center;
 }
@@ -78,14 +89,13 @@ button, h3 {
 
 
 @media (max-width: 400px) {
-    .report-box {
+    .apply-box {
         padding: 15px;
     }
 }
 
 @media (max-width: 600px) {
-
-    .report-box {
+    .apply-box {
         width: 100%;
         border-radius: 16px;
     }
