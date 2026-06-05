@@ -55,7 +55,7 @@
         <!-- BUTTONS -->
         <div class="action-buttons">
             {% if request.user.profile.id != job.profile.id %}
-                {% if not application %}
+                {% if not application and request.user.is_authenticated %}
                     <button type='button' class="apply" onclick="applyJob()">
                         Apply
                     </button>

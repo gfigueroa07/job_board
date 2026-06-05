@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*.pyc
 
 # Virtual environments
 venv/
@@ -19,6 +20,8 @@ staticfiles/
 # Environment variables
 .env
 .env.*
+
+!.env.example
 
 # IDEs / editors
 .vscode/
