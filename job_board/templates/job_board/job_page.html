@@ -21,7 +21,7 @@
                 <p>Price: ${{ job.price|floatformat:2 }}</p>
                 <p>Category: {{ job.category }}</p>
                 <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
-                <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
+                <a class="view-job" href="{% url 'job_details' job.id %}">View Job</a>
             </div>
         {% endfor %}
         <div class="pagination">

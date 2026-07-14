@@ -40,9 +40,21 @@ div.job-card:hover {
     box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
-div.job-card h3 a {
+div.job-card h3 {
     color: #0073b1;
     text-decoration: none;
+}
+
+.view-job {
+    display: flex;
+    justify-content: center;
+    align-items: center; /* use this instead of align-content */
+    max-width: fit-content;
+    margin: 0 auto;
+    padding: 6px;
+    border-radius: 6px;
+    background-color: #0073b1;
+    color: white;
 }
 
 div.job-card h3 a:hover {
