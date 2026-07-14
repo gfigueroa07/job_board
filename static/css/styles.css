@@ -109,22 +109,39 @@ button {
 
 /* Sidebar (dropdown) */
 .sidebar {
-    position: absolute;
-    top: 0rem;       /* below navbar */
+    position: fixed;
+    top: 0;       /* below navbar */
     right: 0;
     width: 50%;
     height: 100vh;
     border: 1px solid, black;
     border-radius: 20px;
     background: white;
+    display: flex;
+    transform: translateX(100%);
     transition: transform 0.3s ease;
-    display: none;    /* hidden by default */
     flex-direction: column;
     z-index: 999;
 }
 
 .sidebar.active {
     display: flex;    /* show when clicked */
+    transform: translateX(0);
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5); /* 50% black */
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+    z-index: 998;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
 }
 
 .sidebar li {

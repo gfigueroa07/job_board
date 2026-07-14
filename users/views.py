@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
-from users .models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
+from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
 from django.urls import path
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
@@ -140,45 +140,6 @@ def job_report(request, job_id):
         form = ReportForm()
     return render(request, 'users/report.html', {'form': form, 'job': job})
 
-@login_required
-def job_application(request, job_id):
-    job =  get_object_or_404(JobListing, id=job_id)
-    if request.user.profile == job.profile:
-        messages.error(request, "Can't apply to a job owned by you.")
-        return redirect('job_details', job_id=job.id)
-    already_applied = False
-    if JobApplication.objects.filter(job=job, applicant=request.user.profile).exists():
-        success = False  
-        already_applied = True
-        messages.warning(request, "You have already applied to this job.")
-        return redirect('job_details', job_id=job.id)
-    if request.method == 'POST':
-        form = JobApplicationForm(request.POST)
-        if form.is_valid():
-            application = form.save(commit=False)
-            application.job = job
-            application.applicant = request.user.profile
-            if JobApplication.objects.filter(job=job, applicant=request.user.profile).exists():
-                success = False  
-                already_applied = True
-                messages.warning(request, "You have already applied to this job.")
-                return redirect('job_details', job_id=job.id)
-            Notifications.objects.create(
-                user=job.profile.user,
-                notification_type='application',
-                message=f"{request.user} applied to your job",
-                related_job=job
-            )
-            application.save()
-            success = True
-            return redirect('job_details', job_id=job.id)
-        else:
-            success = False
-    else:
-        form = JobApplicationForm()
-        success = False
-    return render(request, 'users/user_apply.html', {'form': form, 'job': job, 'success': success, 'already_applied': already_applied})
-
 def job_applicants(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     if request.user.profile.id != job.profile.id: 
@@ -310,13 +271,14 @@ def review_create(request, profile_id):
             review = form.save(commit=False)
             review.review_written = request.user.profile
             review.review_received = reviewed_profile
-            print("SAVING REVIEW") #debug test
+            review.save()
             Notifications.objects.create(
             user=review.review_received.user,
             notification_type='review',
             message=f"You received a new review.",
+            related_review=review,
             )
-            review.save()
+            
             return redirect('profile_detail', profile_id=profile_id)
     else:
         form = UserReviewsForm()
@@ -606,3 +568,39 @@ def report_create(request, model_name, object_id):
         'model_name': model_name,
         'next': next_url
     })
+    
+def notification_redirect(request, notification_id):
+    notification = get_object_or_404(
+        Notifications,
+        id=notification_id,
+        user=request.user
+    )
+
+    # Mark as read
+    if not notification.is_read:
+        notification.is_read = True
+        notification.save()
+
+    # Redirect based on notification type
+    if notification.notification_type == "application":
+        if notification.related_job:
+            return redirect(
+                "job_applicants",
+                notification.related_job.id
+            )
+
+    elif notification.notification_type == "review":
+        if notification.related_review:
+            return redirect(
+                "reviews",
+                notification.related_review.review_received.id
+            )
+
+    elif notification.notification_type == "status_update":
+        if notification.related_job:
+            return redirect(
+                "job_details",
+                notification.related_job.id
+            )
+
+    return redirect("notifications")

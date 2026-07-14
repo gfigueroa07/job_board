@@ -4,7 +4,7 @@ from job_board .forms import ProfileForm, ProfileEditForm, ReportForm
 from django.urls import path
 from django.http import HttpResponse
 from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm
-from users.models import JobListing, JobApplication, Conversation, Profile, JobImage
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -57,17 +57,36 @@ def job_details(request, job_id):
     if handle_report_submission(request):
         return redirect(request.path)
     if request.method == "POST":
-        print("POST RECEIVED")
         apply_form = JobApplicationForm(request.POST)
 
         if apply_form.is_valid():
+            if JobApplication.objects.filter(
+                job=job,
+                applicant=request.user.profile
+            ).exists():
+                messages.warning(
+                    request,
+                    "You already applied to this job."
+                )
+                return redirect('job_details', job_id=job.id)
+            
             application = apply_form.save(commit=False)
             application.job = job
             application.applicant = request.user.profile
             application.save()
+        Notifications.objects.create(
+            user=job.profile.user,
+            notification_type='application',
+            message=f"{request.user} applied to your job",
+            related_job=job,
+            related_application=application
+        )
 
-            messages.success(request, "Application submitted.")
-            return redirect('job_details', job_id=job.id)
+        print("Notification created")
+        
+        messages.success(request, "Application submitted.")
+        return redirect('job_details', job_id=job.id)
+    
     else:
         apply_form = JobApplicationForm()
     return render(request, 'job_board/job_details.html', {

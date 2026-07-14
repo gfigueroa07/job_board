@@ -18,35 +18,38 @@
     <div class="notifications-list">
 
         {% for notification in notifications %}
-        <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
+        <a href="{% url 'notification_redirect' notification.id %}"
+            class="notification-link">
+            <div class="notification-item {% if not notification.is_read %}unread{% endif %}">
 
-            <!-- ICON -->
-            <div class="notification-icon">
-                {% if notification.notification_type == 'application' %}
-                    📄
-                {% elif notification.notification_type == 'review' %}
-                    ⭐
-                {% else %}
-                    🔔
-                {% endif %}
-            </div>
+                <!-- ICON -->
+                <div class="notification-icon">
+                    {% if notification.notification_type == 'application' %}
+                        📄
+                    {% elif notification.notification_type == 'review' %}
+                        ⭐
+                    {% else %}
+                        🔔
+                    {% endif %}
+                </div>
 
-            <!-- CONTENT -->
-            <div class="notification-content">
+                <!-- CONTENT -->
+                <div class="notification-content">
 
-                <p class="message">
-                    {{ notification.message }}
-                </p>
+                    <p class="message">
+                        {{ notification.message }}
+                    </p>
 
-                <div class="meta">
-                    <span class="time">
-                        {{ notification.created_at|timesince }} ago
-                    </span>
+                    <div class="meta">
+                        <span class="time">
+                            {{ notification.created_at|timesince }} ago
+                        </span>
+                    </div>
+
                 </div>
 
             </div>
-
-        </div>
+        </a>
         {% empty %}
             <div class="empty">
                 No notifications yet
