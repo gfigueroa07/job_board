@@ -4,11 +4,6 @@
 <link rel="stylesheet" href="{% static 'auth/login.css' %}">
 {% endblock %}
 {% block content %}
-{% if messages %}
-    {% for message in messages %}
-        <p>{{ message }}</p>
-    {% endfor %}
-{% endif %}
 <div class="page-center">
     <div id="logo">
         <a href="{% url 'home' %}" class="logo">Hustlr</a>

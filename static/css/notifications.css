@@ -29,6 +29,12 @@
     gap: 10px;
 }
 
+.notification-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
 /* ITEM */
 .notification-item {
     display: flex;

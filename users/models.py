@@ -127,6 +127,7 @@ class Notifications(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     related_job = models.ForeignKey(JobListing, null=True, blank=True, on_delete=models.CASCADE)
     related_application = models.ForeignKey(JobApplication, null=True, blank=True, on_delete=models.CASCADE)
+    related_review = models.ForeignKey(Review, null=True, blank=True, on_delete=models.CASCADE)
     
 class Feedback(models.Model):
     REPORT_TYPES = (
@@ -173,108 +174,3 @@ class Report(models.Model):
         if obj:
             return f"{obj.__class__.__name__} - {obj}"
         return f"Report #{self.id}"
-    
-# class ProfileReport(models.Model):
-#     reason_choice = [
-#         ('spam','Spam'),
-#         ('scam','Scam/Fraud'),
-#         ('fake','Fake Profile'),
-#         ('harassment','Harassment'),
-#         ('inappropriate','Inappropriate Content'),
-#         ('other','Other'),
-#     ]
-#     report_status = [
-#         ('pending','Pending'),
-#         ('reviewed','Reviewed'),
-#         ('action_taken','Action Taken'),
-#         ('ignored','Ignored'),
-#     ]
-#     reported_profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='reports_against')
-#     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reported_made')
-#     reason = models.CharField(max_length=30, choices=reason_choice)
-#     message = models.TextField(max_length=250, blank=True)
-#     status = models.CharField(max_length=20, choices=report_status, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
-
-#     def __str__(self):
-#         return f"{self.reported_profile} - {self.reason}: {self.status}"       
-
-# class JobReport(models.Model):
-#     reason_choice = [
-#         ('spam','Spam'),
-#         ('scam','Scam/Fraud'),
-#         ('fake','Fake Job'),
-#         ('harassment','Harassment'),
-#         ('inappropriate','Inappropriate Content'),
-#         ('other','Other'),
-#     ]
-#     report_status = [
-#         ('pending','Pending'),
-#         ('reviewed','Reviewed'),
-#         ('action_taken','Action Taken'),
-#         ('ignored','Ignored'),
-#     ]
-    
-#     reported_job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='reports_against')
-#     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reports_made')
-#     reason = models.CharField(max_length=30, choices=reason_choice)
-#     message = models.TextField(max_length=250, blank=True)
-#     status = models.CharField(max_length=20, choices=report_status, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
-
-#     def __str__(self):
-#         return f"{self.reported_job} - {self.reason}: {self.status}"
-     
-# class ConversationReport(models.Model):
-#     reason_choice  = [
-#         ('spam', 'Spam'),
-#         ('scam', 'Scam'),
-#         ('fake', 'Fake'),
-#         ('harassment', 'Harassment'),
-#         ('inappropiate', 'Inappropriate Content'),
-#         ('other', 'Other'), 
-#     ]  
-#     report_status = [
-#         ('pending','Pending'),
-#         ('reviewed','Reviewed'),
-#         ('action_taken','Action Taken'),
-#         ('ignored','Ignored'),
-#     ]
-#     reported_convo = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name='report_against')
-#     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='reporter')
-#     reason = models.CharField(max_length=20, choices=reason_choice)
-#     message = models.TextField(max_length=250, blank=True)
-#     status = models.CharField(max_length=20, choices=report_status, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
-    
-#     def __str__(self):
-#         return f"{self.reported_convo} - {self.reason}: {self.status}"    
-    
-# class ReviewReport(models.Model):
-#     reason_choice = [
-#         ('spam','Spam'),
-#         ('scam','Scam/Fraud'),
-#         ('fake','Fake Review'),
-#         ('harassment','Harassment'),
-#         ('inappropriate','Inappropriate Content'),
-#         ('other','Other'),
-#     ]
-#     report_status = [
-#         ('pending','Pending'),
-#         ('reviewed','Reviewed'),
-#         ('action_taken','Action Taken'),
-#         ('ignored','Ignored'),
-#     ]
-#     reported_review = models.ForeignKey(Review, on_delete=models.CASCADE, related_name='report_against')
-#     reporter_profile = models.ForeignKey(Profile, on_delete=models.SET_NULL, blank=True, null=True, related_name='report_made')
-#     reason = models.CharField(max_length=20, choices=reason_choice)
-#     message = models.TextField(max_length=250, blank=True)
-#     status = models.CharField(max_length=20, choices=report_status, default='pending')
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     reporter_ip = models.GenericIPAddressField(null=True, blank=True)
-    
-#     def __str__(self):
-#         return f"{self.reporter_profile} - {self.reason}: {self.status}"

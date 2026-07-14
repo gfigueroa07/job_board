@@ -24,6 +24,7 @@
             </div>
             {% endif %}
             <button id="menu-btn">☰</button>
+            <div class="sidebar-overlay"></div>
             <ul class="sidebar">
                 <button id="exit-btn">✖</button>
                 {% if user.is_authenticated and user.profile %}
@@ -68,16 +69,45 @@
             const sidebar = document.querySelector(".sidebar");
             const menuBtn = document.getElementById("menu-btn");
             const exitBtn = document.getElementById("exit-btn");
-            menuBtn.addEventListener("click", function () {
-                console.log("Menu click");
+            const overlay = document.querySelector(".sidebar-overlay");
+
+            menuBtn.addEventListener("click", function (event) {
+                event.stopPropagation();
                 sidebar.classList.toggle("active");
             });
 
+            menuBtn.addEventListener("click", function (e) {
+                e.stopPropagation();
+
+                sidebar.classList.add("active");
+                overlay.classList.add("active");
+            });
+
+            function closeSidebar() {
+                sidebar.classList.remove("active");
+                overlay.classList.remove("active");
+            }
+            exitBtn.addEventListener("click", closeSidebar);
+            overlay.addEventListener("click", closeSidebar);
+            
             exitBtn.addEventListener("click", function () {
-                console.log("Exit click");
                 sidebar.classList.remove("active");
             });
+
+            document.addEventListener("click", function (eventy) {
+                const clickedInsideSidebar = sidebar.contains(event.target);
+                const clickedMenuButton = menuBtn.contains(event.target);
+
+                if (
+                    sidebar.classList.contains("active") &&
+                    !clickedInsideSidebar &&
+                    !clickedMenuButton
+                ) {
+                    sidebar.classList.remove("active");
+                }
+            })
         });
+
         document.addEventListener("DOMContentLoaded", function () {
             // Automatically update the copyright year
             document.getElementById('year').textContent = new Date().getFullYear();
@@ -89,6 +119,7 @@
                 slidesPerView: 'auto'
             });
         });
+
         function updateCounts() {
             fetch("/api/unread-count/")
                 .then(res => res.json())
