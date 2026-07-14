@@ -97,8 +97,12 @@
     background-color: #f0f0f0;
 }
 
-.menu-dropdown .delete-user {
-    color: red;
+.menu-dropdown .report {
+    background-color: rgb(153, 49, 49);
+}
+
+.menu-dropdown .report:hover { 
+    background-color: rgba(153, 49, 49, 0.731);
 }
 
 .review-actions {

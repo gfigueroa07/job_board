@@ -108,7 +108,12 @@
 .report {
     font-size: 12px;
     padding: 5px 10px;
-    border-radius: 12px;
+    border-radius: 6px;
+    background-color: rgb(153, 49, 49);
+}
+
+.report:hover {
+    background-color: rgba(153, 49, 49, 0.731);
 }
 
 /* MESSAGES */

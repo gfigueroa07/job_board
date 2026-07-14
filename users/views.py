@@ -342,9 +342,8 @@ def review_report(request, review_id):
 
 @login_required
 def conversation_detail(request, convo_id):
-
     conversation = get_object_or_404(Conversation, id=convo_id)
-    form = ReportForm(initial={
+    report_form = ReportForm(initial={
         'reported_conversation': conversation
         })
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
@@ -376,40 +375,10 @@ def conversation_detail(request, convo_id):
     return render(request, 'users/conversation.html', {
         'conversation': conversation,
         'convo_messages': convo_messages,
-        'form': form
+        'report_form': report_form,
+        
     })
     
-def conversation_report(request, convo_id):
-    conversation  = get_object_or_404(Conversation, id=convo_id)
-    if request.method == 'POST':
-        form = ReportForm(initial={
-        'reported_conversation': conversation
-        })
-        if form.is_valid():
-            reporter_profile = None
-            reporter_ip = None
-            if request.user.is_authenticated:
-                reporter_profile = request.user.profile
-                if Report.objects.filter(reported_convo=conversation, reporter_profile=reporter_profile).exists():
-                    messages.warning(request, "You have already reported this conversation.")
-                    return redirect('conversation_details', convo_id=conversation.id)
-            else:
-                reporter_ip = get_client_ip(request)
-                time_limit = timezone.now() - timedelta(hours=24)
-                if Report.objects.filter(reported_convo=conversation, reporter_ip=reporter_ip, created_at__gte=time_limit).exists():
-                    messages.warning(request, "You have already reported this conversation in the last 24 hours.")
-                    return redirect('conversation_details', convo_id=conversation.id)
-            report = form.save(commit=False)
-            report.reported_convo = conversation
-            report.reporter_profile = reporter_profile
-            report.reporter_ip = reporter_ip
-            report.save()
-            messages.success(request, "Thank you for your report.")
-            return redirect('conversation_details', convo_id=conversation.id)
-    else:
-        form = ReportForm()
-    return render(request, 'users/report.html', {'form': form, 'conversation': conversation})
-
 @login_required
 def inbox(request):
 
