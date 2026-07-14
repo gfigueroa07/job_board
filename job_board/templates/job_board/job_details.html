@@ -29,7 +29,11 @@
         <!-- IMAGES -->
         <div class="job-images">
             {% for image in images %}
-                <img src="{{ image.image.url }}">   
+                <img 
+                src="{{ image.image.url }}"
+                class='job-image'
+                onclick="openImage('{{ image.image.url }}')"
+                >   
             {% endfor %}
         </div>
         <hr>
@@ -89,6 +93,10 @@
             <a href="{% url 'job_page' %}">← Back to Job Listings</a>
         </div>
     </div>
+    <div id="imageModal" class="image-modal" onclick="closeImage()">
+        <span class="close-image">&times;</span>
+        <img id="expandedImage" class="expanded-image">
+    </div>
     <script>
         function applyJob() {
             const modal = document.getElementById("applyModal");
@@ -97,11 +105,25 @@
             }
             modal.classList.add("active");
         }
+
         function closeApply() {
             const modal = document.getElementById("applyModal");
             if (!modal) return;
             modal.classList.remove("active");
         }
+
+        function openImage(imageUrl) {
+            const modal = document.getElementById("imageModal");
+            const image = document.getElementById("expandedImage");
+
+            image.src = imageUrl;
+            modal.classList.add("active");
+        }
+
+        function closeImage() {
+            document.getElementById("imageModal").classList.remove("active");
+        }
+        
     </script>
 </div>
 {% endblock %}
