@@ -8,13 +8,18 @@
 <h1>Jobs applied</h1>
     {% for job in page_obj %}
         <div class="job-card">
-            <h3>
-                <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
-            </h3>
+            <div class="job-header">
+                <h3>
+                    <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
+                </h3>
+                <span class="status-badge status-{{ job.status|lower }}">
+                    {{ job.status|title }}
+                </span>
+            </div>
             <p>Price: ${{ job.price|floatformat:2 }}</p>
             <p>Category: {{ job.category }}</p>
             <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>
-            <a class="button" href="{% url 'job_details' job.id %}">View Job</a>
+            <a class="view-job" href="{% url 'job_details' job.id %}">View Job</a>
         </div>
     {% empty %}
         <p>You haven't applied to jobs yet.</p>

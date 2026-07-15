@@ -45,6 +45,14 @@ div.job-card h3 {
     text-decoration: none;
 }
 
+.job-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
 .view-job {
     display: flex;
     justify-content: center;

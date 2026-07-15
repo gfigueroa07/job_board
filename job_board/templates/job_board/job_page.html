@@ -15,9 +15,14 @@
         <p class="job-count">{{ job_count }} jobs found</p>
         {% for job in page_obj %}
             <div class="job-card">
-                <h3>
-                    <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
-                </h3>
+                <div class="job-header">
+                    <h3>
+                        <a href="{% url 'job_details' job.id %}">{{ job.title }}</a>
+                    </h3>
+                    <span class="status-badge status-{{ job.status|lower }}">
+                        {{ job.status|title }}
+                    </span>
+                </div>
                 <p>Price: ${{ job.price|floatformat:2 }}</p>
                 <p>Category: {{ job.category }}</p>
                 <p>{{ job.description|truncatewords:15|default:"No description provided." }}</p>

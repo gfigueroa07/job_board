@@ -142,7 +142,6 @@ class JobDetailsForm(forms.ModelForm):
         fields = [
             'title',
             'description',
-            # 'due_date',
             'price',
         ]
         widgets = {

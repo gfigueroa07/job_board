@@ -81,11 +81,25 @@
         <!-- OWNER LINKS -->
         {% if request.user.profile == job.profile %}
         <div class="owner-links">
-            <a href="{% url 'job_edit' job.id %}">Edit Job</a>
-            <span>•</span>
-            <a href="{% url 'job_delete' job.id %}">Delete Job</a>
-            <span>•</span>
-            <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            {% if job.status == 'open' %}
+                <a href="{% url 'job_edit' job.id %}">Edit Job</a>
+                <span>•</span>
+                <a href='#'>Close Job</a>              
+                <span>•</span>
+                <a href="{% url 'job_delete' job.id %}">Delete Job</a>
+                <span>•</span>
+                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            {% elif job.status == 'pending' %}
+                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+                <span>•</span>
+                <a href='#'>Reopen Job</a>
+                <span>•</span>
+                <a href='#'>Mark Completed</a>
+            {% elif job.status == 'closed' %}
+                <a href='#'>Reopen Job</a>
+            {% elif job.status == 'completed' %}
+                <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+            {% endif %}
         </div>
         {% endif %}
         <!-- BACK -->
