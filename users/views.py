@@ -18,10 +18,6 @@ from django.contrib.contenttypes.models import ContentType
 from .context_processors import handle_report_submission
 
 
-# Create your views here.
-# def home(request):
-#     return render(request, 'users/home.html')
-
 def profile_create(request):
     if request.user.is_authenticated:
         if hasattr(request.user, 'profile'):

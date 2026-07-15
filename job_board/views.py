@@ -1,15 +1,15 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from job_board .forms import ProfileForm, ProfileEditForm, ReportForm
+from django.core.mail import send_mail
+from django.conf import settings
 from django.urls import path
 from django.http import HttpResponse
-from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm
-from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications
+from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage, ReportForm
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
 from users.context_processors import handle_report_submission
-from .models import XaropItem
 
 def home(request):
     return render(request, 'job_board/home.html')
@@ -183,7 +183,29 @@ def terms(request):
     return render(request, 'job_board/terms.html')
 
 def contact(request):
-    return render(request, 'job_board/contact.html')
+    if request.method == "POST":
+        form = ContactForm(request.POST)
+    if form.is_valid():
+        contact = form.save()
+        send_mail(
+            subject=f"New Contact Form: {contact.subject}",
+            message=(
+                f"Name: {contact.full_name}\n"
+                f"Email: {contact.email}\n"
+                f"Phone: {contact.phone_number}\n\n"
+                f"{contact.message}"
+            ),
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=["guillermofigueroa2840@gmail.com"],
+            fail_silently=False
+        )
+        messages.success(
+            request, "Your message has been sent successfully."
+        )
+        return redirect("contact")
+    else:
+        form = ContactForm()
+    return render(request, "job_board/contact.html", {"form": form})
 
 def profile(request):
     return render(request, 'job_board/profile.html')

@@ -1,9 +1,8 @@
 from django.contrib import admin
-from .models import Profile, JobListing, Review, JobApplication, Conversation, Message, Message, Feedback, Report, User
+from .models import Profile, JobListing, Review, JobApplication, Conversation, Feedback, Report, ContactMessage
 from django.utils.html import format_html
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
-from django.db import models
 # Register your models here.
 
 admin.site.register(Profile)
@@ -83,29 +82,17 @@ class ReportAdmin(admin.ModelAdmin):
 
     full_details.short_description = "Full Content"
     
-    # @admin.register(Report)
-# class ReportAdmin(admin.ModelAdmin):
-#     list_display = ('report_type', 'object_id', 'created_at')
-#     readonly_fields = ('view_messages',)
+@admin.register(ContactMessage)
+class ContactMessageAdmin(admin.ModelAdmin):
+    list_display = (
+        "full_name",
+        "email",
+        "created_at",
+    )
 
-#     def view_messages(self, obj):
-#         if obj.report_type != 'conversation':
-#             return "Not a conversation report"
+    search_fields = (
+        "full_name",
+        "email",
+    )
 
-#         try:
-#             convo = Conversation.objects.get(id=obj.object_id)
-#             messages = convo.messages.all().order_by('timestamp')
-#         except Conversation.DoesNotExist:
-#             return "Conversation not found"
-
-#         if not messages:
-#             return "No messages"
-
-#         return format_html(
-#             "<br><br>".join(
-#                 f"<strong>{m.sender.username}</strong>: {m.content} <br><small>{m.timestamp}</small>"
-#                 for m in messages
-#             )
-#         )
-
-#     view_messages.short_description = "Conversation Messages"
+    ordering = ("-created_at",)

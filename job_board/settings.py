@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 from pathlib import Path
 import os, dj_database_url, cloudinary, cloudinary.uploader, cloudinary.api
 from dotenv import load_dotenv
+from decouple import config, Csv
+
+print("DEBUG from decouple:", config("DEBUG", default="NOT FOUND"))
+print("EMAIL_HOST_USER:", config("EMAIL_HOST_USER", default="NOT FOUND"))
 
 load_dotenv()
 
@@ -31,10 +35,16 @@ if not SECRET_KEY:
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = os.environ.get(
+DEBUG = config("DEBUG", default=True, cast=bool)
+
+ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
-    "127.0.0.1,localhost,.onrender.com"
-).split(",")
+    default="127.0.0.1,localhost,.onrender.com",
+    cast=Csv()
+)
+
+print("DEBUG:", DEBUG)
+print("ALLOWED_HOSTS:", ALLOWED_HOSTS)
 # Application definition
 
 INSTALLED_APPS = [
@@ -100,7 +110,6 @@ STORAGES = {
     },
 }
 
-DEBUG = os.environ.get("DEBUG", "false").lower() == "true"
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 CLOUDINARY_STORAGE = {
@@ -191,3 +200,14 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 SUPPORT_EMAIL = "support@hustlr.com"
 COMPANY_NAME = "Hustlr"
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER

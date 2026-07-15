@@ -47,6 +47,7 @@ div.job-card h3 {
 
 .job-header {
     display: flex;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 15px;

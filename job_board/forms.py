@@ -1,5 +1,5 @@
 from django import forms
-from users .models import Profile, JobListing, Review, JobApplication, Conversation, Message, Feedback, Report
+from users .models import Profile, JobListing, Review, JobApplication, Conversation, Message, Feedback, Report, ContactMessage
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm
@@ -52,12 +52,6 @@ class UserProfileCreationForm(UserCreationForm):
     password2 = forms.CharField(
         widget=forms.PasswordInput(attrs={'placeholder': 'Confirm Password'})
     )
-
-    # location = forms.CharField(
-    #     max_length=20,
-    #     required=False,
-    #     widget=forms.TextInput(attrs={'placeholder': 'Location'})
-    # )
 
     description = forms.CharField(
         max_length=250,
@@ -253,3 +247,20 @@ class ReportForm(forms.ModelForm):
             }),
         }
         
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = ContactMessage
+        fields = [
+            'full_name',
+            'email',
+            'phone_number',
+            'subject',
+            'message'
+        ]
+        labels = {
+            'full_name': 'FULL NAME',
+            'email': 'EMAIL',
+            'phone_number': 'PHONE NUMBER',
+            'subject': 'SUBJECT',
+            'message': 'MESSAGE'
+        }
