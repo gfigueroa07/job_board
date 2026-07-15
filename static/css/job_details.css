@@ -64,6 +64,44 @@ body {
     object-fit: cover;
 }
 
+.job-image {
+    cursor: pointer;
+    transition: transform .2s;
+}
+
+.job-image:hover {
+    transform: scale(1.03)
+}
+
+.image-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.85);
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.image-modal.active {
+    display: flex;
+}
+
+.expanded-image {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 8px;
+}
+
+.close-image {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 45px;
+    cursor: pointer;
+}
+
 /* STATUS */
 .status-badge {
     color: white;

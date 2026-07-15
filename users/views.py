@@ -160,10 +160,10 @@ def job_applicants(request, job_id):
             job.status = 'pending'
             job.save()
             Conversation.objects.get_or_create(job=job, applicant=application.applicant.user)
-            messages.success(request, f"{application.applicant.user.username} has been approved.")
+            messages.success(request, f"{application.applicant.user.username} has been approved. You can now message the employer!")
         elif action == 'rejected':
             application.status = 'rejected'
-            messages.success(request, f"{application.applicant.user.username} has been rejected")   
+            messages.success(request, f"{application.applicant.user.username} has been rejected.")   
         Notifications.objects.create(
             user=application.applicant.user,
             notification_type='status_update',

@@ -39,7 +39,7 @@ class JobListing(models.Model):
     ]
     category = models.CharField(max_length=50, choices=job_category, default='other')
     profile = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    price = models.FloatField(blank=False, default=0.0)
+    price = models.FloatField(blank=False, default=0)
     title = models.CharField(max_length=50)
     description = models.TextField(max_length=800, blank=False)
     date = models.DateTimeField(auto_now_add=True)
@@ -80,6 +80,8 @@ class JobApplication(models.Model):
         ('pending', 'Pending'),
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
+        ('cancelled', 'Cancelled'),
+        ('withdrawn', 'Withdrawn')
     ]
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)

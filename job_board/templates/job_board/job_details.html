@@ -29,7 +29,11 @@
         <!-- IMAGES -->
         <div class="job-images">
             {% for image in images %}
-                <img src="{{ image.image.url }}">   
+                <img 
+                src="{{ image.image.url }}"
+                class='job-image'
+                onclick="openImage('{{ image.image.url }}')"
+                >   
             {% endfor %}
         </div>
         <hr>
@@ -77,17 +81,35 @@
         <!-- OWNER LINKS -->
         {% if request.user.profile == job.profile %}
         <div class="owner-links">
-            <a href="{% url 'job_edit' job.id %}">Edit Job</a>
-            <span>•</span>
-            <a href="{% url 'job_delete' job.id %}">Delete Job</a>
-            <span>•</span>
-            <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            {% if job.status == 'open' %}
+                <a href="{% url 'job_edit' job.id %}">Edit Job</a>
+                <span>•</span>
+                <a href='#'>Close Job</a>              
+                <span>•</span>
+                <a href="{% url 'job_delete' job.id %}">Delete Job</a>
+                <span>•</span>
+                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            {% elif job.status == 'pending' %}
+                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+                <span>•</span>
+                <a href='#'>Reopen Job</a>
+                <span>•</span>
+                <a href='#'>Mark Completed</a>
+            {% elif job.status == 'closed' %}
+                <a href='#'>Reopen Job</a>
+            {% elif job.status == 'completed' %}
+                <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+            {% endif %}
         </div>
         {% endif %}
         <!-- BACK -->
         <div class="back-link">
             <a href="{% url 'job_page' %}">← Back to Job Listings</a>
         </div>
+    </div>
+    <div id="imageModal" class="image-modal" onclick="closeImage()">
+        <span class="close-image">&times;</span>
+        <img id="expandedImage" class="expanded-image">
     </div>
     <script>
         function applyJob() {
@@ -97,11 +119,25 @@
             }
             modal.classList.add("active");
         }
+
         function closeApply() {
             const modal = document.getElementById("applyModal");
             if (!modal) return;
             modal.classList.remove("active");
         }
+
+        function openImage(imageUrl) {
+            const modal = document.getElementById("imageModal");
+            const image = document.getElementById("expandedImage");
+
+            image.src = imageUrl;
+            modal.classList.add("active");
+        }
+
+        function closeImage() {
+            document.getElementById("imageModal").classList.remove("active");
+        }
+        
     </script>
 </div>
 {% endblock %}
