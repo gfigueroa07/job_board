@@ -44,14 +44,11 @@ Environment-based configuration using .env
 Media stored externally via Cloudinary
 Secure settings via environment variables
 📸 Screenshots
+<img width="1320" height="2577" alt="image" src="https://github.com/user-attachments/assets/6d048e6e-3266-468c-94c1-4e581e758296" />
+<img width="1320" height="2219" alt="image" src="https://github.com/user-attachments/assets/67721b88-6e98-4e4f-9ee6-71aa06f3a7af" />
+<img width="1320" height="2292" alt="image" src="https://github.com/user-attachments/assets/7e174277-4f95-43e2-beda-85097ece1f5b" />
+<img width="1320" height="2309" alt="image" src="https://github.com/user-attachments/assets/985c7849-d808-41df-ac73-07f528d0b053" />
 
-Add screenshots here (highly recommended)
-
-Job listing page
-Job detail view
-Apply modal
-Messaging system
-Profile page
 ⚙️ Installation & Setup
 1. Clone repository
 git clone https://github.com/gfigueroa07/job_board.git
