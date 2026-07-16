@@ -187,18 +187,18 @@ def contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             contact = form.save()
-            send_mail(
-                subject=f"New Contact Form: {contact.subject}",
-                message=(
-                    f"Name: {contact.full_name}\n"
-                    f"Email: {contact.email}\n"
-                    f"Phone: {contact.phone_number}\n\n"
-                    f"{contact.message}"
-                ),
-                from_email=settings.DEFAULT_FROM_EMAIL,
-                recipient_list=["guillermofigueroa2840@gmail.com"],
-                fail_silently=False
-            )
+            # send_mail(
+            #     subject=f"New Contact Form: {contact.subject}",
+            #     message=(
+            #         f"Name: {contact.full_name}\n"
+            #         f"Email: {contact.email}\n"
+            #         f"Phone: {contact.phone_number}\n\n"
+            #         f"{contact.message}"
+            #     ),
+            #     from_email=settings.DEFAULT_FROM_EMAIL,
+            #     recipient_list=["guillermofigueroa2840@gmail.com"],
+            #     fail_silently=False
+            # )
             messages.success(
                 request, "Your message has been sent successfully."
             )
