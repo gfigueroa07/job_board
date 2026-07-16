@@ -4,8 +4,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import path
 from django.http import HttpResponse
-from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm
-from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage, ReportForm
+from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm, ReportForm
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -185,24 +185,24 @@ def terms(request):
 def contact(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
-    if form.is_valid():
-        contact = form.save()
-        send_mail(
-            subject=f"New Contact Form: {contact.subject}",
-            message=(
-                f"Name: {contact.full_name}\n"
-                f"Email: {contact.email}\n"
-                f"Phone: {contact.phone_number}\n\n"
-                f"{contact.message}"
-            ),
-            from_email=settings.DEFAULT_FROM_EMAIL,
-            recipient_list=["guillermofigueroa2840@gmail.com"],
-            fail_silently=False
-        )
-        messages.success(
-            request, "Your message has been sent successfully."
-        )
-        return redirect("contact")
+        if form.is_valid():
+            contact = form.save()
+            send_mail(
+                subject=f"New Contact Form: {contact.subject}",
+                message=(
+                    f"Name: {contact.full_name}\n"
+                    f"Email: {contact.email}\n"
+                    f"Phone: {contact.phone_number}\n\n"
+                    f"{contact.message}"
+                ),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                recipient_list=["guillermofigueroa2840@gmail.com"],
+                fail_silently=False
+            )
+            messages.success(
+                request, "Your message has been sent successfully."
+            )
+            return redirect("contact")
     else:
         form = ContactForm()
     return render(request, "job_board/contact.html", {"form": form})
