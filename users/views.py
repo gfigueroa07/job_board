@@ -37,7 +37,7 @@ def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)   
     average_rating = Review.objects.filter(review_received=profile).aggregate(Avg('rating'))['rating__avg']
-    form = ReportForm(initial={
+    report_form = ReportForm(initial={
         'reported_user': profile.id
     })
     if handle_report_submission(request):
@@ -46,7 +46,7 @@ def profile_detail(request, profile_id):
         'profile': profile,
         'reviews': reviews,
         'average_rating': average_rating,
-        'form': form,   
+        'report_form': report_form,   
     })
 
 def profile_edit(request):
@@ -237,7 +237,7 @@ def user_jobs_applied(request, profile_id):
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     review = Review.objects.filter(review_received=profile)
-    form = ReportForm(initial={
+    report_form = ReportForm(initial={
         'reported_review': review
         })
     if handle_report_submission(request):
@@ -245,7 +245,7 @@ def review_page(request, profile_id):
     return render(request, 'users/review_page.html', {
         'profile': profile, 
         'reviews': review,
-        'form': form
+        'report_form': report_form
         })
 
 @login_required
