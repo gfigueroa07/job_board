@@ -155,6 +155,16 @@ button[type="submit"]:hover {
     left: -9999px;
 }
 
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 
 @media (max-width: 600px) {
     .form-box {

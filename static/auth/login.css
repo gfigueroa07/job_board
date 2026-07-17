@@ -103,6 +103,20 @@ html, body {
     text-align: center; /* keeps it aligned under input */
 }
 
+.messages {
+    text-align: center;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 /* Horizontal line with "or" centered */
 .separator {
     display: flex;

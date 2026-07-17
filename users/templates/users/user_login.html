@@ -9,6 +9,15 @@
         <a href="{% url 'home' %}" class="logo">Hustlr</a>
     </div>
     <div id='login-container'>
+        {% if messages %}
+            <div class='messages'>
+                {% for message in messages %}
+                    <div class='alert alert-{{ message.tags }}'>
+                        <p class='{{ message.tags }}'>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         <div class='info'>
             <h2>Ready to take the next step?</h2>
             <p>Create an account or sign in.</p>

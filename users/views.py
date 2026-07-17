@@ -28,7 +28,8 @@ def profile_create(request):
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save()
-            return redirect('profile_detail', profile_id=profile.id) 
+            messages.success(request, 'Profile created successfully.')
+            return redirect('login') 
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
