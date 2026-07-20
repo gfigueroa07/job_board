@@ -17,6 +17,20 @@
     flex-wrap: wrap;
 }
 
+.messages {
+    text-align: center;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .review-card {
     width: 100%;
     max-width: 800px;
@@ -160,6 +174,7 @@
     max-width: 300px;
     min-width: 180px;
     padding: 12px 16px;
+    margin: 10px;
     border: none;
     border-radius: 6px;
     background-color: #0073b1;
@@ -173,10 +188,27 @@
     background-color: #0073b19f;
 }
 
+.cancel {
+    width: 50%;
+    max-width: 300px;
+    min-width: 180px;
+    margin: 10px;
+    border-radius: 6px;
+    background-color: gray;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.cancel:hover {
+    background-color: rgb(146, 146, 146);
+}
+
 @media (max-width: 600px) {
     .review-card {
         width: 100%;
-        padding: 15px;
+        padding: 50px;
     }
 
     .review-header {

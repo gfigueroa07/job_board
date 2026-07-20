@@ -160,20 +160,22 @@ class Notifications(models.Model):
     related_review = models.ForeignKey(Review, null=True, blank=True, on_delete=models.CASCADE)
     
 class Feedback(models.Model):
-    REPORT_TYPES = (
+    FEEDBACK_TYPES = (
         ('bug', 'Bug'),
         ('feedback', 'Feedback'),
         ('suggestion', 'Suggestion'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    report_type = models.CharField(max_length=20, choices=REPORT_TYPES)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, blank=True, null=True)
+    feedback_type = models.CharField(max_length=20, choices=FEEDBACK_TYPES)
     message = models.TextField(blank=True, max_length=250, null=True)  # allow blank for optional
     page_url = models.URLField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.report_type}"
+        if self.user:
+            return f"{self.user.username} - {self.feedback_type}"
+        return f"Anonymous - {self.feedback_type}"
     
 class Report(models.Model):
     REPORT_TYPES = [

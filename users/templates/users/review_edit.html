@@ -27,6 +27,9 @@
                 {{ form.comment.errors }}
             </div>
             <button type="submit" class="review-submit-btn">Save Changes</button>
+            <a class='cancel' href="{% url 'reviews' profile_id=review.review_received.id %}">
+                ← Cancel
+            </a>
         </div>
     </form>
     <script>

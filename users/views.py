@@ -70,14 +70,14 @@ def profile_edit(request):
         })
 
 @login_required
-def profile_delete(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    if user.id != request.user.id:
-        return redirect('profile_detail', user_id=user.id)
+def profile_delete(request, profile_id):
+    profile = get_object_or_404(Profile, id=profile_id)
+    if profile != request.user.profile:
+        return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        user.delete()
+        profile.delete()
         return redirect('login')
-    return render(request, 'users/profile_delete.html', {'user': user})
+    return render(request, 'users/profile_delete.html', {'profile': profile})
 
 def profile_report(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
@@ -237,7 +237,7 @@ def user_jobs_applied(request, profile_id):
 
 def review_page(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
-    review = Review.objects.filter(review_received=profile)
+    review = Review.objects.filter(review_received=profile).order_by('-created_at')
     report_form = ReportForm(initial={
         'reported_review': review
         })
@@ -275,8 +275,8 @@ def review_create(request, profile_id):
             message=f"You received a new review.",
             related_review=review,
             )
-            
-            return redirect('profile_detail', profile_id=profile_id)
+            messages.success(request, "Thanks for your review!")
+            return redirect('reviews', profile_id=profile_id)
     else:
         form = UserReviewsForm()
     return render(request, 'users/review_create.html', {'form': form, 'profile': reviewed_profile})
@@ -290,8 +290,10 @@ def review_edit(request, review_id):
         form = UserReviewsForm(request.POST, request.FILES, instance=review)
         if form.is_valid():
             review.edited = True
+            profile_id = review.review_received.id
             form.save()
-            return redirect('profile_detail', profile_id=review.review_received.id)
+            messages.success(request, "Your review was edited successfully.")
+            return redirect('reviews', profile_id=profile_id)
     else:
         form = UserReviewsForm(instance=review)
     return render(request, 'users/review_edit.html', {'form': form, 'review': review})
@@ -302,8 +304,10 @@ def review_delete(request, review_id):
     if review.review_written != request.user.profile:
         return redirect('profile_detail', review_id=review.review_written.id)
     if request.method == 'POST':
+        profile_id = review.review_written.id 
         review.delete()
-        return redirect('review_edit', profile_id=review.review_written.id)
+        messages.success(request, "Your review was successfully deleted.")
+        return redirect('reviews', profile_id=profile_id)
     return render(request, 'users/review_delete.html', {'review': review})
 
 def review_report(request, review_id):
@@ -435,34 +439,6 @@ def notifications(request):
 def notification_count(request):
     count = request.user.notifications.filter(is_read=False).count()
     return JsonResponse({'count': count})
-
-@login_required
-def submit_report(request):
-    form = FeedbackForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            report_type = form.cleaned_data['report_type']
-            message = form.cleaned_data['message']
-
-            # Make message required for bugs
-            if report_type == 'bug' and not message:
-                return render(request, 'users/feedback.html', {
-                    'form': form,
-                    'error': 'Please describe the bug in the message field.'
-                })
-            # 24-hour limit check
-            last_report = Feedback.objects.filter(user=request.user).order_by('-created_at').first()
-            if last_report and timezone.now() - last_report.created_at < timedelta(hours=24):
-                return render(request, 'users/feedback.html', {
-                    'form': form,
-                    'error': 'You can only submit one report every 24 hours.'
-                })
-            # Save report
-            report = form.save(commit=False)
-            report.user = request.user
-            report.save()
-            return redirect('home')
-    return render(request, 'users/feedback.html', {'form': form})
 
 def unread_count(request):
     if not request.user.is_authenticated:

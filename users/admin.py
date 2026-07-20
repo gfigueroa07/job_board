@@ -10,7 +10,6 @@ admin.site.register(JobListing)
 admin.site.register(Review)
 admin.site.register(JobApplication)
 admin.site.register(Conversation)
-admin.site.register(Feedback)
 
 @admin.register(Report)
 class ReportAdmin(admin.ModelAdmin):
@@ -96,3 +95,22 @@ class ContactMessageAdmin(admin.ModelAdmin):
     )
 
     ordering = ("-created_at",)
+    
+@admin.register(Feedback)
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = (
+        "display_user",
+        "feedback_type",
+        "message",
+        "created_at",
+    )
+    search_fields = (
+        "user__username",
+        "message",
+    )
+    ordering = ("-created_at",)
+    def display_user(self, obj):
+        if obj.user:
+            return obj.user.username
+        return "Anonymous"
+    display_user.short_description = "User"

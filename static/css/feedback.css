@@ -1,0 +1,52 @@
+.feedback-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    background-color: white;
+    border-radius: 20px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.432);
+    margin: 0 auto;      /* center it */
+    padding: 20px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+.feedback-btn {
+    width: 50%;
+    height: auto;
+    flex-direction: row;
+    padding: 5px;
+    margin: 5px;
+    color: white;
+    background-color: #0073b1;
+    cursor: pointer;
+    border-radius: 10px;
+    font-size: 1rem;
+}
+
+.feedback-btn:hover {
+    background-color: #0073b19f;
+}
+
+input, textarea {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: none;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}

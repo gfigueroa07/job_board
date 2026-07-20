@@ -108,12 +108,30 @@ button {
     text-wrap-style: balance;
 }
 
+.cancel {
+    width: 50%;
+    max-width: 300px;
+    min-width: 180px;
+    margin: 10px;
+    border-radius: 6px;
+    background-color: gray;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.cancel:hover {
+    background-color: rgb(146, 146, 146);
+}
+
 /* Sidebar (dropdown) */
 .sidebar {
     position: fixed;
     top: 0;       /* below navbar */
     right: 0;
-    width: 50%;
+    width: 320px;
+    max-width: 85%;
     height: 100vh;
     border: 1px solid, black;
     border-radius: 20px;
@@ -200,6 +218,67 @@ form button, body a.button {
 form button:hover, body a.button:hover {
     background-color: #0073b19f;
 }
+
+/* Sidebar sections */
+
+.menu-section {
+    margin-top: 20px;
+    margin-left: 5px;
+    padding: 10px 20px 5px;
+    color: #0073b1;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-bottom: none !important;
+}
+
+
+/* Sidebar links */
+
+.sidebar li {
+    padding: 0;
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.sidebar li a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    color: #222;
+    font-weight: 500;
+}
+
+
+.sidebar li a:hover {
+    background-color: #f2f8fb;
+    color: #0073b1;
+}
+
+
+/* Logout */
+
+.logout {
+    margin-top: auto;
+    border-top: 1px solid #ddd;
+}
+
+
+.logout button {
+    width: 100%;
+    background: transparent;
+    color: #dc3545;
+    text-align: left;
+    padding: 12px 20px;
+}
+
+
+.logout button:hover {
+    background-color: #fff1f1;
+}
+
 
 /* Footer */
 footer {

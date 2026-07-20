@@ -220,7 +220,7 @@ class UserReviewsForm(forms.ModelForm):
 class FeedbackForm(forms.ModelForm):
     class Meta:
         model = Feedback
-        fields = ['report_type', 'message', 'page_url']
+        fields = ['feedback_type', 'message']
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

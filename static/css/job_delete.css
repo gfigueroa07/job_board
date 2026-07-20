@@ -1,0 +1,65 @@
+.delete-card {
+    max-width: 500px;
+    margin: 60px auto;
+    padding: 35px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    text-align: center;
+}
+
+
+.delete-icon {
+    font-size: 45px;
+    margin-bottom: 15px;
+}
+
+
+.delete-message {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+
+.delete-warning {
+    color: #666;
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+
+.delete-actions {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+
+.delete-btn:hover {
+    background: #bb2d3b;
+}
+
+
+.cancel-btn {
+    background: #f1f1f1;
+    color: #333;
+    text-decoration: none;
+    padding: 12px 25px;
+    border-radius: 8px;
+}
+
+
+.cancel-btn:hover {
+    background: #ddd;
+}

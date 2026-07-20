@@ -1,15 +1,52 @@
 {% extends 'job_board/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/job_delete.css' %}">
+{% endblock %}
+
 {% block content %}
-<h2>Delete Job</h2>
 
-<p>Are you sure you want to delete this job?</p>
+<div class="page-container">
 
-<form method="post">
-    {% csrf_token %}
-    <button type="submit">Yes, delete</button>
-    <a href="{% url 'job_details' job.id %}">
-        Cancel
-    </a>
-</form>
-<p><a href="/">Return to home page</a></p>
+    <div class="delete-card">
+
+        <div class="delete-icon">
+            ⚠
+        </div>
+
+        <h1 class="page-title">
+            Delete Job
+        </h1>
+
+        <p class="delete-message">
+            Are you sure you want to delete 
+            <strong>{{ job.title }}</strong>?
+        </p>
+
+        <p class="delete-warning">
+            This action cannot be undone. All job information and images will be permanently removed.
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="delete-actions">
+
+                <button type="submit" class="delete-btn">
+                    Delete Job
+                </button>
+
+                <a href="{% url 'job_details' job.id %}" class="cancel-btn">
+                    Cancel
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
 {% endblock %}

@@ -39,7 +39,8 @@ urlpatterns = [
     path('privacy/', views.privacy, name='privacy'),
     path('terms/', views.terms, name='terms'),
     path('contact/', views.contact, name='contact'),
-    ]
+    path('feedback/', views.feedback, name='feedback'),
+]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 if settings.DEBUG:

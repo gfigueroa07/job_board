@@ -46,7 +46,7 @@
             <button class="menu-btn">...</button>
             <div class="menu-dropdown">
                 <a href="{% url 'profile_edit' %}">Edit Profile</a>
-                <a class='delete-user 'href="{% url 'profile_delete' user.id %}">Delete Profile</a>
+                <a class='delete-user 'href="{% url 'profile_delete' profile.id %}">Delete Profile</a>
                 <form method="post" action="{% url 'logout' %}">
                     {% csrf_token %}
                     <button type="submit">Log out</button>

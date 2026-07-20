@@ -9,9 +9,13 @@
 <div class="reviews-container">
     <h1 class="page-title">Reviews</h1>
     {% if messages %}
-        {% for message in messages %}
-            <p>{{ message }}</p>
-        {% endfor %}
+        <div class='messages'>
+            {% for message in messages %}
+                <div class='alert alert-{{ message.tags }}'>
+                    <p class='{{ message.tags }}'>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
     {% endif %}
     {% if reviews %}
         {% for review in reviews %}
@@ -52,15 +56,6 @@
                 <div class='review-content'>
                     <p>{{ review.comment }} {% if review.edited %}<small>(edited)</small>{% endif %}</p>
                 </div>
-                {% comment %} <div class='review-actions'>
-                    {% if review.review_written == request.user.profile %}
-                        <a href="{% url 'review_edit' review.id %}"><button>Edit</button></a>
-                        <form method="post" action="{% url 'review_delete' review.id %}">
-                            {% csrf_token %}
-                            <button type="submit">Delete</button>
-                        </form>
-                    {% endif %}
-                </div> {% endcomment %}
             </div>
         {% endfor %}
     {% else %}

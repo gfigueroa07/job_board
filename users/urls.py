@@ -29,7 +29,7 @@ urlpatterns = [
     path('profile/create/', views.profile_create, name='profile_create'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
-    path('profile/<int:user_id>/delete/', views.profile_delete, name='profile_delete'),
+    path('profile/<int:profile_id>/delete/', views.profile_delete, name='profile_delete'),
     
     path('notifications/', views.notifications, name='notifications'),
     path('conversations/', views.inbox, name='inbox'),
@@ -51,7 +51,6 @@ urlpatterns = [
     
     path('job/<int:job_id>/applicants', views.job_applicants, name='job_applicants'),
     
-    path('feedback/', views.submit_report, name='feedback'),
     path('report/<str:model_name>/<int:object_id>/', views.report_create, name='report_create'),
          
     path("notifications/<int:notification_id>/",views.notification_redirect,name="notification_redirect"),

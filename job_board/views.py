@@ -4,8 +4,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import path
 from django.http import HttpResponse
-from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm, ReportForm
-from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage
+from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm, ReportForm, FeedbackForm
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage, Feedback
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -171,9 +171,10 @@ def job_edit(request, job_id):
 def job_delete(request, job_id):
     job = get_object_or_404(JobListing, id=job_id)
     if job.profile != request.user.profile:
-        return redirect('job_details')
+        return redirect('job_details', job_id=job.id)
     if request.method == 'POST':
         job.delete()
+        messages.success(request, "Job deleted successfully.")
         return redirect('job_page')
     return render(request, 'job_board/job_delete.html', {'job': job})
 
@@ -222,18 +223,6 @@ def contact(request):
         form = ContactForm(request.POST)
         if form.is_valid():
             contact = form.save()
-            # send_mail(
-            #     subject=f"New Contact Form: {contact.subject}",
-            #     message=(
-            #         f"Name: {contact.full_name}\n"
-            #         f"Email: {contact.email}\n"
-            #         f"Phone: {contact.phone_number}\n\n"
-            #         f"{contact.message}"
-            #     ),
-            #     from_email=settings.DEFAULT_FROM_EMAIL,
-            #     recipient_list=["guillermofigueroa2840@gmail.com"],
-            #     fail_silently=False
-            # )
             messages.success(
                 request, "Your message has been sent successfully."
             )
@@ -242,6 +231,25 @@ def contact(request):
         form = ContactForm()
     return render(request, "job_board/contact.html", {"form": form})
 
-def profile(request):
-    return render(request, 'job_board/profile.html')
+def feedback(request):
+    if request.method == "POST":
+        form = FeedbackForm(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            if request.user.is_authenticated:
+                feedback.user = request.user
+            feedback.page_url = request.META.get('HTTP_REFERER')
+            feedback.save()
+            messages.success(
+                request,
+                "Thank you for improving Hustlr!"
+            )
+            return redirect('feedback')
+    else:
+        form = FeedbackForm()
+    return render(
+        request,
+        "job_board/feedback.html",
+        {'form': form}
+    )  
 
