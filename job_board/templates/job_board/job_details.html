@@ -105,7 +105,6 @@
                 </form>
 
             {% elif job.status == 'pending' %}
-                <span>•</span>
                 <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
                 <span>•</span>
                 <form method="post" action="{% url 'change_job_status' job.id 'open' %}">
@@ -124,8 +123,8 @@
                     <button type="submit">Open Job</button>
                 </form>   
 
-            {% elif job.status == 'completed' %}
-                <a href="{% url 'review_create' profile.id %}">Leave a review</a>
+            {% elif job.status == 'completed' and profile != request.user.profile %}
+                <a href="{% url 'review_create' job.profile.id %}">Leave a review</a>
             {% endif %}
         </div>
         {% endif %}

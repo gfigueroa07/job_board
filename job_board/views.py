@@ -75,18 +75,18 @@ def job_details(request, job_id):
             application.job = job
             application.applicant = request.user.profile
             application.save()
-        Notifications.objects.create(
-            user=job.profile.user,
-            notification_type='application',
-            message=f"{request.user} applied to your job",
-            related_job=job,
-            related_application=application
-        )
+            Notifications.objects.create(
+                user=job.profile.user,
+                notification_type='application',
+                message=f"{request.user} applied to your job",
+                related_job=job,
+                related_application=application
+            )
 
-        print("Notification created")
-        
-        messages.success(request, "Application submitted.")
-        return redirect('job_details', job_id=job.id)
+            print("Notification created")
+            
+            messages.success(request, "Application submitted.")
+            return redirect('job_details', job_id=job.id)
     
     else:
         apply_form = JobApplicationForm()
