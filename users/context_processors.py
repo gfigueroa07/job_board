@@ -61,3 +61,40 @@ def handle_report_submission(request):
     report.save()
     messages.success(request, "Report submitted.")
     return report
+
+def reopen_job(job):
+    accepted_application = JobApplication.objects.filter(
+        job=job,
+        status='accepted'
+    ).first()
+    if accepted_application:
+        accepted_application.change_status("rejected")
+    job.status = "open"
+    job.save()
+    
+def complete_job(job):
+    accepted_application = JobApplication.objects.filter(
+        job=job,
+        status='accepted'
+    ).first()
+    if accepted_application:
+        accepted_application.change_status("completed")
+        
+    job.status = "completed"
+    job.save()
+    
+def close_job(job):
+    applications = JobApplication.objects.filter(
+        job=job,
+        status="pending"
+    )
+    for application in applications:
+        application.change_status("rejected")
+    accepted_application = JobApplication.objects.filter(
+        job=job,
+        status="accepted"
+    ).first()
+    if accepted_application:
+        accepted_application.change_status("rejected")
+    job.status = "closed"
+    job.save()

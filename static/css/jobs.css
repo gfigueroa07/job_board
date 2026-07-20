@@ -14,6 +14,20 @@ form button[type="submit"] {
 
 }
 
+.messages {
+    text-align: center;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 .search-wrapper {
     display: flex;
     justify-content: center;

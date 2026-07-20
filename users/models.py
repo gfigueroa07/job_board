@@ -82,7 +82,8 @@ class JobApplication(models.Model):
         ('accepted', 'Accepted'),
         ('rejected', 'Rejected'),
         ('cancelled', 'Cancelled'),
-        ('withdrawn', 'Withdrawn')
+        ('withdrawn', 'Withdrawn'),
+        ('completed', 'Completed')
     ]
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE, related_name='applications')
     applicant = models.ForeignKey(Profile, on_delete=models.CASCADE)
@@ -91,19 +92,45 @@ class JobApplication(models.Model):
     status = models.CharField(max_length=10, choices=application_status, default='pending')
     
     def save(self, *args, **kwargs):
-        if self.pk:
+        force_save = kwargs.pop("force_save", False)
+        if self.pk and not force_save:
             old = JobApplication.objects.get(pk=self.pk)
             if old.status != "pending" and old.status != self.status:
                 raise ValidationError("Application decision is locked")
         super().save(*args, **kwargs)
-        
+    def change_status(self, status):
+        valid_statuses = {
+            "pending",
+            "accepted",
+            "rejected",
+            "cancelled",
+            "withdrawn",
+            "completed",
+        }
+        if status not in valid_statuses:
+            raise ValueError(f"Invalid status: {status}")
+        self.status = status
+        self.save(force_save=True)
     def __str__(self):
         return f"{self.job} - {self.applicant}: {self.status}" 
     
 class Conversation(models.Model):
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-    created_at = models.DateTimeField(auto_now_add=True)  
+    active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    conversation_status = [
+        ("active", "Active"),
+        ("archived", "Archived"),
+    ]
+    status = models.CharField(
+        max_length=10,
+        choices=conversation_status,
+        default="active",
+    )
+    def archive(self):
+        self.status = "archived"
+        self.save(update_fields=["status"])
     class Meta:
         unique_together = ('job', 'applicant')
       

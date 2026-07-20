@@ -199,6 +199,10 @@
     background: #357bd8;
 }
 
+.conversation-closed {
+    text-align: center;
+    padding: 20px;
+}
 /* EMPTY */
 .no-chat {
     margin: auto;

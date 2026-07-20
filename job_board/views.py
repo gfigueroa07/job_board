@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
 from users.context_processors import handle_report_submission
+from users.utils import reopen_job, complete_job, close_job
 
 def home(request):
     return render(request, 'job_board/home.html')
@@ -176,6 +177,40 @@ def job_delete(request, job_id):
         return redirect('job_page')
     return render(request, 'job_board/job_delete.html', {'job': job})
 
+@login_required
+def change_job_status(request, job_id, status):
+    job = get_object_or_404(JobListing, id=job_id)
+    accepted_application = JobApplication.objects.filter(
+        job=job,
+        status='accepted'
+    ).first()
+    
+    if request.user.profile != job.profile:
+        messages.error(request,"You don't have persmission.")
+        return redirect("job_details", job.id)
+    
+    valid_statuses = [
+        "open",
+        "pending",
+        "closed",
+        "completed"
+    ]
+    
+    if status not in valid_statuses:
+        messages.error(request, "Invalid status.")
+        return redirect("job_details", job.id)
+    
+    if status == "open":
+        reopen_job(job)
+    elif status == "completed":
+        complete_job(job)
+        
+    elif status == 'closed':
+        close_job(job)
+        
+    messages.success(request, f"Job marked as {status}.")
+    return redirect("job_details", job.id)
+    
 def privacy(request):
     return render(request, 'job_board/privacy.html')
 

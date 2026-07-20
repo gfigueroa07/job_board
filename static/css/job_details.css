@@ -240,6 +240,26 @@ body {
     text-decoration: underline;
 }
 
+.owner-links form {
+    display: inline;
+    margin: 0;
+    padding: 0;
+}
+
+.owner-links button {
+    background: none;
+    border: none;
+    color: #2563eb;
+    cursor: pointer;
+    font: inherit;
+    padding: 0;
+    text-decoration: none;
+}
+
+.owner-links button:hover {
+    color: #1d4ed8;
+}
+
 /* BACK LINK */
 .back-link {
     text-align: center;
@@ -323,6 +343,20 @@ hr {
     align-items: right;
 }
 
+.messages {
+    text-align: center;
+}
+
+.messages .success {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.messages .error {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
 @media (max-width: 600px) {
     .job-images img {
         flex-basis: 100%;
@@ -353,5 +387,10 @@ hr {
         width: 100%;
         text-align: center;
         margin: 0;
+    }
+
+    .owner-links {
+        display: flex;
+        flex-direction: column;
     }
 }

@@ -53,6 +53,11 @@
             {{ form.skills.errors}}
         </div>
         <button type="submit" class='save-changes'>Save Changes</button>
+        <div class="back-link">
+            <a href="{% url 'profile_detail' profile.id %}">
+                ← Cancel
+            </a>
+        </div>
     </form>
 </div>
 

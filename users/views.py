@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
 from django.urls import path
@@ -157,7 +157,7 @@ def job_applicants(request, job_id):
             job.status = 'pending'
             job.save()
             Conversation.objects.get_or_create(job=job, applicant=application.applicant.user)
-            messages.success(request, f"{application.applicant.user.username} has been approved. You can now message the employer!")
+            messages.success(request, f"{application.applicant.user.username} has been approved. You can now send a message!")
         elif action == 'rejected':
             application.status = 'rejected'
             messages.success(request, f"{application.applicant.user.username} has been rejected.")   
@@ -180,13 +180,13 @@ def user_login(request):
         messages.error(request, "You are already logged in.")
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
+        form = LoginForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
             profile = request.user.profile
             return redirect('profile_detail', profile_id=profile.id)
     else:
-        form = AuthenticationForm()
+        form = LoginForm()
     return render(request, 'users/user_login.html', {'form': form})
 
 @require_POST
@@ -343,9 +343,10 @@ def conversation_detail(request, convo_id):
     report_form = ReportForm(initial={
         'reported_conversation': conversation
         })
+        
     if request.user != conversation.applicant and request.user != conversation.job.profile.user:
         return redirect('job_details', conversation.job.id)
-
+    
     # define other_user
     if request.user == conversation.applicant:
         other_user = conversation.job.profile.user
@@ -355,6 +356,16 @@ def conversation_detail(request, convo_id):
     conversation.other_user = other_user
 
     if request.method == 'POST':
+        if conversation.status == "archived":
+            messages.error(
+                request,
+                "This conversation is archived and cannot receive new messages."
+            )
+            return redirect(
+                "conversation_details",
+                convo_id
+            )
+            
         content = request.POST.get('content')
         if content and content.strip():
             Message.objects.create(

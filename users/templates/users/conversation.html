@@ -98,16 +98,32 @@
         </div>
     {% endfor %}
 </div>
-
+    {% if messages %}
+        <div class='messages'>
+            {% for message in messages %}
+                <div class='alert alert-{{ message.tags }}'>
+                    <p class='{{ message.tags }}'>{{ message }}</p>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div>
         <!-- INPUT -->
-        <form method="POST" class="chat-input">
-            {% csrf_token %}
-            <input type="text" name="content" placeholder="Type a message..." required>
-            <button type="submit">Send</button>
-        </form>
+        {% if conversation.status == "active" %}
+            <form method="POST" class="chat-input">
+                {% csrf_token %}
+                <input type="text" name="content" placeholder="Type a message..." required>
+                <button type="submit">Send</button>
+            </form>
+        {% else %}
+            <div class="conversation-closed">
+                This conversation has been archived.
+                You can still view previous messages.
+            </div>
+        {% endif %}
         <script>
             fetch("/api/mark-messages-read/");
-        </script>
+        </script> 
         {% else %}
         <div class="no-chat">
             <p>Select a conversation</p>

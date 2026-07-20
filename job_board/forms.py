@@ -2,7 +2,7 @@ from django import forms
 from users .models import Profile, JobListing, Review, JobApplication, Conversation, Message, Feedback, Report, ContactMessage
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 
 class ProfileForm(forms.ModelForm):
@@ -100,20 +100,18 @@ class UserProfileCreationForm(UserCreationForm):
             profile.save()
 
         return profile
-        
+    
+    def clean_username(self):
+        username = self.cleaned_data['username'].strip().lower()
+        if User.objects.filter(username=username).exists():
+            raise forms.ValidationError("This username is already taken.")
+        return username
+    
+class LoginForm(AuthenticationForm):
+    def clean_username(self):
+        return self.cleaned_data['username'].strip().lower()
+                                     
 class ProfileEditForm(forms.ModelForm):
-    # def clean_profile_name(self):
-    #     profile_name = self.cleaned_data.get('profile_name')
-
-    #     if Profile.objects.filter(profile_name=profile_name)\
-    #         .exclude(pk=self.instance.pk)\
-    #         .exists():
-    #         raise forms.ValidationError("This profile already exists.")
-
-    #     if len(profile_name) < 5:
-    #         raise forms.ValidationError("Title too short")
-
-    #     return profile_name
     class Meta:
         model = Profile
         fields = [
