@@ -16,8 +16,6 @@ from decouple import config, Csv
 from dotenv import load_dotenv
 load_dotenv()
 
-from decouple import config, Csv
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -33,24 +31,30 @@ if not SECRET_KEY:
 
 DEBUG = config("DEBUG", default=True, cast=bool)
 
-if DEBUG:
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
-        }
-    }
-else:
-    DATABASES = {
-    "default": dj_database_url.config(conn_max_age=600)
-    }
-
 ALLOWED_HOSTS = config(
     "ALLOWED_HOSTS",
     default="127.0.0.1,localhost,.onrender.com",
     cast=Csv(),
 )
 
+DATABASE_URL = config("DATABASE_URL", default=None)
+
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            conn_max_age=600
+        )
+    }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
+    
+    
 # Application definition
 
 INSTALLED_APPS = [
@@ -164,12 +168,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / "staticfiles"
-MEDIA_URL = '/media/'  # URL prefix for media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Folder where uploaded files are stored
-os.makedirs(MEDIA_ROOT, exist_ok=True)
-# STATICFILES_DIRS = (
-#     os.path.join(BASE_DIR, 'static'),
-# )
 STATICFILES_DIRS = [
     BASE_DIR /  "static",
 ]
@@ -180,9 +178,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = 'login'
 
-#logout user after 900 seconds (15 minutes)
-SESSION_COOKIE_AGE = 900
-#restart 900second timer if user request/activity
+#logout user after 14 days
+SESSION_COOKIE_AGE = 1209600
+#restart timer if user request/activity
 SESSION_SAVE_EVERY_REQUEST = True
 #logout user if they close browser
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -201,3 +199,18 @@ EMAIL_HOST_USER = config("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+SECURE_SSL_REDIRECT = not DEBUG
+
+SESSION_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_SECURE = not DEBUG
+
+SECURE_HSTS_SECONDS = 31536000
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+
+CSRF_TRUSTED_ORIGINS = config(
+    "CSRF_TRUSTED_ORIGINS",
+    default="",
+    cast=Csv()
+)

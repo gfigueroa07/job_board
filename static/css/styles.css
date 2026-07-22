@@ -13,6 +13,7 @@ html, body {
 
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     background-color: #ffffff;
@@ -30,13 +31,20 @@ body.modal-open {
 
 main {
     flex: 1;
+    display: flex;
 }
 
 .page-container {
     width: 100%;
     max-width: 1200px;
+
     margin-inline: auto;
     padding-inline: 20px;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
 }
 
 /* Header & navigation */
@@ -125,6 +133,38 @@ button {
     background-color: rgb(146, 146, 146);
 }
 
+.nav-notification {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+
+.badge {
+    display: none;
+
+    position: absolute;
+    top: -8px;
+    right: -10px;
+
+    background-color: red;
+    color: white;
+
+    font-size: 11px;
+    font-weight: bold;
+
+    min-width: 18px;
+    height: 18px;
+
+    border-radius: 50%;
+
+    justify-content: center;
+    align-items: center;
+}
+.has-alert {
+    color: red;
+}
+
 /* Sidebar (dropdown) */
 .sidebar {
     position: fixed;
@@ -133,6 +173,7 @@ button {
     width: 320px;
     max-width: 85%;
     height: 100vh;
+    height: 100dvh;
     border: 1px solid, black;
     border-radius: 20px;
     background: white;
@@ -141,6 +182,9 @@ button {
     transition: transform 0.3s ease;
     flex-direction: column;
     z-index: 999;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding-bottom: env(safe-area-inset-bottom);
 }
 
 .sidebar.active {

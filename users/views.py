@@ -302,9 +302,9 @@ def review_edit(request, review_id):
 def review_delete(request, review_id):
     review = get_object_or_404(Review, id=review_id)
     if review.review_written != request.user.profile:
-        return redirect('profile_detail', review_id=review.review_written.id)
+        return redirect('profile_detail', profile_id=review.review_received.id)
     if request.method == 'POST':
-        profile_id = review.review_written.id 
+        profile_id = review.review_received.id 
         review.delete()
         messages.success(request, "Your review was successfully deleted.")
         return redirect('reviews', profile_id=profile_id)
@@ -406,7 +406,14 @@ def inbox(request):
     convo_data = []
 
     for convo in conversations:
+        unread_messages = convo.messages.filter(
+            is_read=False
+        ).exclude(sender=request.user)
 
+        print(
+            convo.job.title,
+            unread_messages.count()
+        )
         last_message = convo.messages.order_by('-created_at').first()
 
         has_unread = convo.messages.filter(
@@ -432,42 +439,23 @@ def inbox(request):
 
 @login_required
 def notifications(request):
-    notifications = request.user.notifications.order_by('-created_at')
-    return render(request, 'users/notifications.html', {'notifications': notifications})
+    notifications = Notifications.objects.filter(
+        user=request.user
+    ).order_by('-created_at')
+    # Mark all notifications as read when user visits page
+    notifications.filter(
+        is_read=False
+    ).update(
+        is_read=True
+    )
+    return render(request, "users/notifications.html", {
+        "notifications": notifications
+    })
 
 @login_required
 def notification_count(request):
     count = request.user.notifications.filter(is_read=False).count()
     return JsonResponse({'count': count})
-
-def unread_count(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"count": 0})
-
-    message_count = Message.objects.filter(
-        is_read=False
-    ).exclude(sender=request.user).count()
-
-    notification_count = Notifications.objects.filter(
-        user=request.user,
-        is_read=False
-    ).count()
-
-    return JsonResponse({
-        "messages": message_count,
-        "notifications": notification_count,
-        "total": message_count + notification_count
-    })
-
-def mark_messages_read(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({"status": "unauthorized"})
-
-    Message.objects.filter(
-        is_read=False
-    ).exclude(sender=request.user).update(is_read=True)
-
-    return JsonResponse({"status": "ok"})
 
 def get_client_ip(request):
     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')

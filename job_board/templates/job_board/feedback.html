@@ -4,35 +4,37 @@
 <link rel="stylesheet" href="{% static 'css/feedback.css' %}">
 {% endblock %}
 {% block content %}
-<div class='feedback-card'>
-    {% if messages %}
-        <div class='messages'>
-            {% for message in messages %}
-                <div class='alert alert-{{ message.tags }}'>
-                    <p class='{{ message.tags }}'>{{ message }}</p>
+<div class="feedback-container">
+    <div class='feedback-card'>
+        {% if messages %}
+            <div class='messages'>
+                {% for message in messages %}
+                    <div class='alert alert-{{ message.tags }}'>
+                        <p class='{{ message.tags }}'>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <h1 class='title'>Feedback</h1>
+        <form method="POST">
+            {% csrf_token %}
+            {% for field in form %}
+                <div class="form-group">
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% if field.errors %}
+                        <div class='error'>
+                            {{ field.errors }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endfor %}
-        </div>
-    {% endif %}
-    <h1 class='title'>Feedback</h1>
-    <form method="POST">
-        {% csrf_token %}
-        {% for field in form %}
-            <div class="form-group">
-                {{ field.label_tag }}
-                {{ field }}
-
-                {% if field.errors %}
-                    <div class='error'>
-                        {{ field.errors }}
-                    </div>
-                {% endif %}
-            </div>
-        {% endfor %}
-        <button class='feedback-btn' type='submit'>
-            <i class='fa-regular fa-paper-plane'></i>
-            SUBMIT
-        </button>
-    </form>
+            <button class='feedback-btn' type='submit'>
+                <i class='fa-regular fa-paper-plane'></i>
+                SUBMIT
+            </button>
+        </form>
+    </div>
 </div>
 {% endblock %}

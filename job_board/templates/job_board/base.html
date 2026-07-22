@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Hustlr</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.1/css/all.min.css" integrity="sha512-5Hs3dF2AEPkpNAR7UiOHba+lRSJNeM2ECkwxUIxC1Q/FLycGTbNapWXB4tP889k5T5Ju8fs4b1P5z/iB4nMfSQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -15,9 +15,17 @@
             <a href='{% url 'home' %}' class='logo'>Hustlr</a>
             <div class='nav-right'>
             {% if user.is_authenticated and user.profile %}
-                <a href="{% url 'inbox' %}"><i class="fa-solid fa-inbox"></i> {{ unread_message_count }}</a>
-                <a href="{% url 'notifications' %}"><i class="fa-regular fa-bell"></i>{{ unread_notification_count }}</a>
-                <a href="{% url 'profile_detail' user.profile.id %}"><i class="fa-regular fa-circle-user"></i></a>
+                <a class="nav-notification" href="{% url 'inbox' %}">
+                    <i class="fa-solid fa-inbox"></i>
+                    <span id="msg-count" class="badge"></span>
+                </a>
+                <a class="nav-notification" href="{% url 'notifications' %} ">
+                    <i class="fa-regular fa-bell"></i>
+                    <span id="notif-count" class="badge"></span>
+                </a>
+                <a href="{% url 'profile_detail' user.profile.id %}">
+                    <i class="fa-regular fa-circle-user"></i>
+                </a>
             {% else %}
             <div class='login'>
                 <a href="{% url 'login' %}">Login</a>
@@ -27,22 +35,22 @@
             <div class="sidebar-overlay"></div>
             <ul class="sidebar">
                 <button id="exit-btn">✖</button>
-                {% if user.is_authenticated and user.profile %}
-                    <li>
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                            Home
-                        </a>
-                    </li>
-                    <li class="menu-section">
+                <li>
+                    <a href="{% url 'home' %}">
+                        <i class="fa-solid fa-house"></i>
+                        Home
+                    </a>
+                </li>
+                <li class="menu-section">
                         Jobs
-                    </li>
-                    <li>
-                        <a href="{% url 'job_page' %}">
-                            <i class="fa-solid fa-magnifying-glass"></i>
-                            Browse Jobs
-                        </a>
-                    </li>
+                </li>
+                <li>
+                    <a href="{% url 'job_page' %}">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        Browse Jobs
+                    </a>
+                </li>
+                {% if request.user.is_authenticated %}
                     <li>
                         <a href="{% url 'job_list' %}">
                             <i class="fa-solid fa-plus"></i>
@@ -82,6 +90,7 @@
                             Notifications
                         </a>
                     </li>
+                {% endif %}
                     <li class="menu-section">
                         Support
                     </li>
@@ -102,14 +111,17 @@
                     </li>
                     <li>
                         <a href="{% url 'privacy' %}">
+                            <i class="fa-solid fa-shield-halved"></i>
                             Privacy Policy
                         </a>
                     </li>
                     <li>
                         <a href="{% url 'terms' %}">
+                            <i class="fa-solid fa-file-contract"></i>
                             Terms of Service
                         </a>
                     </li>
+                {% if request.user.is_authenticated %}
                     <form method="post" action="{% url 'logout' %}">
                         {% csrf_token %}
                         <li class="logout">
@@ -119,33 +131,6 @@
                             </button>
                         </li>
                     </form>
-                {% else %}
-                    <li>
-                        <a href="{% url 'home' %}">
-                            <i class="fa-solid fa-house"></i>
-                            Home
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'login' %}">
-                            Login
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'contact' %}">
-                            Contact Us
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'privacy' %}">
-                            Privacy Policy
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{% url 'terms' %}">
-                            Terms of Service
-                        </a>
-                    </li>
                 {% endif %}
             </ul>
         </nav>
@@ -170,13 +155,10 @@
             const exitBtn = document.getElementById("exit-btn");
             const overlay = document.querySelector(".sidebar-overlay");
 
+            if (!sidebar || !menuBtn || !exitBtn || !overlay) return;
+
             menuBtn.addEventListener("click", function (event) {
                 event.stopPropagation();
-                sidebar.classList.toggle("active");
-            });
-
-            menuBtn.addEventListener("click", function (e) {
-                e.stopPropagation();
 
                 sidebar.classList.add("active");
                 overlay.classList.add("active");
@@ -186,14 +168,12 @@
                 sidebar.classList.remove("active");
                 overlay.classList.remove("active");
             }
+
             exitBtn.addEventListener("click", closeSidebar);
             overlay.addEventListener("click", closeSidebar);
-            
-            exitBtn.addEventListener("click", function () {
-                sidebar.classList.remove("active");
-            });
 
-            document.addEventListener("click", function (eventy) {
+            document.addEventListener("click", function (event) {
+
                 const clickedInsideSidebar = sidebar.contains(event.target);
                 const clickedMenuButton = menuBtn.contains(event.target);
 
@@ -202,21 +182,29 @@
                     !clickedInsideSidebar &&
                     !clickedMenuButton
                 ) {
-                    sidebar.classList.remove("active");
+                    closeSidebar();
                 }
-            })
+            });
         });
 
         document.addEventListener("DOMContentLoaded", function () {
-            // Automatically update the copyright year
-            document.getElementById('year').textContent = new Date().getFullYear();
 
-            // Initialize Swiper
-            const swiper = new Swiper(".card-swiper", {
-                centeredSlides: false,
-                spaceBetween: 0,
-                slidesPerView: 'auto'
-            });
+            const year = document.getElementById("year");
+
+            if (year) {
+                year.textContent = new Date().getFullYear();
+            }
+
+            const swiper = document.querySelector(".card-swiper");
+
+            if (swiper) {
+                new Swiper(".card-swiper", {
+                    centeredSlides: false,
+                    spaceBetween: 0,
+                    slidesPerView: "auto"
+                });
+            }
+
         });
 
         function updateCounts() {
@@ -224,37 +212,85 @@
                 .then(res => res.json())
                 .then(data => {
 
-                    document.getElementById("msg-count").innerText = data.messages;
-                    document.getElementById("notif-count").innerText = data.notifications;
+                    const bell = document.querySelector(".fa-bell");
+                    const inbox = document.querySelector(".fa-inbox");
+                    if (bell) {
+                        if (data.notifications > 0) {
+                            bell.classList.add("has-alert");
+                        }
+                        else {
+                            bell.classList.remove("has-alert");
+                        }
+                    }
 
+                    if (inbox) {
+                        if (data.messages > 0) {
+                            inbox.classList.add("has-alert");
+                        }
+                        else {
+                            inbox.classList.remove("has-alert");
+                        }
+                    }
                 });
         }
 
-        // run every 5 seconds
-        setInterval(updateCounts, 5000);
+        {% if request.user.is_authenticated %}
+            setInterval(updateCounts, 5000);
+            updateCounts();
+        {% endif %}
 
-        // run immediately on load
-        updateCounts();
+        // Reusable modal helper
+        function closeOnOverlayClick(modalId, closeFunction) {
+
+            const modal = document.getElementById(modalId);
+
+            if (!modal) return;
+
+            modal.addEventListener("click", function(event) {
+
+                if (event.target === modal) {
+                    closeFunction();
+                }
+
+            });
+        }
 
         function openReport(type, id) {
+
             const modal = document.getElementById("reportModal");
             const typeInput = document.getElementById("reportType");
             const idInput = document.getElementById("reportId");
 
+
             if (!modal || !typeInput || !idInput) return;
+
 
             typeInput.value = type;
             idInput.value = id;
+
 
             modal.classList.add("active");
         }
 
         function closeReport() {
+
             const modal = document.getElementById("reportModal");
+
             if (!modal) return;
+
 
             modal.classList.remove("active");
         }
+
+        // Initialize report modal outside-click close
+        document.addEventListener("DOMContentLoaded", function () {
+
+            closeOnOverlayClick(
+                "reportModal",
+                closeReport
+            );
+
+        });
     </script>
 </body>
 </html>

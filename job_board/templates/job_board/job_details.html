@@ -7,163 +7,201 @@
 {% endblock %}
 {% block content %}
 {% include "job_board/partials/application_modal.html" %}
-<div class="page-container">
-    <h1 class="page-title">Job Details</h1>
-    <div class="job-card">
-        {% if messages %}
-            <div class='messages'>
-                {% for message in messages %}
-                    <div class='alert alert-{{ message.tags }}'>
-                        <p class='{{ message.tags }}'>{{ message }}</p>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
-        <!-- HEADER -->
-        <div class="job-header">
-            <h2 class="job-title">{{ job.title }}</h2>
-            <span class="status-badge status-{{ job.status|lower }}">
-                {{ job.status|title }}
-            </span>
-        </div>
-        <hr>
-        <!-- PRICE + DUE -->
-        <div class="job-info">
-            <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
-            {% if job.due_date %}
-                <p><strong>Due By:</strong> {{ job.due_date }}</p>
-            {% endif %}
-        </div>
-        <hr>
-        <!-- IMAGES -->
-        <div class="job-images">
-            {% for image in images %}
-                <img 
-                src="{{ image.image.url }}"
-                class='job-image'
-                onclick="openImage('{{ image.image.url }}')"
-                >   
+
+<h1 class="page-title">Job Details</h1>
+<div class="job-card">
+    {% if messages %}
+        <div class='messages'>
+            {% for message in messages %}
+                <div class='alert alert-{{ message.tags }}'>
+                    <p class='{{ message.tags }}'>{{ message }}</p>
+                </div>
             {% endfor %}
         </div>
-        <hr>
-        <!-- DESCRIPTION -->
-        <div class="job-section">
-            <h3>Job Description</h3>
-            <p>{{ job.description }}</p>
-        </div>
-        <hr>
-        <!-- POSTED BY -->
-        <div class="posted-by">
-            <span>Posted by:</span>
-            {% if job.profile.profile_picture %}
-                <img class="profile" src="{{ job.profile.profile_picture.url }}">
-            {% else %}
-                <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
-            {% endif %}
-            <a href="{% url 'profile_detail' job.profile.id %}">
-                {{ job.profile.user.username }}
-            </a>
-        </div>
-        <hr>
-        <!-- BUTTONS -->
-        <div class="action-buttons">
-            {% if request.user.profile.id != job.profile.id %}
-                {% if not application and request.user.is_authenticated %}
-                    <button type='button' class="apply" onclick="applyJob()">
-                        Apply
-                    </button>
-                {% else %}
-                    <span class="status-badge status-{{ application.status|lower }}">
-                        {{ application.status|title }}
-                    </span>
-                {% endif %}
-                <button class="report" onclick="openReport('job', '{{ job.id }}')">
-                    Report
-                </button>
-            {% endif %}
-            {% if conversation %}
-                {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
-                    <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
-                {% endif %}
-            {% endif %}
-        </div>
-        <!-- OWNER LINKS -->
-        {% if request.user.profile == job.profile %}
-        <div class="owner-links">
-
-            {% if job.status == 'open' %}
-                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
-                <span>•</span>
-                <a href="{% url 'job_edit' job.id %}">Edit Job</a>
-                <span>•</span>
-                <a href="{% url 'job_delete' job.id %}">Delete Job</a>
-                <span>•</span>
-                 
-                <form method="post" action="{% url 'change_job_status' job.id 'closed' %}">
-                    {% csrf_token %}
-                    <button type="submit">Close Job</button>
-                </form>
-
-            {% elif job.status == 'pending' %}
-                <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
-                <span>•</span>
-                <form method="post" action="{% url 'change_job_status' job.id 'open' %}">
-                    {% csrf_token %}
-                    <button type="submit">Open Job</button>
-                </form>   
-                <span>•</span>
-                <form method="post" action="{% url 'change_job_status' job.id 'completed' %}">
-                    {% csrf_token %}
-                    <button type="submit">Mark as Completed</button>
-                </form>   
-
-            {% elif job.status == 'closed' %}
-                <form method="post" action="{% url 'change_job_status' job.id 'open' %}">
-                    {% csrf_token %}
-                    <button type="submit">Open Job</button>
-                </form>   
-
-            {% elif job.status == 'completed' and profile != request.user.profile %}
-                <a href="{% url 'review_create' job.profile.id %}">Leave a review</a>
-            {% endif %}
-        </div>
+    {% endif %}
+    <!-- HEADER -->
+    <div class="job-header">
+        <h2 class="job-title">{{ job.title }}</h2>
+        <span class="status-badge status-{{ job.status|lower }}">
+            {{ job.status|title }}
+        </span>
+    </div>
+    <hr>
+    <!-- PRICE + DUE -->
+    <div class="job-info">
+        <p><strong>Price:</strong> ${{ job.price|floatformat:2 }}</p>
+        {% if job.due_date %}
+            <p><strong>Due By:</strong> {{ job.due_date }}</p>
         {% endif %}
-        <!-- BACK -->
-        <div class="back-link">
-            <a href="{% url 'job_page' %}">← Back to Job Listings</a>
-        </div>
     </div>
-    <div id="imageModal" class="image-modal" onclick="closeImage()">
-        <span class="close-image">&times;</span>
-        <img id="expandedImage" class="expanded-image">
+    <hr>
+    <!-- IMAGES -->
+    <div class="job-images">
+        {% for image in images %}
+            <img 
+            src="{{ image.image.url }}"
+            class='job-image'
+            onclick="openImage('{{ image.image.url }}')"
+            >   
+        {% endfor %}
     </div>
-    <script>
-        function applyJob() {
-            const modal = document.getElementById("applyModal");
-            if (!modal) {
-                return;
-            }
-            modal.classList.add("active");
-        }
+    <hr>
+    <!-- DESCRIPTION -->
+    <div class="job-section">
+        <h3>Job Description</h3>
+        <p>{{ job.description }}</p>
+    </div>
+    <hr>
+    <!-- POSTED BY -->
+    <div class="posted-by">
+        <span>Posted by:</span>
+        {% if job.profile.profile_picture %}
+            <img class="profile" src="{{ job.profile.profile_picture.url }}">
+        {% else %}
+            <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
+        {% endif %}
+        <a href="{% url 'profile_detail' job.profile.id %}">
+            {{ job.profile.user.username }}
+        </a>
+    </div>
+    <hr>
+    <!-- BUTTONS -->
+    <div class="action-buttons">
+        {% if request.user.profile.id != job.profile.id %}
+            {% if not request.user.is_authenticated %}
+                <a class="apply" href="{% url 'login' %}?next={{ request.path }}">
+                    Apply
+                </a>
+            {% elif not application %}
+                <button type="button" class="apply" onclick="applyJob()">
+                    Apply
+                </button>
+            {% else %}
+                <span class="status-badge status-{{ application.status|lower }}">
+                    {{ application.status|title }}
+                </span>
+            {% endif %}
+            <button class="report" onclick="openReport('job', '{{ job.id }}')">
+                Report
+            </button>
+        {% endif %}
+        {% if conversation %}
+            {% if request.user == conversation.applicant or request.user == conversation.job.profile.user %}
+                <a class="message" href=" {% url 'conversation_details' conversation.id %}">Message</a>
+            {% endif %}
+        {% endif %}
+    </div>
+    <!-- OWNER LINKS -->
+    {% if is_owner %}
+    <div class="owner-links">
+        {% comment %} <p>User: {{ request.user }}</p>
+        <p>User Profile: {{ request.user.profile }}</p>
+        <p>Job Profile: {{ job.profile }}</p>
+        {% if request.user.profile == job.profile %}
+    <p>Match: True</p>
+{% else %}
+    <p>Match: False</p>
+{% endif %} {% endcomment %}
+        {% if job.status == 'open' %}
+            <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            <span>•</span>
+            <a href="{% url 'job_edit' job.id %}">Edit Job</a>
+            <span>•</span>
+            <a href="{% url 'job_delete' job.id %}">Delete Job</a>
+            <span>•</span>
+                
+            <form method="post" action="{% url 'change_job_status' job.id 'closed' %}">
+                {% csrf_token %}
+                <button type="submit">Close Job</button>
+            </form>
 
-        function closeApply() {
-            const modal = document.getElementById("applyModal");
-            if (!modal) return;
-            modal.classList.remove("active");
-        }
+        {% elif job.status == 'pending' %}
+            <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
+            <span>•</span>
+            <form method="post" action="{% url 'change_job_status' job.id 'open' %}">
+                {% csrf_token %}
+                <button type="submit">Open Job</button>
+            </form>   
+            <span>•</span>
+            <form method="post" action="{% url 'change_job_status' job.id 'completed' %}">
+                {% csrf_token %}
+                <button type="submit">Mark as Completed</button>
+            </form>   
 
-        function openImage(imageUrl) {
-            const modal = document.getElementById("imageModal");
-            const image = document.getElementById("expandedImage");
+        {% elif job.status == 'closed' %}
+            <form method="post" action="{% url 'change_job_status' job.id 'open' %}">
+                {% csrf_token %}
+                <button type="submit">Open Job</button>
+            </form>   
 
-            image.src = imageUrl;
-            modal.classList.add("active");
-        }
-
-        function closeImage() {
-            document.getElementById("imageModal").classList.remove("active");
-        }
-        
-    </script>
+        {% elif job.status == 'completed' and job.profile != request.user.profile %}
+            <a href="{% url 'review_create' job.profile.id %}">Leave a review</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    <!-- BACK -->
+    <div class="back-link">
+        <a href="{% url 'job_page' %}">← Back to Job Listings</a>
+    </div>
 </div>
+<div id="imageModal" class="image-modal" onclick="closeImage()">
+    <span class="close-image">&times;</span>
+    <img id="expandedImage" class="expanded-image">
+</div>
+<script>
+    function applyJob() {
+
+        const modal = document.getElementById("applyModal");
+
+        if (!modal) return;
+
+
+        modal.classList.add("active");
+    }
+
+    function closeApply() {
+
+        const modal = document.getElementById("applyModal");
+
+        if (!modal) return;
+
+
+        modal.classList.remove("active");
+    }
+
+    // Use helper from base.html
+    document.addEventListener("DOMContentLoaded", function () {
+
+        closeOnOverlayClick(
+            "applyModal",
+            closeApply
+        );
+
+    });
+
+    function openImage(imageUrl) {
+
+        const modal = document.getElementById("imageModal");
+        const image = document.getElementById("expandedImage");
+
+
+        if (!modal || !image) return;
+
+
+        image.src = imageUrl;
+
+        modal.classList.add("active");
+    }
+
+    function closeImage() {
+
+        const modal = document.getElementById("imageModal");
+
+        if (!modal) return;
+
+
+        modal.classList.remove("active");
+    }
+</script>
+
 {% endblock %}

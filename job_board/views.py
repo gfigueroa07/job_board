@@ -3,9 +3,9 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings
 from django.urls import path
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .forms import JobDetailsForm, JobCreateForm, JobApplicationForm, ContactForm, ReportForm, FeedbackForm
-from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage, Feedback
+from users.models import JobListing, JobApplication, Conversation, Profile, JobImage, Notifications, ContactMessage, Feedback, Message
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -48,7 +48,9 @@ def job_details(request, job_id):
             Q(applicant=request.user) |
             Q(job__profile__user=request.user)
         ).first()
+    is_owner = False
     if request.user.is_authenticated:
+        is_owner = request.user.profile == job.profile
         application = JobApplication.objects.filter(
             job=job,
             applicant=request.user.profile
@@ -96,7 +98,8 @@ def job_details(request, job_id):
         'conversation': conversation,
         'images': images,
         'report_form': report_form,
-        'apply_form': apply_form
+        'apply_form': apply_form,
+        'is_owner': is_owner
     })
 
 @login_required
@@ -252,4 +255,40 @@ def feedback(request):
         "job_board/feedback.html",
         {'form': form}
     )  
+    
+def unread_count(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({
+            "messages": 0,
+            "notifications": 0,
+        })
 
+    unread_messages = Message.objects.filter(
+        conversation__in=Conversation.objects.filter(
+            Q(applicant=request.user) |
+            Q(job__profile=request.user.profile)
+        ),
+        is_read=False
+    ).exclude(
+        sender=request.user
+    ).count()
+
+    unread_notifications = Notifications.objects.filter(
+        user=request.user,
+        is_read=False
+    ).count()
+
+    return JsonResponse({
+        "messages": unread_messages,
+        "notifications": unread_notifications,
+    })
+
+def mark_messages_read(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({"status": "unauthorized"})
+
+    Message.objects.filter(
+        is_read=False
+    ).exclude(sender=request.user).update(is_read=True)
+
+    return JsonResponse({"status": "ok"})

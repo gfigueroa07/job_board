@@ -1,7 +1,8 @@
 /* PAGE WRAPPER */
 .notifications-wrapper {
+    width: 100%;
     max-width: 700px;
-    margin: 40px auto;
+    margin-inline: auto;
     background: #f4f6f9;
     font-family: Arial, sans-serif;
     border-radius: 10px;

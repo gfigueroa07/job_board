@@ -131,7 +131,7 @@
 }
 
 /* BADGE */
-.badge.unread {
+.inbox-unread {
     background: #888;
     color: white;
     font-size: 11px;

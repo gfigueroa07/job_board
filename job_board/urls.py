@@ -40,6 +40,9 @@ urlpatterns = [
     path('terms/', views.terms, name='terms'),
     path('contact/', views.contact, name='contact'),
     path('feedback/', views.feedback, name='feedback'),
+    
+    path("api/unread-count/", views.unread_count, name="unread_count"),
+    path("api/mark-messages-read/", views.mark_messages_read, name="mark_messages_read"),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

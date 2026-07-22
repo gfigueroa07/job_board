@@ -35,9 +35,6 @@ urlpatterns = [
     path('conversations/', views.inbox, name='inbox'),
     path('conversation/<int:convo_id>/', views.conversation_detail, name='conversation_details'),
     
-    path("api/unread-count/", views.unread_count, name="unread_counts"),
-    path("api/mark-messages-read/", views.mark_messages_read, name="mark_messages_read"),
-    
     path('user/login/', views.user_login, name='login'),
     path('user/logout/', views.user_logout, name='logout'),
     path('user/<int:profile_id>/jobs/', views.user_jobs, name='user_jobs'),
