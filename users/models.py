@@ -20,7 +20,7 @@ class Profile(models.Model):
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
 
     def __str__(self):
-        return self.user.username
+        return self.profile_name or self.user.email
     
 class JobListing(models.Model):
     job_status = [
