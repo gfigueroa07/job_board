@@ -1,0 +1,71 @@
+{% extends "job_board/base.html" %}
+{% load static %}
+
+{% block title %}Verify Email{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/verify_email.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="verify-container">
+
+    <div class="verify-card">
+
+        <div class="verify-icon">
+            📧
+        </div>
+
+        <h1>Verify Your Email</h1>
+
+        <p class="verify-text">
+            Before you can apply for jobs or post your own, you need to verify
+            your email address.
+        </p>
+        {% if messages %}
+            <div class='messages'>
+                {% for message in messages %}
+                    <div class='alert alert-{{ message.tags }}'>
+                        <p class='{{ message.tags }}'>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        <p class="verify-text">
+            We've sent a verification email to:
+        </p>
+
+        <div class="email-box">
+            {{ request.user.email }}
+        </div>
+
+        <div class="verify-buttons">
+
+            <a class="btn-primary" href="{% url 'resend_verification_email' %}" >
+                Resend Email
+            </a>
+
+            <a  class="btn-secondary" href="{% url 'job_page' %}">
+                Back to Jobs
+            </a>
+
+        </div>
+
+        <div class="verify-help">
+
+            <h3>Didn't receive the email?</h3>
+
+            <ul>
+                <li>Check your Spam or Junk folder.</li>
+                <li>Wait a few minutes and try again.</li>
+                <li>Make sure your email address is correct.</li>
+            </ul>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

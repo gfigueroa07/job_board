@@ -77,6 +77,20 @@ def complete_profile(request):
         }
     )
     
+
+@login_required
+def verify_email(request):
+    """
+    Display the email verification page.
+    """
+
+    # If the user is already verified,
+    # they don't need to be here.
+    if request.user.profile.email_verified:
+        return redirect("job_page")   # or another page of your choice
+
+    return render(request, "users/verify_email.html")
+    
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)   
@@ -592,3 +606,32 @@ def notification_redirect(request, notification_id):
             )
 
     return redirect("notifications")
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
+
+@login_required
+def resend_verification_email(request):
+    """
+    Resend the user's email verification link.
+    """
+
+    profile = request.user.profile
+
+    # User is already verified
+    if profile.email_verified:
+        messages.info(request, "Your email is already verified.")
+        return redirect("job_page")  # or "profile"
+
+    # TODO:
+    # Generate a new verification token
+    # Send verification email
+
+    messages.success(
+        request,
+        "A new verification email has been sent."
+    )
+
+    return redirect("verify_email")
