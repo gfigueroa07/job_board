@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm, CompleteProfileForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
 from django.urls import path
@@ -34,6 +34,49 @@ def profile_create(request):
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
 
+@login_required
+def complete_profile(request):
+
+    profile = request.user.profile
+
+    if profile.profile_completed:
+        return redirect("home")
+
+    next_url = request.GET.get("next")
+
+    if request.method == "POST":
+        form = CompleteProfileForm(request.POST)
+
+        if form.is_valid():
+
+            # Update User model
+            request.user.first_name = form.cleaned_data["first_name"]
+            request.user.last_name = form.cleaned_data["last_name"]
+            request.user.save()
+
+            # Update Profile model
+            profile.phone_number = form.cleaned_data.get("phone_number")
+            profile.profile_completed = True
+            profile.save()
+
+            if next_url:
+                return redirect(next_url)
+
+            return redirect("home")
+
+    else:
+        form = CompleteProfileForm()
+
+    return render(
+        request,
+        "users/complete_profile.html",
+        {
+            "profile": profile,
+            "form": form,
+            "next": next_url,
+        }
+    )
+    
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)   
@@ -262,6 +305,10 @@ def review_create(request, profile_id):
     if existing_review:
         messages.error(request, 'You have an  existing review')
         return redirect('profile_detail', profile_id=profile_id)
+    if not request.user.profile.email_verified:
+        return redirect("verify_email")
+    if not request.user.profile.profile_completed:
+        return redirect("complete_profile")
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
         if form.is_valid():

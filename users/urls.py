@@ -27,6 +27,7 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('profile/create/', views.profile_create, name='profile_create'),
+    path('profile/complete/', views.complete_profile, name='complete_profile'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/<int:profile_id>/delete/', views.profile_delete, name='profile_delete'),

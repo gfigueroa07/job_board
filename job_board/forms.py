@@ -3,6 +3,8 @@ from users .models import Profile, JobListing, Review, JobApplication, Conversat
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 class ProfileForm(forms.ModelForm):
@@ -40,8 +42,17 @@ class ProfileForm(forms.ModelForm):
         return profile_name
 
 class UserProfileCreationForm(UserCreationForm):
-    username = forms.EmailField(
-        widget=forms.EmailInput(attrs={'placeholder': 'Email'})
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email"
+            }
+        )
+    )
+
+    username = forms.CharField(
+        required=False,
+        widget=forms.HiddenInput()
     )
 
     password1 = forms.CharField(
@@ -71,7 +82,7 @@ class UserProfileCreationForm(UserCreationForm):
         required=False,
         label="Upload Resume"
     )
-
+    
     class Meta:
         model = User
         fields = [
@@ -92,7 +103,7 @@ class UserProfileCreationForm(UserCreationForm):
 
         if commit:
             user.save()
-
+        
         profile, created = Profile.objects.get_or_create(user=user)
 
         profile.description = self.cleaned_data.get("description")
@@ -122,7 +133,28 @@ class UserProfileCreationForm(UserCreationForm):
 class LoginForm(AuthenticationForm):
     def clean_email(self):
         return self.cleaned_data['email'].strip().lower()
-                                     
+
+class CompleteProfileForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "First Name"
+            }
+        )
+    )
+    last_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Last Name"
+            }
+        )
+    )
+    phone_number = PhoneNumberField(
+        required=False,
+    )
+                        
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile

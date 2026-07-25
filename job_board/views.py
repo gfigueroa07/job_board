@@ -107,6 +107,10 @@ def job_list(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Login before posting a job.')
         return redirect('login')
+    if not request.profile.email_verified:
+        return redirect("verify_email")
+    if not request.user.profile.profile_completed:
+        return redirect("complete_profile")
     if request.method == 'POST':
         form = JobCreateForm(request.POST, request.FILES)
         if form.is_valid():

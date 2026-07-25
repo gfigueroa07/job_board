@@ -11,16 +11,18 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 class Profile(models.Model):
     user = models.OneToOneField(User, max_length=15, on_delete=models.CASCADE)
-    profile_name = models.CharField(max_length=30, unique=False, blank=True, null=False)
     profile_picture = models.ImageField(upload_to='profile_pics/', blank=True, null=True)
-    location = models.CharField(max_length=20, blank=False)
+    phone_number = PhoneNumberField(region="US", blank=True)
+    location = models.CharField(max_length=100, blank=False)
     description = models.TextField(max_length=250, blank=True)
     avg_review_score = models.FloatField(default=0.0)
     skills = models.TextField(blank=True)
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
+    profile_completed = models.BooleanField(default=False)
+    email_verified = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.profile_name or self.user.email
+        return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.email
     
 class JobListing(models.Model):
     job_status = [
