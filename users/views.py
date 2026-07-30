@@ -16,6 +16,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
 from .context_processors import handle_report_submission
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
 
 
 def profile_create(request):
@@ -29,7 +32,9 @@ def profile_create(request):
         if form.is_valid():
             profile = form.save()
             messages.success(request, 'Profile created successfully.')
-            return redirect('login') 
+            return redirect('login')
+        uid = urlsafe_base64_encode(force_bytes(profile.pk))
+        token = default_token_generator.make_token(profile)
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
@@ -206,7 +211,7 @@ def job_applicants(request, job_id):
         application = get_object_or_404(JobApplication, id=application_id, job=job)
         job = application.job
         if JobApplication.objects.filter(job=job, status="accepted").exists():
-            messages.error(request, 'Job already has an accepted applicant.')
+            messages.error(request, 'Job already has an accepted applicant.\nTo accept a different applicant, please reopen the job.')
             return redirect('job_applicants', job_id=job.id)
         if action == 'accepted':
             application.status = 'accepted'
