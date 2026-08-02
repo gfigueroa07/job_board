@@ -1,21 +1,26 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm, CompleteProfileForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
-from django.urls import path
+from django.urls import path, reverse
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
 from datetime import timedelta
-from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
 from .context_processors import handle_report_submission
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.utils.encoding import force_bytes
+from .utils import send_verification_email
+
+User = get_user_model()
 
 
 def profile_create(request):
@@ -28,12 +33,112 @@ def profile_create(request):
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save()
+            user = profile.user
+            login(request, user)
             messages.success(request, 'Profile created successfully.')
-            return redirect('login') 
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verification_url = request.build_absolute_uri(
+            reverse(
+                "verify_email_token",
+                    kwargs={
+                        "uidb64": uid,
+                        "token": token,
+                    }
+                )
+            )
+
+            send_verification_email(
+                user.email,
+                verification_url
+            )
+            return redirect('verify_email')
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
 
+@login_required
+def complete_profile(request):
+
+    profile = request.user.profile
+
+    if profile.profile_completed:
+        return redirect("home")
+
+    next_url = request.GET.get("next")
+
+    if request.method == "POST":
+        form = CompleteProfileForm(request.POST)
+
+        if form.is_valid():
+
+            # Update User model
+            request.user.first_name = form.cleaned_data["first_name"]
+            request.user.last_name = form.cleaned_data["last_name"]
+            request.user.save()
+
+            # Update Profile model
+            profile.phone_number = form.cleaned_data.get("phone_number")
+            profile.profile_completed = True
+            profile.save()
+
+            if next_url:
+                return redirect(next_url)
+
+            return redirect("home")
+
+    else:
+        form = CompleteProfileForm()
+
+    return render(
+        request,
+        "users/complete_profile.html",
+        {
+            "profile": profile,
+            "form": form,
+            "next": next_url,
+        }
+    )
+    
+
+@login_required
+def verify_email(request):
+    """
+    Display the email verification page.
+    """
+
+    # If the user is already verified,
+    # they don't need to be here.
+    if request.user.profile.email_verified:
+        return redirect("job_page")   # or another page of your choice
+
+    return render(request, "users/verify_email.html")
+
+def verify_email_token(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        profile = user.profile
+        profile.email_verified = True
+        profile.save()
+        messages.success(
+            request,
+            "Your email has been verified successfully."
+        )
+        if not profile.profile_completed:
+            return redirect("complete_profile")
+        return redirect("home")
+    else:
+        messages.error(
+            request,
+            "This verification link is invalid or has expired."
+        )
+
+        return redirect("verify_email")
+    
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     reviews = Review.objects.filter(review_received=profile)   
@@ -76,7 +181,7 @@ def profile_delete(request, profile_id):
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
         profile.delete()
-        return redirect('login')
+        return redirect('home')
     return render(request, 'users/profile_delete.html', {'profile': profile})
 
 def profile_report(request, profile_id):
@@ -149,7 +254,7 @@ def job_applicants(request, job_id):
         application = get_object_or_404(JobApplication, id=application_id, job=job)
         job = application.job
         if JobApplication.objects.filter(job=job, status="accepted").exists():
-            messages.error(request, 'Job already has an accepted applicant.')
+            messages.error(request, 'Job already has an accepted applicant.\nTo accept a different applicant, please reopen the job.')
             return redirect('job_applicants', job_id=job.id)
         if action == 'accepted':
             application.status = 'accepted'
@@ -262,6 +367,10 @@ def review_create(request, profile_id):
     if existing_review:
         messages.error(request, 'You have an  existing review')
         return redirect('profile_detail', profile_id=profile_id)
+    if not request.user.profile.email_verified:
+        return redirect("verify_email")
+    if not request.user.profile.profile_completed:
+        return redirect("complete_profile")
     if request.method == 'POST':
         form = UserReviewsForm(request.POST, request.FILES)
         if form.is_valid():
@@ -545,3 +654,32 @@ def notification_redirect(request, notification_id):
             )
 
     return redirect("notifications")
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
+
+
+@login_required
+def resend_verification_email(request):
+    """
+    Resend the user's email verification link.
+    """
+
+    profile = request.user.profile
+
+    # User is already verified
+    if profile.email_verified:
+        messages.info(request, "Your email is already verified.")
+        return redirect("job_page")  # or "profile"
+
+    # TODO:
+    # Generate a new verification token
+    # Send verification email
+
+    messages.success(
+        request,
+        "A new verification email has been sent."
+    )
+
+    return redirect("verify_email")

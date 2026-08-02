@@ -1,0 +1,63 @@
+{% extends 'job_board/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/complete_profile.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="complete-profile-container">
+
+    <div class="complete-profile-card">
+        {% if messages %}
+            <div class='messages'>
+                {% for message in messages %}
+                    <div class='alert alert-{{ message.tags }}'>
+                        <p class='{{ message.tags }}'>{{ message }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <h1>Complete Your Profile</h1>
+
+        <p class="subtitle">
+            Before you can apply for jobs, post jobs, or leave reviews, we need a little more information.
+        </p>
+
+        <form method="POST">
+
+            {% csrf_token %}
+
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% endif %}
+
+            {% for field in form %}
+
+                <div class="form-group">
+
+                    {{ field.label_tag }}
+
+                    {{ field }}
+
+                    {% if field.errors %}
+                        <small class="form-error">
+                            {{ field.errors|striptags }}
+                        </small>
+                    {% endif %}
+
+                </div>
+
+            {% endfor %}
+
+            <button type="submit" class="btn-primary">
+                Complete Profile
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+{% endblock %}

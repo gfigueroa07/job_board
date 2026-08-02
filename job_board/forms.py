@@ -3,6 +3,8 @@ from users .models import Profile, JobListing, Review, JobApplication, Conversat
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from phonenumber_field.formfields import PhoneNumberField
+from phonenumber_field.widgets import PhoneNumberPrefixWidget
 
 
 class ProfileForm(forms.ModelForm):
@@ -40,9 +42,17 @@ class ProfileForm(forms.ModelForm):
         return profile_name
 
 class UserProfileCreationForm(UserCreationForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                "placeholder": "Email"
+            }
+        )
+    )
+
     username = forms.CharField(
-        max_length=15,
-        widget=forms.TextInput(attrs={'placeholder': 'Username'})
+        required=False,
+        widget=forms.HiddenInput()
     )
 
     password1 = forms.CharField(
@@ -72,45 +82,79 @@ class UserProfileCreationForm(UserCreationForm):
         required=False,
         label="Upload Resume"
     )
-
+    
     class Meta:
         model = User
         fields = [
-            'username',
+            'email',
             'password1',
             'password2',
         ]
 
     def save(self, commit=True):
-        user = super().save(commit=True)  # 🔥 UserCreationForm handles password hashing
+        user = super().save(commit=False)
 
+        email = self.cleaned_data["email"].lower()
+
+        user.email = email
+
+        # Username exists internally
+        user.username = email
+
+        if commit:
+            user.save()
+        
         profile, created = Profile.objects.get_or_create(user=user)
 
-        # profile.location = self.cleaned_data.get('location')
-        profile.description = self.cleaned_data.get('description')
-        profile.skills = self.cleaned_data.get('skills')
+        profile.description = self.cleaned_data.get("description")
+        profile.skills = self.cleaned_data.get("skills")
 
-        if self.cleaned_data.get('profile_picture'):
-            profile.profile_picture = self.cleaned_data.get('profile_picture')
+        if self.cleaned_data.get("profile_picture"):
+            profile.profile_picture = self.cleaned_data["profile_picture"]
 
-        if self.cleaned_data.get('resume'):
-            profile.resume = self.cleaned_data.get('resume')
+        if self.cleaned_data.get("resume"):
+            profile.resume = self.cleaned_data["resume"]
 
         if commit:
             profile.save()
 
         return profile
     
-    def clean_username(self):
-        username = self.cleaned_data['username'].strip().lower()
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError("This username is already taken.")
-        return username
+    def clean_email(self):
+        email = self.cleaned_data["email"].strip().lower()
+
+        if User.objects.filter(email=email).exists():
+            raise forms.ValidationError(
+                "An account already exists with this email."
+            )
+
+        return email
     
 class LoginForm(AuthenticationForm):
-    def clean_username(self):
-        return self.cleaned_data['username'].strip().lower()
-                                     
+    def clean_email(self):
+        return self.cleaned_data['email'].strip().lower()
+
+class CompleteProfileForm(forms.Form):
+    first_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "First Name"
+            }
+        )
+    )
+    last_name = forms.CharField(
+        max_length=30,
+        widget=forms.TextInput(
+            attrs={
+                "placeholder": "Last Name"
+            }
+        )
+    )
+    phone_number = PhoneNumberField(
+        required=False,
+    )
+                        
 class ProfileEditForm(forms.ModelForm):
     class Meta:
         model = Profile

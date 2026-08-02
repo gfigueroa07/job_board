@@ -94,14 +94,6 @@
     <!-- OWNER LINKS -->
     {% if is_owner %}
     <div class="owner-links">
-        {% comment %} <p>User: {{ request.user }}</p>
-        <p>User Profile: {{ request.user.profile }}</p>
-        <p>Job Profile: {{ job.profile }}</p>
-        {% if request.user.profile == job.profile %}
-    <p>Match: True</p>
-{% else %}
-    <p>Match: False</p>
-{% endif %} {% endcomment %}
         {% if job.status == 'open' %}
             <a href="{% url 'job_applicants' job.id %}">View Applicants</a>
             <span>•</span>

@@ -27,6 +27,10 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('profile/create/', views.profile_create, name='profile_create'),
+    path('profile/complete/', views.complete_profile, name='complete_profile'),
+    path('verify-email/', views.verify_email, name='verify_email'),
+    path("verify/<uidb64>/<token>/", views.verify_email_token, name="verify_email_token"),
+    path('verify-email/resend/', views.resend_verification_email, name='resend_verification_email'),
     path('profile/<int:profile_id>/', views.profile_detail, name='profile_detail'),
     path('profile/edit/', views.profile_edit, name='profile_edit'),
     path('profile/<int:profile_id>/delete/', views.profile_delete, name='profile_delete'),

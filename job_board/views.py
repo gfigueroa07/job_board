@@ -60,6 +60,17 @@ def job_details(request, job_id):
     if handle_report_submission(request):
         return redirect(request.path)
     if request.method == "POST":
+        if not request.user.is_authenticated:
+            return redirect("login")
+        
+        profile = request.user.profile
+
+        if not profile.email_verified:
+            return redirect("verify_email")
+
+        if not profile.profile_completed:
+            return redirect("complete_profile")
+        
         apply_form = JobApplicationForm(request.POST)
 
         if apply_form.is_valid():
@@ -107,6 +118,10 @@ def job_list(request):
     if not request.user.is_authenticated:
         messages.error(request, 'Login before posting a job.')
         return redirect('login')
+    if not request.user.profile.email_verified:
+        return redirect("verify_email")
+    if not request.user.profile.profile_completed:
+        return redirect("complete_profile")
     if request.method == 'POST':
         form = JobCreateForm(request.POST, request.FILES)
         if form.is_valid():
