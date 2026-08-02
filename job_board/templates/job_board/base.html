@@ -235,7 +235,7 @@
         }
 
         {% if request.user.is_authenticated %}
-            setInterval(updateCounts, 5000);
+            setInterval(updateCounts, 60000);
             updateCounts();
         {% endif %}
 

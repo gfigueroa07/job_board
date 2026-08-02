@@ -2,23 +2,25 @@ from django.shortcuts import render, redirect, get_object_or_404
 from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm, CompleteProfileForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
-from django.urls import path
+from django.urls import path, reverse
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth import login, logout
+from django.contrib.auth import login, logout, get_user_model
 from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
 from datetime import timedelta
-from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 from django.contrib.contenttypes.models import ContentType
 from .context_processors import handle_report_submission
 from django.contrib.auth.tokens import default_token_generator
-from django.utils.http import urlsafe_base64_encode
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
+from .utils import send_verification_email
+
+User = get_user_model()
 
 
 def profile_create(request):
@@ -31,10 +33,26 @@ def profile_create(request):
         form = UserProfileCreationForm(request.POST, request.FILES)
         if form.is_valid():
             profile = form.save()
+            user = profile.user
+            login(request, user)
             messages.success(request, 'Profile created successfully.')
-            return redirect('login')
-        uid = urlsafe_base64_encode(force_bytes(profile.pk))
-        token = default_token_generator.make_token(profile)
+            uid = urlsafe_base64_encode(force_bytes(user.pk))
+            token = default_token_generator.make_token(user)
+            verification_url = request.build_absolute_uri(
+            reverse(
+                "verify_email_token",
+                    kwargs={
+                        "uidb64": uid,
+                        "token": token,
+                    }
+                )
+            )
+
+            send_verification_email(
+                user.email,
+                verification_url
+            )
+            return redirect('verify_email')
     else:
         form = UserProfileCreationForm()
     return render(request, 'users/profile_create.html', {'form': form})
@@ -95,6 +113,31 @@ def verify_email(request):
         return redirect("job_page")   # or another page of your choice
 
     return render(request, "users/verify_email.html")
+
+def verify_email_token(request, uidb64, token):
+    try:
+        uid = urlsafe_base64_decode(uidb64).decode()
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and default_token_generator.check_token(user, token):
+        profile = user.profile
+        profile.email_verified = True
+        profile.save()
+        messages.success(
+            request,
+            "Your email has been verified successfully."
+        )
+        if not profile.profile_completed:
+            return redirect("complete_profile")
+        return redirect("home")
+    else:
+        messages.error(
+            request,
+            "This verification link is invalid or has expired."
+        )
+
+        return redirect("verify_email")
     
 def profile_detail(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
@@ -138,7 +181,7 @@ def profile_delete(request, profile_id):
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
         profile.delete()
-        return redirect('login')
+        return redirect('home')
     return render(request, 'users/profile_delete.html', {'profile': profile})
 
 def profile_report(request, profile_id):
