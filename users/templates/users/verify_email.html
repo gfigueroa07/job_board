@@ -44,12 +44,12 @@
 
             <form method="POST" action="{% url 'resend_verification_email' %}">
                 {% csrf_token %}
-                <button type="submit">
-                    Resend verification email
+                <button class='btn-primary' type="submit">
+                    Resend
                 </button>
             </form>
 
-            <a  class="btn-secondary" href="{% url 'job_page' %}">
+            <a class="btn-secondary" href="{% url 'job_page' %}">
                 Back to Jobs
             </a>
 

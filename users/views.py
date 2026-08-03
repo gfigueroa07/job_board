@@ -164,12 +164,14 @@ def profile_edit(request):
 def profile_delete(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
     if profile != request.user.profile:
-        return redirect('profile_detail', profile_id=profile.id)
-    if request.method == 'POST':
-        request.user.delete()
+        return redirect("profile_detail", profile_id=profile.id)
+    if request.method == "POST":
+        user = request.user
+        logout(request)
+        user.delete()
         messages.success(request, "Your account has been deleted.")
         return redirect("login")
-    return render(request, 'users/profile_delete.html', {'profile': profile})
+    return render(request, "users/profile_delete.html", {"profile": profile})
 
 def profile_report(request, profile_id):
     profile = get_object_or_404(Profile, id=profile_id)
