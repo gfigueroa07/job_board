@@ -44,7 +44,7 @@
 
             <form method="POST" action="{% url 'resend_verification_email' %}">
                 {% csrf_token %}
-                <button class='btn-primary' type="submit">
+                <button id="resend-btn" class='btn-primary' type="submit" {% if remaining %}disabled{% endif %}>
                     Resend
                 </button>
             </form>
@@ -70,5 +70,52 @@
     </div>
 
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const button = document.getElementById("resend-btn");
+    const cooldown = 60;
+
+    if (sessionStorage.getItem("resendCooldown")) {
+        startCountdown();
+    }
+
+    button.form.addEventListener("submit", function () {
+        sessionStorage.setItem(
+            "resendCooldown",
+            Date.now() + cooldown * 1000
+        );
+
+        startCountdown();
+    });
+
+
+    function startCountdown() {
+
+        button.disabled = true;
+
+        const timer = setInterval(function () {
+
+            const remaining = Math.ceil(
+                (sessionStorage.getItem("resendCooldown") - Date.now()) / 1000
+            );
+
+            if (remaining <= 0) {
+                clearInterval(timer);
+                sessionStorage.removeItem("resendCooldown");
+
+                button.disabled = false;
+                button.textContent = "Resend";
+                return;
+            }
+
+            button.textContent = `Resend (${remaining})`;
+
+        }, 1000);
+    }
+
+});
+</script>
 
 {% endblock %}

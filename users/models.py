@@ -20,6 +20,7 @@ class Profile(models.Model):
     resume = models.FileField(upload_to='resumes/', blank=True, null=True)
     profile_completed = models.BooleanField(default=False)
     email_verified = models.BooleanField(default=False)
+    email_verification_sent_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.email

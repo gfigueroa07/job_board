@@ -19,9 +19,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from .utils import send_verification_email, build_verification_url
+import logging
 
 User = get_user_model()
-
+logger = logging.getLogger(__name__)
 
 def profile_create(request):
     if request.user.is_authenticated:
@@ -38,6 +39,8 @@ def profile_create(request):
             messages.success(request, 'Profile created successfully.')
             verification_url = build_verification_url(request, user)
             send_verification_email(user.email, verification_url)
+            profile.email_verification_sent_at = timezone.now()
+            profile.save(update_fields=["email_verification_sent_at"])
             return redirect('verify_email')
     else:
         form = UserProfileCreationForm()
@@ -270,14 +273,19 @@ def job_applicants(request, job_id):
     
 def user_login(request):
     if request.user.is_authenticated:
-        profile = request.user.profile
+        profile, created = Profile.objects.get_or_create(
+            user=request.user
+        )
+
         messages.error(request, "You are already logged in.")
-        return redirect('profile_detail', profile_id=profile.id)
+        return redirect("profile_detail", profile_id=profile.id)
     if request.method == 'POST':
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
             login(request, form.get_user())
-            profile = request.user.profile
+            profile, _ = Profile.objects.get_or_create(
+            user=request.user
+        )
             return redirect('profile_detail', profile_id=profile.id)
     else:
         form = LoginForm()
@@ -660,20 +668,32 @@ def resend_verification_email(request):
 
     # Generate a NEW verification link
     try:
+        now = timezone.now()
+        if profile.email_verification_sent_at:
+            elapsed = now - profile.email_verification_sent_at
+
+            if elapsed.total_seconds() < 60:
+                messages.error(
+                    request,
+                    "Please wait before requesting another verification email."
+                )
+                return redirect("verify_email")
         verification_url = build_verification_url(request, user)
         send_verification_email(user.email, verification_url)
+
+        profile.email_verification_sent_at = now
+        profile.save(update_fields=["email_verification_sent_at"])
 
         messages.success(
             request,
             "A new verification email has been sent."
         )
 
-    except Exception:
+    except Exception as e:
+        logger.exception("Failed to send verification email")
         messages.error(
             request,
             "We couldn't send the verification email. Please try again."
         )
-
-    return redirect("verify_email")
 
     return redirect("verify_email")
