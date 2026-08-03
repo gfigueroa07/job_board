@@ -18,7 +18,7 @@ from .context_processors import handle_report_submission
 from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
-from .utils import send_verification_email
+from .utils import send_verification_email, build_verification_url
 
 User = get_user_model()
 
@@ -36,22 +36,8 @@ def profile_create(request):
             user = profile.user
             login(request, user)
             messages.success(request, 'Profile created successfully.')
-            uid = urlsafe_base64_encode(force_bytes(user.pk))
-            token = default_token_generator.make_token(user)
-            verification_url = request.build_absolute_uri(
-            reverse(
-                "verify_email_token",
-                    kwargs={
-                        "uidb64": uid,
-                        "token": token,
-                    }
-                )
-            )
-
-            send_verification_email(
-                user.email,
-                verification_url
-            )
+            verification_url = build_verification_url(request, user)
+            send_verification_email(user.email, verification_url)
             return redirect('verify_email')
     else:
         form = UserProfileCreationForm()
@@ -180,8 +166,9 @@ def profile_delete(request, profile_id):
     if profile != request.user.profile:
         return redirect('profile_detail', profile_id=profile.id)
     if request.method == 'POST':
-        profile.delete()
-        return redirect('home')
+        request.user.delete()
+        messages.success(request, "Your account has been deleted.")
+        return redirect("login")
     return render(request, 'users/profile_delete.html', {'profile': profile})
 
 def profile_report(request, profile_id):
@@ -655,31 +642,36 @@ def notification_redirect(request, notification_id):
 
     return redirect("notifications")
 
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import redirect
-
-
 @login_required
+@require_POST
 def resend_verification_email(request):
-    """
-    Resend the user's email verification link.
-    """
-
     profile = request.user.profile
+    user = request.user
 
-    # User is already verified
+    # Already verified
     if profile.email_verified:
-        messages.info(request, "Your email is already verified.")
-        return redirect("job_page")  # or "profile"
+        messages.info(
+            request,
+            "Your email is already verified."
+        )
+        return redirect("job_page")
 
-    # TODO:
-    # Generate a new verification token
-    # Send verification email
+    # Generate a NEW verification link
+    try:
+        verification_url = build_verification_url(request, user)
+        send_verification_email(user.email, verification_url)
 
-    messages.success(
-        request,
-        "A new verification email has been sent."
-    )
+        messages.success(
+            request,
+            "A new verification email has been sent."
+        )
+
+    except Exception:
+        messages.error(
+            request,
+            "We couldn't send the verification email. Please try again."
+        )
+
+    return redirect("verify_email")
 
     return redirect("verify_email")
