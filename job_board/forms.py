@@ -315,6 +315,55 @@ class ContactForm(forms.ModelForm):
             'message': 'MESSAGE'
         }
 
+def send_password_reset_email(email, reset_url):
+
+    resend.api_key = settings.RESEND_API_KEY
+
+    response = resend.Emails.send(
+        {
+            "from": "Hustlr <noreply@hustlrjobs.com>",
+            "to": [email],
+            "subject": "Reset your Hustlr password",
+
+            "html": f"""
+                <h2>Password Reset Request</h2>
+
+                <p>
+                    We received a request to reset your Hustlr password.
+                </p>
+
+                <p>
+                    Click the button below to create a new password:
+                </p>
+
+                <p>
+                    <a href="{reset_url}"
+                    style="
+                    background:#2563eb;
+                    color:white;
+                    padding:12px 20px;
+                    text-decoration:none;
+                    border-radius:6px;">
+                        Reset Password
+                    </a>
+                </p>
+
+                <p>
+                    If you did not request this,
+                    you can safely ignore this email.
+                </p>
+            """
+        }
+    )
+    print("=== PASSWORD RESET EMAIL ===")
+    print(f"Recipient: {email}")
+    print(f"Reset URL: {reset_url}")
+
+    resend.api_key = settings.RESEND_API_KEY
+
+
+    print(response)
+
 class CustomPasswordResetForm(PasswordResetForm):
 
     email = forms.EmailField(
@@ -365,47 +414,6 @@ class CustomPasswordResetForm(PasswordResetForm):
                 user.email,
                 reset_url
             )
-
-            def send_password_reset_email(email, reset_url):
-
-                resend.api_key = settings.RESEND_API_KEY
-
-                resend.Emails.send(
-                    {
-                        "from": "Hustlr <noreply@hustlrjobs.com>",
-                        "to": [email],
-                        "subject": "Reset your Hustlr password",
-
-                        "html": f"""
-                            <h2>Password Reset Request</h2>
-
-                            <p>
-                                We received a request to reset your Hustlr password.
-                            </p>
-
-                            <p>
-                                Click the button below to create a new password:
-                            </p>
-
-                            <p>
-                                <a href="{reset_url}"
-                                style="
-                                background:#2563eb;
-                                color:white;
-                                padding:12px 20px;
-                                text-decoration:none;
-                                border-radius:6px;">
-                                    Reset Password
-                                </a>
-                            </p>
-
-                            <p>
-                                If you did not request this,
-                                you can safely ignore this email.
-                            </p>
-                        """
-                    }
-                )
 
 
 class CustomSetPasswordForm(SetPasswordForm):

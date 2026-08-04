@@ -708,8 +708,5 @@ class CustomPasswordResetView(PasswordResetView):
         form.save(
             request=self.request,
             use_https=self.request.is_secure(),
-            from_email=None,   # ignored
-            email_template_name=None,
-            subject_template_name=None,
         )
-        return super().form_valid(form)
+        return redirect(self.success_url)
