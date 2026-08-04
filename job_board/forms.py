@@ -13,6 +13,7 @@ from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 
 import resend
+import re
 
 
 class ProfileForm(forms.ModelForm):
@@ -143,21 +144,20 @@ class LoginForm(AuthenticationForm):
         return self.cleaned_data['email'].strip().lower()
 
 class CompleteProfileForm(forms.Form):
+    def validate_name(value):
+            if not re.match(r"^[a-zA-ZÀ-ÿ' -]+$", value):
+                raise ValidationError(
+                    "Names can only contain letters, spaces, apostrophes, and hyphens."
+                )
+
     first_name = forms.CharField(
-        max_length=30,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "First Name"
-            }
-        )
+        max_length=50,
+        validators=[validate_name]
     )
+
     last_name = forms.CharField(
-        max_length=30,
-        widget=forms.TextInput(
-            attrs={
-                "placeholder": "Last Name"
-            }
-        )
+        max_length=50,
+        validators=[validate_name]
     )
     phone_number = PhoneNumberField(
         required=False,
@@ -355,14 +355,9 @@ def send_password_reset_email(email, reset_url):
             """
         }
     )
-    print("=== PASSWORD RESET EMAIL ===")
-    print(f"Recipient: {email}")
-    print(f"Reset URL: {reset_url}")
 
     resend.api_key = settings.RESEND_API_KEY
 
-
-    print(response)
 
 class CustomPasswordResetForm(PasswordResetForm):
 
@@ -409,12 +404,6 @@ class CustomPasswordResetForm(PasswordResetForm):
                     },
                 )
             )
-
-            send_password_reset_email(
-                user.email,
-                reset_url
-            )
-
 
 class CustomSetPasswordForm(SetPasswordForm):
     new_password1 = forms.CharField(

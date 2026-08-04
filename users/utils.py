@@ -10,7 +10,7 @@ resend.api_key = settings.RESEND_API_KEY
 
 
 def send_verification_email(email, verification_url):
-    resend.Emails.send({
+    response = resend.Emails.send({
         "from": "Hustlr <noreply@hustlrjobs.com>",
         "to": [email],
         "subject": "Verify your Hustlr account",
@@ -41,6 +41,13 @@ def send_verification_email(email, verification_url):
             </p>
         """
     })
+
+    print("\n=== EMAIL VERIFICATION ===")
+    print(f"Recipient: {email}")
+    print(f"Verification URL: {verification_url}")
+    print("==========================\n")
+
+    print(response)
 
 def build_verification_url(request, user):
     uid = urlsafe_base64_encode(force_bytes(user.pk))

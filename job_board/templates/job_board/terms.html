@@ -1,68 +1,188 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
+
+{% block title %}Terms of Service | Hustlr{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Terms of Service</h1>
 
-<h2>Effective Date: 03/27/2026</h2>
+<div class="legal-container">
 
-<h3>1. Acceptance of Terms</h3>
+    <div class="legal-card">
 
-<h4>By using this platform, you agree to these Terms.</h4>
+        <h1 class="legal-title">Terms of Service</h1>
 
-<h3>2. User Accounts</h3>
-<ul>
-    <li>You are responsible for your account</li>
-    <li>Provide accurate information</li>
-    <li>Do not share your login credentials</li>
-</ul>
-<h3>3. Platform Use</h3>
+        <p class="legal-updated">
+            Last Updated: August 4, 2026
+        </p>
 
-<h4>You agree NOT to:</h4>
-<ul>
-    <li>Post false or misleading job listings</li>
-    <li>Harass or abuse other users</li>
-    <li>Send spam or scams</li>
-    <li>Violate any laws</li>
-</ul>
-<h3>4. Job Listings & Applications</h3>
-<ul>
-    <li>We do not guarantee job accuracy or outcomes</li>
-    <li>Users are responsible for verifying opportunities</li>
-    <li>We are not involved in agreements between users</li>
-</ul>
-<h3>5. Messaging</h3>
-<ul>
-    <li>Conversations are user-generated</li>
-    <li>We may review messages if reported for abuse</li>
-</ul>
-<h3>6. Content Ownership</h3>
-<ul>
-    <li>You own the content you post</li>
-    <li>You grant us permission to display it on the platform</li>
-</ul>
-<h3>7. Termination</h3>
+        <div class="legal-section">
+            <h2>1. Acceptance of These Terms</h2>
 
-<h4>We may suspend or terminate accounts that violate these Terms.</h4>
+            <p>
+                By creating an account or using Hustlr, you agree to these
+                Terms of Service. If you do not agree, please do not use the
+                platform.
+            </p>
+        </div>
 
-<h3>8. Disclaimer</h3>
+        <div class="legal-section">
+            <h2>2. User Accounts</h2>
 
-<h4>The platform is provided “as is” without warranties.</h4>
+            <ul>
+                <li>Provide accurate account information.</li>
+                <li>Keep your password secure.</li>
+                <li>Do not share your login credentials.</li>
+                <li>You are responsible for all activity on your account.</li>
+                <li>Email verification may be required before accessing certain features.</li>
+            </ul>
+        </div>
 
-<h3>9. Limitation of Liability</h3>
+        <div class="legal-section">
+            <h2>3. Using Hustlr</h2>
 
-<h4>We are not liable for:</h4>
-<ul>
-    <li>User interactions</li>
-    <li>Job outcomes</li>
-    <li>Losses resulting from platform use</li>
-</ul>
-<h3>10. Changes to Terms</h3>
+            <p>
+                Hustlr connects Employers and Contractors. Hustlr is not an
+                employer, staffing agency, or party to agreements made between users.
+            </p>
 
-<h4>We may update these Terms at any time.</h4>
+            <p>You agree not to:</p>
 
-<h3>11. Contact</h3>
+            <ul>
+                <li>Post false or misleading job listings.</li>
+                <li>Create fake accounts.</li>
+                <li>Harass, threaten, or abuse other users.</li>
+                <li>Post illegal, discriminatory, or fraudulent content.</li>
+                <li>Spam users or send phishing links.</li>
+                <li>Violate any local, state, or federal laws.</li>
+            </ul>
+        </div>
 
-<h4>For questions, contact: support@hustlr.com</h4>
-<hr>
-<a href="{% url 'home' %}">Back to Jobs</a>
+        <div class="legal-section">
+            <h2>4. Job Listings & Applications</h2>
+
+            <ul>
+                <li>Employers are responsible for the accuracy of job listings.</li>
+                <li>Contractors are responsible for evaluating opportunities before accepting work.</li>
+                <li>Hustlr does not guarantee employment, job quality, payment, or successful completion of services.</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2>5. Payments</h2>
+
+            <p>
+                Hustlr does not process or guarantee payments between Employers
+                and Contractors. Payment arrangements are solely the responsibility
+                of the users involved.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>6. Messaging & Reviews</h2>
+
+            <p>
+                Messages, reviews, and other user-generated content are the
+                responsibility of the users who create them.
+            </p>
+
+            <p>
+                We may review reported content to investigate abuse or violations
+                of these Terms.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>7. Content Ownership</h2>
+
+            <p>
+                You retain ownership of the content you upload, including profile
+                pictures, job listings, photos, reviews, and messages.
+            </p>
+
+            <p>
+                By posting content, you grant Hustlr permission to display,
+                store, and process that content to operate the platform.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>8. Safety</h2>
+
+            <p>
+                Users are responsible for exercising good judgment when meeting,
+                hiring, or accepting work.
+            </p>
+
+            <ul>
+                <li>Verify identities whenever possible.</li>
+                <li>Meet in safe locations when appropriate.</li>
+                <li>Never send money in advance to unknown individuals.</li>
+                <li>Report suspicious behavior through the platform.</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2>9. Account Suspension</h2>
+
+            <p>
+                We reserve the right to remove content, suspend accounts, or
+                permanently ban users who violate these Terms or pose a risk to
+                the Hustlr community.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>10. Disclaimer</h2>
+
+            <p>
+                Hustlr is provided "as is" without warranties of any kind. We
+                cannot guarantee uninterrupted availability or error-free service.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>11. Limitation of Liability</h2>
+
+            <p>
+                To the fullest extent permitted by law, Hustlr is not liable for
+                user interactions, disputes, payments, job outcomes, property
+                damage, injuries, or losses resulting from use of the platform.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>12. Changes to These Terms</h2>
+
+            <p>
+                We may update these Terms from time to time. Continued use of
+                Hustlr after changes become effective constitutes acceptance of
+                the revised Terms.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>13. Contact</h2>
+
+            <p>
+                Questions about these Terms?
+                Contact us at
+                <a href="mailto:support@hustlrjobs.com?subject=Hustlr%20Support"
+                class="legal-link">
+                    support@hustlrjobs.com
+                </a>
+            </p>
+        </div>
+
+        <a href="{% url 'home' %}" class="back-btn">
+            ← Back to Jobs
+        </a>
+
+    </div>
+
+</div>
+
 {% endblock %}

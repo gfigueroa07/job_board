@@ -1,65 +1,156 @@
 {% extends 'job_board/base.html' %}
 {% load static %}
+
+{% block title %}Privacy Policy | Hustlr{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/legal.css' %}">
+{% endblock %}
+
 {% block content %}
-<h1>Privacy Policy</h2>
 
-<h2>Effective Date: 03/27/2026</h2>
+<div class="legal-container">
 
-<h3>1. Information We Collect</h3>
+    <div class="legal-card">
 
-<h4>We collect the following types of information:</h4>
-<ul>
-    <li>Account Information: username, email, profile details</li>
-    <li>User Content: job postings, applications, messages, reviews</li>
-    <li>Activity Data: interactions such as applying to jobs, sending messages, notifications</li>
-    <li>Reports & Feedback: information submitted when reporting users, jobs, or bugs</li>
-</ul>
-<h3>2. How We Use Your Information</h3>
+        <h1 class="legal-title">Privacy Policy</h1>
 
-<h4>We use your information to:</h4>
-<ul>
-    <li>Provide and operate the platform</li>
-    <li>Match users with job opportunities</li>
-    <li>Enable messaging between users</li>
-    <li>Send notifications (applications, messages, status updates)</li>
-    <li>Improve the platform and fix issues</li>
-    <li>Monitor and prevent abuse</li>
-</ul>
-<h3>3. Sharing of Information</h3>
-<h4>We do not sell your personal data. We may share information:</h4>
-<ul>
-    <li>With other users (e.g., profile info, job applications)</li>
-    <li>When required by law</li>
-    <li>To enforce our Terms of Service</li>
-</ul>
-<h3>4. User Content</h3>
-<h4>Any content you post (jobs, messages, reviews) may be visible to other users. You are responsible for what you share.</h4>
-<h3>5. Data Retention</h3>
+        <p class="legal-updated">
+            Last Updated: August 4, 2026
+        </p>
 
-<h4>We retain your data as long as your account is active or as needed to provide services.</h4>
+        <div class="legal-section">
+            <h2>1. Information We Collect</h2>
 
-<h3>6. Security</h3>
+            <p>We may collect:</p>
 
-<h4>We take reasonable steps to protect your data, but no system is completely secure.</h4>
+            <ul>
+                <li>Email address</li>
+                <li>Name</li>
+                <li>Phone number</li>
+                <li>Profile picture</li>
+                <li>Job listings and uploaded photos</li>
+                <li>Job applications</li>
+                <li>Messages between users</li>
+                <li>Reviews, reports, and feedback</li>
+            </ul>
+        </div>
 
-<h3>7. Your Rights</h3>
+        <div class="legal-section">
+            <h2>2. How We Use Your Information</h2>
 
-<h4>You may:</h4>
-<ul>
-    <li> Update or delete your account information</li>
-    <li> Request account deletion</li>
-</ul>
-<h3>8. Children’s Privacy</h3>
+            <ul>
+                <li>Create and manage your account.</li>
+                <li>Verify your email address.</li>
+                <li>Process password reset requests.</li>
+                <li>Connect Employers and Contractors.</li>
+                <li>Display job listings and profiles.</li>
+                <li>Provide messaging and notifications.</li>
+                <li>Investigate abuse and improve platform security.</li>
+                <li>Improve the overall user experience.</li>
+            </ul>
+        </div>
 
-<h4>This platform is not intended for users under 13.</h4>
+        <div class="legal-section">
+            <h2>3. Information Sharing</h2>
 
-<h3>9. Changes to This Policy</h3>
+            <p>
+                We do not sell your personal information.
+            </p>
 
-<h4>We may update this policy. Continued use of the platform means you accept changes.</h4>
+            <p>Your information may be shared:</p>
 
-<h3>10. Contact Us</h3>
+            <ul>
+                <li>With other users when necessary to provide platform features.</li>
+                <li>When required by law.</li>
+                <li>To investigate fraud or enforce our Terms.</li>
+            </ul>
+        </div>
 
-<h4>For questions, contact: support@hustlr.com</h4>
-<hr>
-<a href="{% url 'home' %}">Back to Jobs</a>
+        <div class="legal-section">
+            <h2>4. User Content</h2>
+
+            <p>
+                Information you choose to post, including profile details, job
+                listings, reviews, and uploaded photos, may be visible to other
+                users.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>5. Data Storage</h2>
+
+            <p>
+                Uploaded images may be securely stored using third-party cloud
+                storage providers such as Cloudinary to help operate the platform.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>6. Data Retention</h2>
+
+            <p>
+                We retain account information for as long as necessary to operate
+                the platform or comply with legal obligations.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>7. Security</h2>
+
+            <p>
+                We take reasonable measures to protect your information, but no
+                online service can guarantee absolute security.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>8. Your Choices</h2>
+
+            <ul>
+                <li>Update your profile information.</li>
+                <li>Change your password.</li>
+                <li>Request deletion of your account.</li>
+            </ul>
+        </div>
+
+        <div class="legal-section">
+            <h2>9. Children's Privacy</h2>
+
+            <p>
+                Hustlr is not intended for children under 13 years of age.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>10. Policy Updates</h2>
+
+            <p>
+                We may update this Privacy Policy periodically. Continued use of
+                Hustlr after changes become effective means you accept the updated
+                policy.
+            </p>
+        </div>
+
+        <div class="legal-section">
+            <h2>11. Contact Us</h2>
+
+            <p>
+                Questions about this Privacy Policy?
+                Contact us at
+                <a href="mailto:support@hustlrjobs.com?subject=Hustlr%20Support"
+                class="legal-link">
+                    support@hustlrjobs.com
+                </a>
+            </p>
+        </div>
+
+        <a href="{% url 'home' %}" class="back-btn">
+            ← Back to Jobs
+        </a>
+
+    </div>
+
+</div>
+
 {% endblock %}

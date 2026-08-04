@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
-from django.contrib.auth.views import PasswordResetView
+from django.contrib.auth.views import PasswordResetView, PasswordResetConfirmView
 from django.contrib.auth import login, logout, get_user_model
 from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
@@ -20,6 +20,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes
 from .utils import send_verification_email, build_verification_url
+
 import logging
 
 User = get_user_model()
@@ -63,8 +64,14 @@ def complete_profile(request):
         if form.is_valid():
 
             # Update User model
-            request.user.first_name = form.cleaned_data["first_name"]
-            request.user.last_name = form.cleaned_data["last_name"]
+            request.user.first_name = (
+                form.cleaned_data["first_name"].strip().title()
+            )
+
+            request.user.last_name = (
+                form.cleaned_data["last_name"].strip().title()
+            )
+
             request.user.save()
 
             # Update Profile model
@@ -698,15 +705,3 @@ def resend_verification_email(request):
         )
 
     return redirect("verify_email")
-
-class CustomPasswordResetView(PasswordResetView):
-    form_class = CustomPasswordResetForm
-    template_name = "users/password_reset.html"
-    success_url = reverse_lazy("password_reset_done")
-
-    def form_valid(self, form):
-        form.save(
-            request=self.request,
-            use_https=self.request.is_secure(),
-        )
-        return redirect(self.success_url)

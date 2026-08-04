@@ -61,7 +61,7 @@
             <img class='profile' src="{% static 'images/default_profile.png' %}" alt="Profile Preview">
         {% endif %}
         <a href="{% url 'profile_detail' job.profile.id %}">
-            {{ job.profile.user.username }}
+            {{ job.profile.user.first_name }} {{ job.profile.user.last_name }}
         </a>
     </div>
     <hr>

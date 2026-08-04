@@ -21,7 +21,11 @@
                 {% endif %}
             </div>
             <div class="profile-info">
-                <h1>{{ profile.user }}</h1>
+                {% if profile.profile_completed %}
+                    {{ profile.user.first_name }} {{ profile.user.last_name }}
+                {% else %}
+                    New Hustlr User
+                {% endif %}
                 {% if messages %}
                     <div class="messages">
                         {% for message in messages %}
