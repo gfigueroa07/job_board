@@ -1,13 +1,14 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm, CompleteProfileForm
+from job_board .forms import ProfileForm, ProfileEditForm, UserReviewsForm, JobApplicationForm, FeedbackForm, UserProfileCreationForm, ReportForm, LoginForm, CompleteProfileForm, CustomPasswordResetForm, CustomSetPasswordForm
 from job_board .funcs import filter_and_sort, get_client_ip, is_job_owner
 from users.models import Profile, Review, User, JobListing, JobApplication,  Message, Conversation, Notifications, Feedback, Report
-from django.urls import path, reverse
+from django.urls import path, reverse, reverse_lazy
 from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, HttpResponseForbidden
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.contrib import messages
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.views import PasswordResetView
 from django.contrib.auth import login, logout, get_user_model
 from django.db.models import Avg, Case, When, Value, BooleanField, Max, Q
 from django.utils import timezone
@@ -697,3 +698,18 @@ def resend_verification_email(request):
         )
 
     return redirect("verify_email")
+
+class CustomPasswordResetView(PasswordResetView):
+    form_class = CustomPasswordResetForm
+    template_name = "users/password_reset.html"
+    success_url = reverse_lazy("password_reset_done")
+
+    def form_valid(self, form):
+        form.save(
+            request=self.request,
+            use_https=self.request.is_secure(),
+            from_email=None,   # ignored
+            email_template_name=None,
+            subject_template_name=None,
+        )
+        return super().form_valid(form)

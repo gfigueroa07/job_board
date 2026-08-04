@@ -15,11 +15,15 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, reverse_lazy
 from . import views
 import job_board.views
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.auth import views as auth_views
+from job_board.forms import LoginForm, UserProfileCreationForm, CustomPasswordResetForm, CustomSetPasswordForm
+
+
 # from .context_processors import unread_count
 
 
@@ -55,6 +59,42 @@ urlpatterns = [
     path('report/<str:model_name>/<int:object_id>/', views.report_create, name='report_create'),
          
     path("notifications/<int:notification_id>/",views.notification_redirect,name="notification_redirect"),
+
+    path(
+        "password-reset/",
+        auth_views.PasswordResetView.as_view(
+            template_name="users/password_reset.html",
+            success_url=reverse_lazy("password_reset_sent"),
+            form_class=CustomPasswordResetForm,
+        ),
+        name="password_reset",
+    ),
+
+    path(
+        "password-reset/sent/",
+        auth_views.PasswordResetDoneView.as_view(
+            template_name="users/password_reset_sent.html",
+        ),
+        name="password_reset_sent",
+    ),
+
+    path(
+        "reset/<uidb64>/<token>/",
+        auth_views.PasswordResetConfirmView.as_view(
+            template_name="users/password_reset_confirm.html",
+            form_class=CustomSetPasswordForm,
+            success_url=reverse_lazy("password_reset_complete"),
+        ),
+        name="password_reset_confirm",
+    ),
+
+    path(
+        "reset/complete/",
+        auth_views.PasswordResetCompleteView.as_view(
+            template_name="users/password_reset_complete.html",
+        ),
+        name="password_reset_complete",
+    ),
 
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
