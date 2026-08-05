@@ -124,22 +124,21 @@ class JobApplication(models.Model):
 class Conversation(models.Model):
     job = models.ForeignKey(JobListing, on_delete=models.CASCADE)
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)
-    active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    conversation_status = [
+    STATUS_CHOICES = [
         ("active", "Active"),
         ("archived", "Archived"),
     ]
     status = models.CharField(
         max_length=10,
-        choices=conversation_status,
+        choices=STATUS_CHOICES,
         default="active",
     )
     def archive(self):
         self.status = "archived"
         self.save(update_fields=["status"])
     class Meta:
-        unique_together = ('job', 'applicant')
+        unique_together = ("job", "applicant")
       
 class Message(models.Model):
     conversation = models.ForeignKey(Conversation,  on_delete=models.CASCADE, related_name='messages')

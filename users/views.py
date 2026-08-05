@@ -516,7 +516,7 @@ def inbox(request):
         Q(job__profile__user=user)
     ).annotate(
         last_message_time=Max('messages__created_at')
-    ).order_by('-last_message_time')
+    ).order_by('status', '-last_message_time')
 
     convo_data = []
 

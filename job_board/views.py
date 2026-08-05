@@ -91,12 +91,10 @@ def job_details(request, job_id):
             Notifications.objects.create(
                 user=job.profile.user,
                 notification_type='application',
-                message=f"{request.profile.user.display_name()} applied to your job",
+                message=f"{request.user.profile.display_name()} applied to your job",
                 related_job=job,
                 related_application=application
             )
-
-            print("Notification created")
             
             messages.success(request, "Application submitted.")
             return redirect('job_details', job_id=job.id)
