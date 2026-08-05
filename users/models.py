@@ -23,7 +23,11 @@ class Profile(models.Model):
     email_verification_sent_at = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"{self.user.first_name} {self.user.last_name}".strip() or self.user.email
+        return self.display_name()
+
+    def display_name(self):
+        name = f"{self.user.first_name} {self.user.last_name}".strip()
+        return name if name else self.user.email
     
 class JobListing(models.Model):
     job_status = [

@@ -19,6 +19,15 @@
     border-radius: 12px;
 }
 
+.chat-user h3 a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.chat-user h3 a:hover {
+    text-decoration: underline;
+}
+
 /* LIST TAKES REMAINING SPACE */
 .conversation-list {
     flex: 1; /* IMPORTANT */

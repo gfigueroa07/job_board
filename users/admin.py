@@ -26,8 +26,10 @@ class ReportAdmin(admin.ModelAdmin):
         if isinstance(target, JobListing):
             return f"Job: {target.title}"
 
+        # PROFILE
         if isinstance(target, Profile):
-            return f"Profile: {target.profile_name or target.user.username}"
+            name = f"{target.user.first_name} {target.user.last_name}".strip()
+            return f"Profile: {name or target.user.email}"
 
         if isinstance(target, Conversation):
             return f"Conversation (Job: {target.job.title})"
@@ -52,9 +54,11 @@ class ReportAdmin(admin.ModelAdmin):
 
         # PROFILE
         if isinstance(target, Profile):
+            name = f"{target.user.first_name} {target.user.last_name}".strip()
+
             return format_html(
                 "<b>Name:</b> {}<br><b>Description:</b> {}<br><b>Location:</b> {}",
-                target.profile_name,
+                name or target.user.email,
                 target.description,
                 target.location
             )

@@ -28,9 +28,9 @@
                         <div class="top-row">
                             <span class="name">
                                 {% if convo.applicant == request.user %}
-                                    {{ convo.job.profile.user }}
+                                    {{ convo.job.profile.user.first_name }} {{ convo.job.profile.user.last_name }}
                                 {% else %}
-                                    {{ convo.applicant.username }}
+                                    {{ convo.applicant.user.first_name }} {{ convo.applicant.user.last_name }}
                                 {% endif %}
                             </span>
 
@@ -69,7 +69,11 @@
                         <img src="{% static 'images/default_profile.png' %}">
                     {% endif %}
                     <div>
-                        <h3>{{ conversation.other_user.username }}</h3>
+                        <h3>
+                            <a href="{% url 'profile_detail' conversation.other_user.profile.id %}">
+                                {{ conversation.other_user.profile.display_name }}
+                            </a>
+                        </h3>
                         <p>{{ conversation.job.title }}</p>
                     </div>
                 </div>

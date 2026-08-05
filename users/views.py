@@ -262,16 +262,17 @@ def job_applicants(request, job_id):
             job.status = 'pending'
             job.save()
             Conversation.objects.get_or_create(job=job, applicant=application.applicant.user)
-            messages.success(request, f"{application.applicant.user.username} has been approved. You can now send a message!")
+            messages.success(request, f"{application.applicant.display_name()} has been approved. You can now send a message!")
         elif action == 'rejected':
             application.status = 'rejected'
-            messages.success(request, f"{application.applicant.user.username} has been rejected.")   
+            messages.success(request, f"{application.applicant.display_name()} has been rejected.")   
         Notifications.objects.create(
             user=application.applicant.user,
             notification_type='status_update',
             message=f"Your application was {application.status}",
+            related_job=job,
             related_application=application
-            )
+        )
         application.save()
         return redirect('job_applicants', job.id)     
     return render(request, 'users/job_applicants.html', {
@@ -652,10 +653,10 @@ def notification_redirect(request, notification_id):
             )
 
     elif notification.notification_type == "status_update":
-        if notification.related_job:
+        if notification.related_application:
             return redirect(
                 "job_details",
-                notification.related_job.id
+                notification.related_application.job.id
             )
 
     return redirect("notifications")

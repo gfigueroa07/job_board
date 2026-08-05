@@ -91,7 +91,7 @@ def job_details(request, job_id):
             Notifications.objects.create(
                 user=job.profile.user,
                 notification_type='application',
-                message=f"{request.user} applied to your job",
+                message=f"{request.profile.user.display_name()} applied to your job",
                 related_job=job,
                 related_application=application
             )

@@ -34,13 +34,31 @@
             <div class="applicant-top">
 
                 <div class="applicant-info">
-                    <a href="{% url 'profile_detail' application.applicant.id %}" class="name">
-                        {{ application.applicant.user.username }}
+
+                    <a href="{% url 'profile_detail' application.applicant.id %}" class="applicant-user">
+                        {% if application.applicant.profile_picture %}
+                            <img 
+                                src="{{ application.applicant.profile_picture.url }}" 
+                                class="applicant-avatar"
+                                alt="Profile picture"
+                            >
+                        {% else %}
+                            <img 
+                                src="{% static 'images/default_profile.png' %}" 
+                                class="applicant-avatar"
+                                alt="Default profile picture"
+                            >
+                        {% endif %}
+
+                        <span class="name">
+                            {{ application.applicant.user.first_name }} {{ application.applicant.user.last_name }}
+                        </span>
                     </a>
 
                     <span class="status status-{{ application.status }}">
                         {{ application.status|title }}
                     </span>
+
                 </div>
 
             </div>
