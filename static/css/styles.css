@@ -6,23 +6,27 @@
     font-family: Arial, sans-serif;
 }
 
-html, body {
-    height: 100%;
+html {
     width: 100%;
+    min-height: 100%;
 }
 
 body {
-    min-height: 100vh;
-    min-height: 100dvh;
+    width: 100%;
+    min-height: 100svh;
+
+    margin: 0;
+    padding: 1rem 0 0;
+
     display: flex;
     flex-direction: column;
+
     background-color: #ffffff;
     color: #000000;
     line-height: 1.6;
-    margin: 0;
-    padding: 0;
-    padding-top: 1rem;
-    position: relative;
+
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 body.modal-open {
@@ -30,7 +34,8 @@ body.modal-open {
 }
 
 main {
-    flex: 1;
+    flex: 1 0 auto;
+    width: 100%;
     display: flex;
 }
 
@@ -41,15 +46,17 @@ main {
     margin-inline: auto;
     padding-inline: 20px;
 
-    flex: 1;
-
     display: flex;
     flex-direction: column;
+
+    box-sizing: border-box;
 }
 
 /* Header & navigation */
 header {
+    width: 100%;
     padding: 10px 20px;
+    box-sizing: border-box;
 }
 
 .nav-right {
@@ -168,23 +175,33 @@ button {
 /* Sidebar (dropdown) */
 .sidebar {
     position: fixed;
-    top: 0;       /* below navbar */
+    top: 0;
     right: 0;
+
     width: 320px;
     max-width: 85%;
-    height: 100vh;
-    height: 100dvh;
-    border: 1px solid, black;
+
+    height: 100svh;
+    max-height: 100svh;
+
+    border: 1px solid black;
     border-radius: 20px;
+
     background: white;
+
     display: flex;
+    flex-direction: column;
+
     transform: translateX(100%);
     transition: transform 0.3s ease;
-    flex-direction: column;
+
     z-index: 999;
+
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
+
     padding-bottom: env(safe-area-inset-bottom);
+    box-sizing: border-box;
 }
 
 .sidebar.active {
@@ -217,6 +234,7 @@ button {
 }
 
 header nav#info {
+    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;

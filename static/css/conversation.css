@@ -2,13 +2,14 @@
 .chat-page {
     flex: 1;
     min-height: 0;
+    width: 100%;
     display: flex;
 }
 
 .chat-wrapper {
     flex: 1;
-    height: calc(100vh - 160px);
-    overflow: hidden;
+    min-height: 0;
+    width: 100%;
 
     display: flex;
 
@@ -17,6 +18,8 @@
 
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.671);
     border-radius: 12px;
+
+    overflow: hidden;
 }
 
 .chat-user h3 a {
@@ -234,4 +237,68 @@
 .no-chat {
     margin: auto;
     color: #888;
+}
+
+@media (max-width: 768px) {
+
+    .chat-page {
+        width: 100%;
+        min-height: 0;
+    }
+
+    .chat-wrapper {
+        width: 100%;
+        min-height: 0;
+        border-radius: 0;
+        box-shadow: none;
+    }
+
+    .chat-sidebar {
+        width: 35%;
+        min-width: 110px;
+    }
+
+    .chat-main {
+        min-width: 0;
+        flex: 1;
+    }
+
+    .chat-header {
+        padding: 10px;
+    }
+
+    .chat-user img {
+        width: 38px;
+        height: 38px;
+    }
+
+    .chat-user h3 {
+        font-size: 14px;
+    }
+
+    .chat-user p {
+        font-size: 11px;
+    }
+
+    .chat-body {
+        padding: 10px;
+    }
+
+    .message {
+        max-width: 80%;
+    }
+
+    .chat-input {
+        padding: 8px;
+    }
+
+    .chat-input input {
+        min-width: 0;
+        padding: 9px;
+    }
+
+    .chat-input button {
+        margin-left: 6px;
+        padding: 9px 12px;
+    }
 }

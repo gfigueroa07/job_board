@@ -116,7 +116,7 @@
             {% if conversation.status == "active" %}
                 <form method="POST" class="chat-input">
                     {% csrf_token %}
-                    <input type="text" name="content" placeholder="Type a message..." required>
+                    <input type="text" name="content" placeholder="Type a message..." autocomplete="off" autofocus required>
                     <button type="submit">Send</button>
                 </form>
             {% else %}
@@ -144,6 +144,15 @@
         if (chatBody) {
             chatBody.scrollTop = chatBody.scrollHeight;
         }
+    });
+    document.addEventListener("DOMContentLoaded", function () {
+
+        const input = document.getElementById("message-input");
+
+        if (input) {
+            input.focus();
+        }
+
     });
 </script>
 {% endblock %}
